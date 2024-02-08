@@ -1,3 +1,5 @@
+"use client";
+
 import { Metadata } from "next";
 import Image from "next/image";
 import bannerImage from "@/../public/images/main-banner-1920.jpg";
@@ -5,10 +7,11 @@ import productData from "@/db/productInfo-kor.json";
 import product1 from "@/../public/images/mega-crystal-001.jpg";
 import product2 from "@/../public/images/entro-chandelier-001.jpg";
 import product3 from "@/../public/images/neon-001.jpg";
+import { useState } from "react";
 
-export const metadata: Metadata = {
-  title: "Home",
-};
+// export const metadata: Metadata = {
+//   title: "Home",
+// };
 
 type ProductType = {
   id: number;
@@ -28,21 +31,50 @@ type ProductResponse = {
 };
 
 const Card = () => {
+  const [rotateX, setRotateX] = useState(0);
+  const [rotateY, setRotateY] = useState(0);
+
+  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    let x = event.nativeEvent.offsetX;
+    let y = event.nativeEvent.offsetY;
+    setRotateY((-1 / 5) * x + 20);
+    setRotateX((4 / 30) * y - 20);
+  };
+
+  const handleMouseOut = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setRotateY(0);
+    setRotateX(0);
+  };
+
   return (
-    <div className="w-64 h-80 rounded-xl shadow-md bg-gray-800">
-      <div className="p-2 space-y-1">
-        <div className="relative h-48 bg-slate-200 rounded-xl">
-          <Image
-            src={product2}
-            fill
-            style={{ objectFit: "cover", objectPosition: "top" }}
-            quality={100}
-            alt="product2"
-            className="rounded-md"
-          />
-        </div>
-        <div className="flex justify-center items-center h-28 rounded-xl text-white">
-          Super light
+    <div
+      className="h-80 w-64"
+      onMouseMove={handleMouseMove}
+      onMouseOut={handleMouseOut}
+      style={{
+        transform: `perspective(350px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
+      }}
+    >
+      <div className="relative h-80 w-64 rounded-xl bg-gray-800 shadow-md">
+        <div className="">
+          <div className=" h-48 rounded-xl bg-slate-200">
+            <div className="absolute z-10 hidden h-full w-full bg-black opacity-40" />
+
+            <Image
+              src={product2}
+              fill
+              style={{ objectFit: "cover", objectPosition: "top" }}
+              quality={100}
+              alt="product2"
+              className="rounded-md"
+            />
+
+            <div className="absolute z-20 flex w-full items-end justify-center rounded-md bg-gray-900 pb-10 text-white">
+              Super light
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -55,7 +87,7 @@ export default function Home() {
   return (
     <div>
       <div className="h-[640px] bg-slate-300">
-        <div className="relative w-full h-full bg-black">
+        <div className="relative h-full w-full bg-black">
           <Image
             src={bannerImage}
             fill
@@ -63,11 +95,11 @@ export default function Home() {
             quality={100}
             alt="bannerImage"
           />
-          <div className="absolute bg-black w-full h-full opacity-50" />
+          <div className="absolute h-full w-full bg-black opacity-50" />
 
-          <div className="absolute w-full text-white flex flex-col justify-center pl-20 h-full z-10">
+          <div className="absolute z-10 flex h-full w-full flex-col justify-center pl-20 text-white">
             <div className="text-5xl font-bold">YM Light</div>
-            <div className="text-2xl w-[30%] text-balance pt-2">
+            <div className="w-[30%] text-balance pt-2 text-2xl">
               YM Lights are always made by experts with over 30 years of
               experience.
             </div>
@@ -75,16 +107,16 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="pt-10 w-[1024px] mx-auto">
-        <div className="font-bold text-2xl text-white">New Release</div>
+      <div className="mx-auto  pt-10">
+        <div className="text-2xl font-bold text-white">New Release</div>
         <div className="flex justify-center pt-5">
-          <div className="grid grid-cols-4 gap-24 ">
+          <div className="grid gap-24 min-[320px]:grid-cols-2 md:grid-cols-2  lg:grid-cols-3 xl:grid-cols-4 ">
             {products.map((product, i) => (
               <div
                 key={product.id}
-                className="w-64 h-80 rounded-xl shadow-md bg-gray-800"
+                className="h-80 w-64 rounded-xl bg-gray-800 shadow-md"
               >
-                <div className="p-2 space-y-1">
+                <div className="space-y-1 p-2">
                   <div className="relative h-48  rounded-xl">
                     <Image
                       src={product1}
@@ -95,7 +127,7 @@ export default function Home() {
                       className="rounded-md"
                     />
                   </div>
-                  <div className="flex justify-center items-center h-28 rounded-xl text-white">
+                  <div className="flex h-28 items-center justify-center rounded-xl text-white">
                     {product.name}
                   </div>
                 </div>
