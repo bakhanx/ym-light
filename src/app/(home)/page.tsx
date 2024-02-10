@@ -5,9 +5,9 @@ import Image from "next/image";
 import bannerImage from "@/../public/images/main-banner-1920.jpg";
 import productData from "@/db/productInfo-kor.json";
 import product1 from "@/../public/images/mega-crystal-001.jpg";
-import product2 from "@/../public/images/entro-chandelier-001.jpg";
 import product3 from "@/../public/images/neon-001.jpg";
 import { useState } from "react";
+import Card from "./component/card";
 
 // export const metadata: Metadata = {
 //   title: "Home",
@@ -30,62 +30,14 @@ type ProductResponse = {
   products: ProductType[];
 };
 
-const Card = () => {
-  const [rotateX, setRotateX] = useState(0);
-  const [rotateY, setRotateY] = useState(0);
 
-  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    let x = event.nativeEvent.offsetX;
-    let y = event.nativeEvent.offsetY;
-    setRotateY((-1 / 5) * x + 20);
-    setRotateX((4 / 30) * y - 20);
-  };
-
-  const handleMouseOut = (event: React.MouseEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    setRotateY(0);
-    setRotateX(0);
-  };
-
-  return (
-    <div
-      className="h-80 w-64"
-      onMouseMove={handleMouseMove}
-      onMouseOut={handleMouseOut}
-      style={{
-        transform: `perspective(350px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
-      }}
-    >
-      <div className="relative h-80 w-64 rounded-xl bg-gray-800 shadow-md">
-        <div className="">
-          <div className=" h-48 rounded-xl bg-slate-200">
-            <div className="absolute z-10 hidden h-full w-full bg-black opacity-40" />
-
-            <Image
-              src={product2}
-              fill
-              style={{ objectFit: "cover", objectPosition: "top" }}
-              quality={100}
-              alt="product2"
-              className="rounded-md"
-            />
-
-            <div className="absolute z-20 flex w-full items-end justify-center rounded-md bg-gray-900 pb-10 text-white">
-              Super light
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 export default function Home() {
   const { products }: ProductResponse = productData;
 
   return (
     <div>
+
       <div className="h-[640px] bg-slate-300">
         <div className="relative h-full w-full bg-black">
           <Image
@@ -144,6 +96,7 @@ export default function Home() {
           </div>
         </div>
       </div>
+      
     </div>
   );
 }
