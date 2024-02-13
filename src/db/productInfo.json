@@ -1,0 +1,21 @@
+[
+    {
+        "id": 1,
+        "name": "Mega Crystal Chandelier",
+        "price": 3200000,
+        "color": "white",
+        "ingradient": [
+            "steel",
+            "Fabric"
+        ],
+        "size": {
+            "width": 800,
+            "height": 500
+        },
+        "weight": 11.02,
+        "bulb": "E17",
+        "manufacture": "YM Light",
+        "description": ""
+    },
+    {}
+]
