@@ -2,7 +2,11 @@ import Image from "next/image";
 import React, { useRef, useState } from "react";
 import product2 from "@/../../public/images/entro-chandelier-001.jpg";
 
-const Card = () => {
+type CardProps = {
+  name: string;
+};
+
+const Card = ({ name }: CardProps) => {
   const [rotateX, setRotateX] = useState(0);
   const [rotateY, setRotateY] = useState(0);
   const [bgPosition, setBgPosition] = useState<number | string>(0);
@@ -33,7 +37,6 @@ const Card = () => {
   const overlayStyle = {
     background:
       "linear-gradient(105deg, transparent 40%, rgba(255,219,112,0.8) 45%, rgba(132,50,255,0.6) 50%, transparent 54%)",
-
     backgroundSize: "150% 150%",
     backgroundPosition: bgPosition,
     filter: `brightness(1.2) opacity(${bgOpacity})`,
@@ -42,12 +45,12 @@ const Card = () => {
 
   return (
     <div
-      className="h-80 w-64"
+      className=""
       onMouseMove={handleMouseMove}
       onMouseOut={handleMouseOut}
       style={cardStyle}
     >
-      <div className="relative h-80 w-64 rounded-xl bg-gray-800 shadow-md">
+      <div className="relative h-64 w-40 rounded-xl bg-gray-800 shadow-md sm:h-80 sm:w-64 max-[480px]:w-36 ">
         <div className=" h-48 rounded-xl bg-slate-200">
           <Image
             src={product2}
@@ -61,8 +64,8 @@ const Card = () => {
           {/* Light overlay */}
           <div className="absolute z-30 h-full w-full" style={overlayStyle} />
 
-          <div className="absolute z-20 flex w-full items-end justify-center rounded-md pb-10 text-white">
-            Super light
+          <div className="absolute bottom-0 z-20 flex w-full items-center  justify-center rounded-b-md bg-black bg-opacity-50 p-5 text-white ">
+            {name}
           </div>
 
           {/* black opacity overlay */}
