@@ -10,3 +10,18 @@ div {
     padding: 0;
     margin: 0;
 }
+
+.gradient-text {
+    background: linear-gradient(to right,
+            #a855f7,
+            #ec4899,
+            #eab308,
+            #ec4899,
+            #a855f7,
+            #ec4899,
+            #eab308);
+    background-clip: text;
+    color: transparent;
+    background-size: 300% 300%;
+
+}
