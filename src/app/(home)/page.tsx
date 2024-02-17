@@ -7,6 +7,7 @@ import product1 from "@/../public/images/mega-crystal-001.jpg";
 import product3 from "@/../public/images/neon-001.jpg";
 import { useState } from "react";
 import Card from "./component/card";
+import Link from "next/link";
 
 // export const metadata: Metadata = {
 //   title: "Home",
@@ -48,7 +49,7 @@ export default function Home() {
 
           <div className="absolute z-10 flex h-full flex-col justify-center pl-20 text-white ">
             <div>
-              <span className="gradient-text text-5xl font-bold animate-gradient">
+              <span className="gradient-text animate-gradient text-5xl font-bold">
                 YM Light
               </span>
             </div>
@@ -66,7 +67,9 @@ export default function Home() {
           <div className="text-2xl font-bold text-white">New Release</div>
           <div className="grid gap-10 px-5  min-[320px]:grid-cols-2 sm:gap-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-24">
             {products.map((product) => (
-              <Card key={product.id} name={product.name} />
+              <Link key={product.id} href={`/products/${product.id}`}>
+                <Card key={product.id} name={product.name} />
+              </Link>
             ))}
           </div>
         </div>
