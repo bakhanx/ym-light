@@ -22,9 +22,9 @@ const ProductDetail = ({ params }: Props) => {
           <div>상품명 : {product.name}</div>
           <div>가격 : {product.price}</div>
           <div>색상 : {product.color}</div>
-          <div>성분 : {product.ingradient}</div>
+          <div>성분 :{product.ingradient.join(", ")}</div>
           <div>
-            사이즈 : Width: {product.size.width} / Height: {product.size.height}
+            사이즈 : W: {product.size.width}, H: {product.size.height}
           </div>
           <div>전구 : {product.bulb}</div>
           <div>제조사 : {product.manufacture}</div>
