@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 html {
-    background-color: rgba(0, 0, 0, 0.906);
-    color:white;
+    background-color: white;
+    color:black;
 }
 
 div {
