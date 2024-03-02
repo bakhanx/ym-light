@@ -62,15 +62,29 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="mx-auto pt-10">
-        <div className="flex flex-col items-center justify-center gap-y-10">
-          <div className="text-2xl font-bold text-white">New Release</div>
-          <div className="grid gap-10 px-5  min-[320px]:grid-cols-2 sm:gap-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-24">
-            {products.map((product) => (
-              <Link key={product.id} href={`/products/${product.id}`}>
-                <Card key={product.id} name={product.name} />
-              </Link>
-            ))}
+      <div className="mx-auto max-w-screen-xl pt-10">
+        <div className="flex flex-col gap-y-10 divide-y-2">
+
+          <div className="my-product-wrap">
+            <div className="pl-5 text-2xl font-bold pt-6">새로 등록된 상품</div>
+            <div className="grid gap-10 px-5 min-[320px]:grid-cols-2 sm:gap-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-10 pt-4">
+              {products.map((product) => (
+                <Link key={product.id} href={`/products/${product.id}`}>
+                  <Card key={product.id} name={product.name} />
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <div className="my-product-wrap">
+            <div className="pl-5 text-2xl font-bold pt-6">할인 상품</div>
+            <div className="grid gap-10 px-5 min-[320px]:grid-cols-2 sm:gap-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-10 pt-4">
+              {products.map((product) => (
+                <Link key={product.id} href={`/products/${product.id}`}>
+                  <Card key={product.id} name={product.name} />
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </div>
