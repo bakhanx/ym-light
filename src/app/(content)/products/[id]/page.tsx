@@ -68,7 +68,7 @@ const ProductDetail = ({ params }: Props) => {
                         </span>
                       </div>
 
-                      <div className="pt-20">
+                      <div className="flex flex-col gap-y-2 pt-20">
                         <ProductInfo label="색상" data={product?.color} />
                         <ProductInfo
                           label="재질"
@@ -87,28 +87,66 @@ const ProductDetail = ({ params }: Props) => {
                       </div>
                     </div>
                   </div>
-                  <div className="my-btn-wrap mt-52 flex flex-col gap-y-5 text-white">
-                    <button className="w-full rounded-md bg-slate-800 p-5">
+                  <div className="my-btn-wrap mt-20 flex flex-col gap-y-5 font-bold text-white">
+                    <button className="w-full rounded-md bg-red-700 p-5 hover:bg-red-600">
                       구매하기
                     </button>
-                    <button className="w-full rounded-md bg-slate-800 p-5">
-                      장바구니
-                    </button>
-                    <button className="w-full rounded-md bg-slate-800 p-5">
-                      찜하기
-                    </button>
+                    <div className="flex gap-x-4">
+                      <button className="w-full rounded-md bg-blue-500 p-5 hover:bg-blue-400">
+                        장바구니
+                      </button>
+                      <button className="w-full rounded-md bg-slate-700 p-5 hover:bg-slate-600">
+                        찜하기
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="my-product-detail-item-conent mt-14 ">
+            <div className="my-product-detail-content mt-14 ">
+
               <div className="my-product-detail-tap-wrap">
-                <div className="my-product-detail-tab flex justify-center gap-x-36 border-b-[1px] border-t-2 border-b-slate-500 py-5">
+                <div className="my-product-detail-tab flex justify-center gap-x-36 border-b-2 border-t-2 border-b-orange-300 py-5">
                   <div>관련 상품</div>
                   <div>상품평</div>
                   <div>상품 문의</div>
                   <div>교환 및 반품</div>
+                </div>
+              </div>
+
+              <div className="my-product-detail-item-wrap divide-y-[1px] ">
+                <div className="my-product-detail-item item-notice pt-6 ">
+                  <div className="my-item-title text-lg font-bold">
+                    <p>판매자 공지사항</p>
+                  </div>
+                  <div className="my-item-content p-10 text-center text-slate-500">
+                    <p>표시할 게시물이 없습니다.</p>
+                  </div>
+                </div>
+                <div className="my-product-detail-item item-detail pt-6">
+                  <div className="my-item-title text-lg font-bold">
+                    <div>상품 상세정보</div>
+                  </div>
+                  <div className="my-item-content p-10 text-center text-slate-500">
+                    <p>표시할 게시물이 없습니다.</p>
+                  </div>
+                </div>
+                <div className="my-product-detail-item item-relative pt-6">
+                  <div className="my-item-title text-lg font-bold">
+                    <div>관련 상품</div>
+                  </div>
+                  <div className="my-item-content p-10 text-center text-slate-500">
+                    <p>표시할 게시물이 없습니다.</p>
+                  </div>
+                </div>
+                <div className="my-product-detail-item item-recommend pt-6">
+                  <div className="my-item-title text-lg font-bold">
+                    <div>추천 상품</div>
+                  </div>
+                  <div className="my-item-content p-10 text-center text-slate-500">
+                    <p>표시할 게시물이 없습니다.</p>
+                  </div>
                 </div>
               </div>
 
