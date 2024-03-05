@@ -35,7 +35,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="h-[640px]">
+      <div className="h-[768px]">
         <div className="relative h-full w-full">
           <Image
             src={bannerImage}
