@@ -23,7 +23,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className}`}>
         <TopNav />
-        <div className="pt-14">{children}</div>
+        <div className="">{children}</div>
       </body>
     </html>
   );
