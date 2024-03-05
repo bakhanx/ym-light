@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const TopNav = () => {
   return (
-    <div className="fixed z-50 flex h-14 w-full items-center justify-between border-b-2 border-yellow-500 bg-white p-4 text-black">
+    <div className="fixed z-50 flex h-14 w-full items-center justify-between border-b-2 border-yellow-500 bg-black py-10 px-20 text-white">
       <div className="text-2xl font-bold bg-gradient-to-tr from-yellow-500 to-yellow-200 bg-clip-text text-transparent">
         <Link href="/">YM Light</Link>
       </div>
