@@ -41,11 +41,6 @@ const About = () => {
         <Image src={Image02} alt="worker02" />
       </div>
 
-      <div className="relative grid grid-cols-3">
-        <div>1</div>
-        <div>2</div>
-        <div>3</div>
-      </div>
     </>
   );
 };
