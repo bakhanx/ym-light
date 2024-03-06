@@ -20,7 +20,7 @@ const ProductDetail = ({ params }: Props) => {
   return (
     <>
       {product && (
-        <div className="my-container">
+        <div className="my-container pt-20">
           <div className="my-content m-auto w-[1280px] max-w-screen-xl px-10 pb-28 pt-8 ">
             <div
               className="my-column_bind flex divide-x-2 divide-slate-300
@@ -105,7 +105,6 @@ const ProductDetail = ({ params }: Props) => {
             </div>
 
             <div className="my-product-detail-content mt-14 ">
-
               <div className="my-product-detail-tap-wrap">
                 <div className="my-product-detail-tab flex justify-center gap-x-36 border-b-2 border-t-2 border-b-orange-300 py-5">
                   <div>관련 상품</div>
@@ -132,9 +131,10 @@ const ProductDetail = ({ params }: Props) => {
                     <p>표시할 게시물이 없습니다.</p>
                   </div>
                 </div>
-                <div className="my-product-detail-item item-relative pt-6">
+
+                <div className="my-product-detail-item item-recommend pt-6">
                   <div className="my-item-title text-lg font-bold">
-                    <div>관련 상품</div>
+                    <div>상품평</div>
                   </div>
                   <div className="my-item-content p-10 text-center text-slate-500">
                     <p>표시할 게시물이 없습니다.</p>
@@ -142,7 +142,24 @@ const ProductDetail = ({ params }: Props) => {
                 </div>
                 <div className="my-product-detail-item item-recommend pt-6">
                   <div className="my-item-title text-lg font-bold">
+                    <div>상품 문의</div>
+                  </div>
+                  <div className="my-item-content p-10 text-center text-slate-500">
+                    <p>교환 및 반품</p>
+                  </div>
+                </div>
+                <div className="my-product-detail-item item-recommend pt-6">
+                  <div className="my-item-title text-lg font-bold">
                     <div>추천 상품</div>
+                  </div>
+                  <div className="my-item-content p-10 text-center text-slate-500">
+                    <p>표시할 게시물이 없습니다.</p>
+                  </div>
+                </div>
+
+                <div className="my-product-detail-item item-relative pt-6">
+                  <div className="my-item-title text-lg font-bold">
+                    <div>관련 상품</div>
                   </div>
                   <div className="my-item-content p-10 text-center text-slate-500">
                     <p>표시할 게시물이 없습니다.</p>
