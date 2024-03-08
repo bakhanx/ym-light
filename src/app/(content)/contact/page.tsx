@@ -33,7 +33,7 @@ const Contact = () => {
                       <div>
                         <p className="font-bold">간단한 양식 제출</p>
                         <p className="opacity-70">
-                          우측 양식을 간단하게 적어주셔도 문제 없습니다.
+                          우측 양식을 간단하게 적어주셔도 좋습니다.
                         </p>
                       </div>
                     </div>
@@ -69,11 +69,9 @@ const Contact = () => {
                   <p className="text-3xl font-bold ">Contact Us</p>
                   <p>
                     <span className="text-red-500">* </span>
-                    <span className="opacity-70">
-                    는 필수 양식입니다.
-                    </span>
+                    <span className="opacity-70">는 필수 양식입니다.</span>
                   </p>
-                 
+
                   <div className="w-full pt-5">
                     <form>
                       <div className="flex flex-col gap-y-5">
