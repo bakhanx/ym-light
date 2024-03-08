@@ -47,15 +47,17 @@ const ProductDetail = ({ params }: Props) => {
                       <div className="text-3xl font-bold">{product?.name}</div>
 
                       <div className="gap-x-2 pt-5 font-bold">
-                        <div className="flex gap-x-2">
-                          <span className="text-xl text-red-600">
-                            {product?.discount}%
-                          </span>
+                        {product?.discount && (
+                          <div className="flex gap-x-2">
+                            <span className="text-xl text-red-600">
+                              {product?.discount}%
+                            </span>
 
-                          <span className="text-lg text-yellow-500 line-through opacity-60 ">
-                            {product?.price.toLocaleString("ko-KR")}원
-                          </span>
-                        </div>
+                            <span className="text-lg text-yellow-500 line-through opacity-60 ">
+                              {product?.price.toLocaleString("ko-KR")}원
+                            </span>
+                          </div>
+                        )}
 
                         <span className="text-2xl">
                           {product?.discount
