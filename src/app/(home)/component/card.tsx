@@ -50,14 +50,15 @@ const Card = ({ name }: CardProps) => {
       onMouseOut={handleMouseOut}
       style={cardStyle}
     >
-      <div className="relative h-64 w-40 rounded-xl bg-gray-800 shadow-md sm:h-80 sm:w-64 max-[480px]:w-36 ">
-        <div className=" h-48 rounded-xl bg-slate-200">
+      <div className="h-64 w-40 rounded-xl bg-gray-800 shadow-md max-[480px]:w-36 sm:h-80 sm:w-64 ">
+        <div className="relative h-full rounded-xl bg-slate-200">
           <Image
             src={product2}
             fill
             style={{ objectFit: "cover", objectPosition: "top" }}
             quality={100}
             alt="product2"
+            sizes="1"
             className="rounded-md"
           />
 

@@ -42,6 +42,7 @@ export default function Home() {
             fill
             style={{ objectFit: "cover", objectPosition: "top" }}
             quality={100}
+            sizes="1"
             alt="bannerImage"
           />
 
