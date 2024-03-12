@@ -1,7 +1,7 @@
 "use client";
 
 import productData from "@/db/productInfo-kor.json";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import TempImage from "@/../public/images/entro-chandelier-001.jpg";
 import Image from "next/image";
 import ProductInfo from "../_components/productInfo";
@@ -16,7 +16,9 @@ type Props = {
 type ItemType = {
   id: number;
   name: string;
-  count: number;
+  price : number,
+  count : number;
+  totalPrice : number,
 };
 type ItemListType = ItemType[];
 
@@ -30,38 +32,81 @@ const ProductDetail = ({ params }: Props) => {
     { id: 2, value: "black", name: "블랙" },
     { id: 3, value: "black", name: "골드" },
   ];
+  const initItemCount = Array(itemOptions.length).fill(0);
 
-  const [itemCount, setItemCount] = useState(0);
+  const [itemCount, setItemCount] = useState<number[]>(initItemCount);
   const [selectedItemList, setSelectedItemList] = useState<ItemListType>([]);
 
   const [isOpenOption, setIsOpenOption] = useState(false);
 
-  const handleItemCount = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setItemCount(Number(event.currentTarget.value));
+  const handleItemCount = (
+    index: number,
+    countType: "add" | "substract",
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    setItemCount((prev) => {
+      const temp = [...prev];
+      temp[index] = countType === "add" ? temp[index] + 1 : temp[index] - 1;
+      return temp;
+    });
+  };
+
+  const handleChange = (
+    index: number,
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setItemCount((prev) => {
+      const temp = [...prev];
+      temp[index] = Number(event.target.value);
+      return temp;
+    });
   };
 
   const handleOpenOption = (event: React.MouseEvent<HTMLButtonElement>) => {
     setIsOpenOption((prev) => !prev);
   };
-  const handleSelectOption = (event: React.MouseEvent<HTMLLIElement>) => {
-    if (
-      !selectedItemList?.find(
-        (v) => v.id === Number(event.currentTarget.dataset.id),
-      )
-    ) {
+
+  const handleSelectOption = (
+    index: number,
+    event: React.MouseEvent<HTMLLIElement>,
+  ) => {
+    console.log("옵션 선택");
+    if (!selectedItemList?.find((v) => v.id === index)) {
       setSelectedItemList([
         ...selectedItemList,
         {
-          id: Number(event.currentTarget.dataset.id),
+          id: index,
           name: event.currentTarget.innerText,
-          count: 1,
+          count : itemCount[index]+1,
+          price : product?.price || 0,
+          totalPrice : product && product.price * (itemCount[index]+1) || 0,
         },
       ]);
     }
-    // else{
-    //   setSelectedItemList([...selectedItemList, ])
-    // }
+
+    setItemCount((prev) => {
+      const temp = [...prev];
+      temp[index] = temp[index] + 1;
+      return temp;
+    });
+    setIsOpenOption(false);
   };
+
+  const handleDeleteOption = (
+    index: number,
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    setSelectedItemList((prev) => {
+      const temp = [...prev];
+      temp.splice(index, 1);
+      return temp;
+    });
+  };
+
+
+  useEffect(() => {
+    console.log(selectedItemList);
+  }, [selectedItemList]);
 
   return (
     <>
@@ -164,13 +209,12 @@ const ProductDetail = ({ params }: Props) => {
                             isOpenOption ? "" : "hidden",
                           )}
                         >
-                          {itemOptions.map((itemOption) => (
+                          {itemOptions.map((itemOption, index) => (
                             <li
                               key={itemOption.id}
                               value={itemOption.value}
-                              data-id={itemOption.id}
                               className="p-2 hover:cursor-pointer hover:bg-orange-50"
-                              onClick={handleSelectOption}
+                              onClick={(e) => handleSelectOption(index, e)}
                             >
                               {` ${itemOption.id} : ${itemOption.name}`}
                             </li>
@@ -182,33 +226,41 @@ const ProductDetail = ({ params }: Props) => {
                     {/* select result */}
                     <div className="pt-10">
                       <div className="flex  flex-col gap-y-5">
-                        {selectedItemList?.map((item) => (
+                        {selectedItemList?.map((item, index) => (
                           <div
                             key={item.id}
                             className="flex flex-col  gap-y-5 border-b-2 bg-slate-50 p-3"
                           >
-                            <div>{item.name}</div>
+                            <div className="flex justify-between">
+                              <span>{item.name}</span>
+                              <button
+                                onClick={(e) => handleDeleteOption(index, e)}
+                              >
+                                ❌
+                              </button>
+                            </div>
 
                             <div className="flex justify-between">
                               <div className="count-btn flex text-black">
                                 <button
-                                  className="flex h-6 w-6 items-center justify-center border p-3 hover:bg-orange-50"
-                                  onClick={() =>
-                                    setItemCount((prev) => prev - 1)
+                                  className="flex h-6 w-6 items-center justify-center border p-2 hover:bg-orange-50"
+                                  onClick={(e) =>
+                                    handleItemCount(index, "substract", e)
                                   }
                                 >
                                   -
                                 </button>
+
                                 <input
-                                  className="flex h-6 w-10 items-center justify-center border p-3 font-bold"
+                                  className="flex h-6 w-10 items-center justify-center border text-center"
                                   type="text"
-                                  value={itemCount}
-                                  onChange={handleItemCount}
+                                  value={itemCount[index]}
+                                  onChange={(e) => handleChange(index, e)}
                                 />
                                 <button
-                                  className="flex h-6 w-6 items-center justify-center border p-3 hover:bg-orange-50"
-                                  onClick={() =>
-                                    setItemCount((prev) => prev + 1)
+                                  className="flex h-6 w-6 items-center justify-center border p-2 hover:bg-orange-50"
+                                  onClick={(e) =>
+                                    handleItemCount(index, "add", e)
                                   }
                                 >
                                   +
@@ -219,10 +271,10 @@ const ProductDetail = ({ params }: Props) => {
                                 <span>
                                   {product?.discount
                                     ? (
-                                        product?.price *
+                                        item.totalPrice *
                                         ((100 - product.discount) / 100)
                                       ).toLocaleString("ko-KR")
-                                    : product?.price.toLocaleString("ko-KR")}
+                                    : item.totalPrice.toLocaleString("ko-KR")}
                                   원
                                 </span>
                               </div>
