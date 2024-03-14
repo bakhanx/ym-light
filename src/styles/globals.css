@@ -4,7 +4,7 @@
 
 html {
     background-color: white;
-    color:black;
+    color: black;
 }
 
 div {
@@ -25,4 +25,18 @@ div {
     color: transparent;
     background-size: 300% 300%;
 
+}
+
+@layer base {
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        appearance: none;
+        margin: 0;
+    }
+    input[type="number"]{
+        /* firefox */
+        -moz-appearance: textfield;
+    }
 }
