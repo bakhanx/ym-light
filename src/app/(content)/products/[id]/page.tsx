@@ -16,9 +16,9 @@ type Props = {
 type ItemType = {
   id: number;
   name: string;
-  price : number,
-  count : number;
-  totalPrice : number,
+  price: number;
+  count: number;
+  totalPrice: number;
 };
 type ItemListType = ItemType[];
 
@@ -27,15 +27,26 @@ const ProductDetail = ({ params }: Props) => {
     (product) => String(product.id) === params.id,
   );
 
-  const itemOptions = [
-    { id: 1, value: "white", name: "화이트" },
-    { id: 2, value: "black", name: "블랙" },
-    { id: 3, value: "black", name: "골드" },
+  type ItemOptionType = {
+    id: number;
+    value: string;
+    name: string;
+    price: number;
+  };
+
+  const itemOptions: ItemOptionType[] = [
+    { id: 0, value: "white", name: "화이트", price: 0 },
+    { id: 1, value: "black", name: "블랙", price: 200000 },
+    { id: 2, value: "black", name: "골드", price: 250000 },
   ];
+
+
   const initItemCount = Array(itemOptions.length).fill(0);
 
   const [itemCount, setItemCount] = useState<number[]>(initItemCount);
+
   const [selectedItemList, setSelectedItemList] = useState<ItemListType>([]);
+
 
   const [isOpenOption, setIsOpenOption] = useState(false);
 
@@ -54,9 +65,23 @@ const ProductDetail = ({ params }: Props) => {
   const handleChange = (
     index: number,
     event: React.ChangeEvent<HTMLInputElement>,
+  ) => {};
+
+  const handleBlur = (
+    index: number,
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
+    console.log("수량 변경");
     setItemCount((prev) => {
       const temp = [...prev];
+      if (Number(event.target.value) < 1) {
+        temp[index] = 1;
+        return temp;
+      }
+
+      // 최대 수량 제한
+      // ...
+
       temp[index] = Number(event.target.value);
       return temp;
     });
@@ -77,13 +102,30 @@ const ProductDetail = ({ params }: Props) => {
         {
           id: index,
           name: event.currentTarget.innerText,
-          count : itemCount[index]+1,
-          price : product?.price || 0,
-          totalPrice : product && product.price * (itemCount[index]+1) || 0,
+          count: itemCount[index] + 1,
+          price: product?.price || 0,
+          totalPrice:
+            (product &&
+              (product.price + itemOptions[index].price) *
+                (itemCount[index] + 1)) ||
+            0,
         },
       ]);
-    }
+    } else {
+      const newItemList = [...selectedItemList];
+      const item = newItemList.find((item) => item.id === index);
+      if (item) {
+        item.totalPrice =
+          (product &&
+            (product?.price + itemOptions[index].price) *
+              (itemCount[index] + 1)) ||
+          0;
+      }
+      console.log(item);
+      console.log(item?.totalPrice);
 
+      setSelectedItemList([...selectedItemList]);
+    }
     setItemCount((prev) => {
       const temp = [...prev];
       temp[index] = temp[index] + 1;
@@ -102,7 +144,6 @@ const ProductDetail = ({ params }: Props) => {
       return temp;
     });
   };
-
 
   useEffect(() => {
     console.log(selectedItemList);
@@ -216,7 +257,8 @@ const ProductDetail = ({ params }: Props) => {
                               className="p-2 hover:cursor-pointer hover:bg-orange-50"
                               onClick={(e) => handleSelectOption(index, e)}
                             >
-                              {` ${itemOption.id} : ${itemOption.name}`}
+                              {` ${itemOption.id} : ${itemOption.name}`}{" "}
+                              {itemOption.price > 0 && `(+${itemOption.price})`}
                             </li>
                           ))}
                         </ul>
@@ -247,6 +289,7 @@ const ProductDetail = ({ params }: Props) => {
                                   onClick={(e) =>
                                     handleItemCount(index, "substract", e)
                                   }
+                                  disabled={itemCount[index] === 1}
                                 >
                                   -
                                 </button>
@@ -256,6 +299,9 @@ const ProductDetail = ({ params }: Props) => {
                                   type="text"
                                   value={itemCount[index]}
                                   onChange={(e) => handleChange(index, e)}
+                                  onBlur={(e) => {
+                                    handleBlur(index, e);
+                                  }}
                                 />
                                 <button
                                   className="flex h-6 w-6 items-center justify-center border p-2 hover:bg-orange-50"
