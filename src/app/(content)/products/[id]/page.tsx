@@ -13,127 +13,100 @@ type Props = {
   };
 };
 
-type ItemType = {
+type ItemOptionType = {
   id: number;
   name: string;
   price: number;
-  count: number;
+};
+
+type selectedItemType = {
+  id: number;
+  name: string;
+  price: number;
+  quantity: number;
   totalPrice: number;
 };
-type ItemListType = ItemType[];
+
+const data: ItemOptionType[] = [
+  { id: 0, name: "화이트", price: 0 },
+  { id: 1, name: "블랙", price: 200000 },
+  { id: 2, name: "골드", price: 250000 },
+];
+
+// 쿠폰시스템
+// const coupon = [{ id: 1, name: "신규할인쿠폰", rate: 10 }];
 
 const ProductDetail = ({ params }: Props) => {
   const product = productData.products.find(
     (product) => String(product.id) === params.id,
   );
 
-  type ItemOptionType = {
-    id: number;
-    value: string;
-    name: string;
-    price: number;
+  const parsePrice = (price: number) => {
+    return price.toLocaleString("ko-KR");
   };
 
-  const itemOptions: ItemOptionType[] = [
-    { id: 0, value: "white", name: "화이트", price: 0 },
-    { id: 1, value: "black", name: "블랙", price: 200000 },
-    { id: 2, value: "black", name: "골드", price: 250000 },
-  ];
+  const calcPrice = (price: number) => {
+    if (product?.discount) {
+      return price - (price * product.discount) / 100;
+    }
 
+    return price;
 
-  const initItemCount = Array(itemOptions.length).fill(0);
+    // 복수 할인
+    // if (product?.discount) {
+    //   const totalRate = discount
+    //     .map((item) => item)
+    //     .reduce((acc, cur) => acc + cur, 0);
+    //   return (price - (price * totalRate) / 100).toLocaleString("ko-KR");
+    // }
+  };
 
-  const [itemCount, setItemCount] = useState<number[]>(initItemCount);
+  const [selectedItemList, setSelectedItemList] = useState<selectedItemType[]>(
+    [],
+  );
 
-  const [selectedItemList, setSelectedItemList] = useState<ItemListType>([]);
+  const [itemOptions, setItemOptions] = useState(data);
+  const [totalItemListPrice, setTotalItemListPrice] = useState(0);
 
+  const [quantity, setQuantity] = useState(Array(data.length).fill(0));
 
   const [isOpenOption, setIsOpenOption] = useState(false);
-
-  const handleItemCount = (
-    index: number,
-    countType: "add" | "substract",
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => {
-    setItemCount((prev) => {
-      const temp = [...prev];
-      temp[index] = countType === "add" ? temp[index] + 1 : temp[index] - 1;
-      return temp;
-    });
-  };
-
-  const handleChange = (
-    index: number,
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {};
-
-  const handleBlur = (
-    index: number,
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    console.log("수량 변경");
-    setItemCount((prev) => {
-      const temp = [...prev];
-      if (Number(event.target.value) < 1) {
-        temp[index] = 1;
-        return temp;
-      }
-
-      // 최대 수량 제한
-      // ...
-
-      temp[index] = Number(event.target.value);
-      return temp;
-    });
-  };
 
   const handleOpenOption = (event: React.MouseEvent<HTMLButtonElement>) => {
     setIsOpenOption((prev) => !prev);
   };
 
-  const handleSelectOption = (
-    index: number,
-    event: React.MouseEvent<HTMLLIElement>,
-  ) => {
-    console.log("옵션 선택");
-    if (!selectedItemList?.find((v) => v.id === index)) {
-      setSelectedItemList([
-        ...selectedItemList,
-        {
-          id: index,
-          name: event.currentTarget.innerText,
-          count: itemCount[index] + 1,
-          price: product?.price || 0,
-          totalPrice:
-            (product &&
-              (product.price + itemOptions[index].price) *
-                (itemCount[index] + 1)) ||
-            0,
-        },
-      ]);
-    } else {
-      const newItemList = [...selectedItemList];
-      const item = newItemList.find((item) => item.id === index);
-      if (item) {
-        item.totalPrice =
-          (product &&
-            (product?.price + itemOptions[index].price) *
-              (itemCount[index] + 1)) ||
-          0;
-      }
-      console.log(item);
-      console.log(item?.totalPrice);
+  const handleSelectOption = (id: number, e: any) => {
+    const temp = [...quantity];
+    temp[id]++;
+    setQuantity(temp);
 
-      setSelectedItemList([...selectedItemList]);
+    const clickedItem = data.find((v) => v.id === id) as any;
+    const isExistList = selectedItemList.find((v) => v.id === clickedItem.id);
+
+    if (!isExistList) {
+      const newClickedItem = {
+        ...clickedItem,
+        quantity: clickedItem.quantity ? clickedItem?.quantity + 1 : 1,
+        totalPrice:
+          calcPrice(product?.price as number) +
+          (clickedItem.quantity
+            ? clickedItem.price * (clickedItem.quantity + 1)
+            : clickedItem.price),
+      };
+      setSelectedItemList((prev) => [...prev, newClickedItem]);
+    } else {
+      const newClickItem = [...selectedItemList];
+      const foundItem = newClickItem.find((v) => v.id === id);
+      if (foundItem) {
+        foundItem.quantity++;
+        foundItem.totalPrice +=
+          calcPrice(product?.price as number) + foundItem.price;
+      }
+      setSelectedItemList(newClickItem);
     }
-    setItemCount((prev) => {
-      const temp = [...prev];
-      temp[index] = temp[index] + 1;
-      return temp;
-    });
     setIsOpenOption(false);
   };
-
   const handleDeleteOption = (
     index: number,
     event: React.MouseEvent<HTMLButtonElement>,
@@ -145,8 +118,70 @@ const ProductDetail = ({ params }: Props) => {
     });
   };
 
+  const handleButtonClick = (id: number, buttonType: "add" | "substract") => {
+    const newClickItem = [...selectedItemList];
+    const foundItem = newClickItem.find((v) => v.id === id);
+
+    if (foundItem) {
+      if (buttonType === "add") {
+        foundItem.quantity++;
+        foundItem.totalPrice +=
+          calcPrice(product?.price as number) + foundItem.price;
+        setQuantity((prev) => {
+          const temp = [...prev];
+          temp[id]++;
+          return temp;
+        });
+      } else if (buttonType === "substract") {
+        if (quantity[id] === 1) return;
+        foundItem.quantity--;
+        foundItem.totalPrice -=
+          calcPrice(product?.price as number) + foundItem.price;
+        setQuantity((prev) => {
+          const temp = [...prev];
+          temp[id]--;
+          return temp;
+        });
+      }
+    }
+    setSelectedItemList(newClickItem);
+  };
+
+  const handleChange = (id: number, e: any) => {
+    const temp = [...quantity];
+    temp[id] = e.target.value;
+    setQuantity(temp);
+  };
+
+  const handleBlur = (id: number, e: any) => {
+    let _quantity = 0;
+    if (quantity[id] < 1) {
+      setQuantity((prev) => {
+        const temp = [...prev];
+        temp[id] = 1;
+        return temp;
+      });
+      _quantity = 1;
+    } else {
+      _quantity = e.target.value;
+    }
+    const newClickItem = [...selectedItemList];
+    const foundItem = newClickItem.find((v) => v.id === id);
+    if (foundItem) {
+      foundItem.quantity = _quantity;
+      foundItem.totalPrice =
+        (calcPrice(product?.price as number) + foundItem.price) *
+        foundItem.quantity;
+    }
+    setSelectedItemList(newClickItem);
+  };
+
   useEffect(() => {
-    console.log(selectedItemList);
+    setTotalItemListPrice(
+      selectedItemList
+        .map((item) => item.totalPrice)
+        .reduce((acc, cur) => acc + cur, 0),
+    );
   }, [selectedItemList]);
 
   return (
@@ -250,15 +285,14 @@ const ProductDetail = ({ params }: Props) => {
                             isOpenOption ? "" : "hidden",
                           )}
                         >
-                          {itemOptions.map((itemOption, index) => (
+                          {itemOptions.map((item) => (
                             <li
-                              key={itemOption.id}
-                              value={itemOption.value}
+                              key={item.id}
                               className="p-2 hover:cursor-pointer hover:bg-orange-50"
-                              onClick={(e) => handleSelectOption(index, e)}
+                              onClick={(e) => handleSelectOption(item.id, e)}
                             >
-                              {` ${itemOption.id} : ${itemOption.name}`}{" "}
-                              {itemOption.price > 0 && `(+${itemOption.price})`}
+                              {` ${item.id} : ${item.name}`}{" "}
+                              {item.price > 0 && `(+${item.price})`}
                             </li>
                           ))}
                         </ul>
@@ -268,7 +302,7 @@ const ProductDetail = ({ params }: Props) => {
                     {/* select result */}
                     <div className="pt-10">
                       <div className="flex  flex-col gap-y-5">
-                        {selectedItemList?.map((item, index) => (
+                        {selectedItemList?.map((item) => (
                           <div
                             key={item.id}
                             className="flex flex-col  gap-y-5 border-b-2 bg-slate-50 p-3"
@@ -276,7 +310,7 @@ const ProductDetail = ({ params }: Props) => {
                             <div className="flex justify-between">
                               <span>{item.name}</span>
                               <button
-                                onClick={(e) => handleDeleteOption(index, e)}
+                                onClick={(e) => handleDeleteOption(item.id, e)}
                               >
                                 ❌
                               </button>
@@ -287,26 +321,25 @@ const ProductDetail = ({ params }: Props) => {
                                 <button
                                   className="flex h-6 w-6 items-center justify-center border p-2 hover:bg-orange-50"
                                   onClick={(e) =>
-                                    handleItemCount(index, "substract", e)
+                                    handleButtonClick(item.id, "substract")
                                   }
-                                  disabled={itemCount[index] === 1}
                                 >
                                   -
                                 </button>
 
                                 <input
                                   className="flex h-6 w-10 items-center justify-center border text-center"
-                                  type="text"
-                                  value={itemCount[index]}
-                                  onChange={(e) => handleChange(index, e)}
+                                  type="number"
+                                  value={quantity[item.id]}
+                                  onChange={(e) => handleChange(item.id, e)}
                                   onBlur={(e) => {
-                                    handleBlur(index, e);
+                                    handleBlur(item.id, e);
                                   }}
                                 />
                                 <button
                                   className="flex h-6 w-6 items-center justify-center border p-2 hover:bg-orange-50"
                                   onClick={(e) =>
-                                    handleItemCount(index, "add", e)
+                                    handleButtonClick(item.id, "add")
                                   }
                                 >
                                   +
@@ -314,19 +347,29 @@ const ProductDetail = ({ params }: Props) => {
                               </div>
 
                               <div className="item-price">
-                                <span>
-                                  {product?.discount
-                                    ? (
-                                        item.totalPrice *
-                                        ((100 - product.discount) / 100)
-                                      ).toLocaleString("ko-KR")
-                                    : item.totalPrice.toLocaleString("ko-KR")}
-                                  원
-                                </span>
+                                <span>{parsePrice(item.totalPrice)}원</span>
                               </div>
                             </div>
                           </div>
                         ))}
+                      </div>
+                      <div className="pt-5">
+                        <div className="flex items-end justify-end gap-x-2 px-3 ">
+                          <span className="font-semibold text-slate-500">
+                            추가 할인
+                          </span>
+                          <span className="font-bold text-red-500">
+                            {parsePrice(totalItemListPrice)}원
+                          </span>
+                        </div>
+                        <div className="flex items-end justify-end gap-x-10 px-3">
+                          <span className="font-semibold text-slate-700">
+                            총 가격
+                          </span>
+                          <span className="text-xl font-bold">
+                            {parsePrice(totalItemListPrice)}원
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
