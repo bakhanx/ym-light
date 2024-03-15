@@ -67,7 +67,7 @@ const ProductDetail = ({ params }: Props) => {
 
   const [itemOptions, setItemOptions] = useState(data);
   const [totalItemListPrice, setTotalItemListPrice] = useState(0);
-
+  const [totalOriginalPrice, setTotalOriginalPrice] = useState(0);
   const [quantity, setQuantity] = useState(Array(data.length).fill(0));
 
   const [isOpenOption, setIsOpenOption] = useState(false);
@@ -107,13 +107,22 @@ const ProductDetail = ({ params }: Props) => {
     }
     setIsOpenOption(false);
   };
+
   const handleDeleteOption = (
-    index: number,
+    id: number,
     event: React.MouseEvent<HTMLButtonElement>,
   ) => {
+    const index = selectedItemList.findIndex((item) => id === item.id);
+    console.log(index);
     setSelectedItemList((prev) => {
       const temp = [...prev];
       temp.splice(index, 1);
+      return temp;
+    });
+
+    setQuantity((prev) => {
+      const temp = [...prev];
+      temp[id] = 0;
       return temp;
     });
   };
@@ -177,12 +186,23 @@ const ProductDetail = ({ params }: Props) => {
   };
 
   useEffect(() => {
+    console.log(selectedItemList);
+
     setTotalItemListPrice(
       selectedItemList
         .map((item) => item.totalPrice)
         .reduce((acc, cur) => acc + cur, 0),
     );
-  }, [selectedItemList]);
+
+    const totalQuantity = selectedItemList
+      .map((item) => item.quantity)
+      .reduce((acc, cur) => acc + cur, 0);
+    const regularPrice = totalQuantity * (product?.price as number);
+    const OptionPrice = selectedItemList
+      .map((item) => item.quantity * item.price)
+      .reduce((acc, cur) => acc + cur, 0);
+    setTotalOriginalPrice(regularPrice + OptionPrice);
+  }, [selectedItemList, product]);
 
   return (
     <>
@@ -353,20 +373,25 @@ const ProductDetail = ({ params }: Props) => {
                           </div>
                         ))}
                       </div>
-                      <div className="pt-5">
-                        <div className="flex items-end justify-end gap-x-2 px-3 ">
-                          <span className="font-semibold text-slate-500">
-                            추가 할인
-                          </span>
-                          <span className="font-bold text-red-500">
-                            {parsePrice(totalItemListPrice)}원
-                          </span>
-                        </div>
-                        <div className="flex items-end justify-end gap-x-10 px-3">
+                      <div className="px-3 pt-5">
+                        {totalOriginalPrice - totalItemListPrice > 0 && (
+                          <div className="flex items-end justify-end gap-x-10">
+                            <span className="text-sm font-semibold text-red-500 ">
+                              추가 할인
+                            </span>
+                            <span className="w-36 text-right font-bold text-red-500">
+                              {parsePrice(
+                                totalOriginalPrice - totalItemListPrice,
+                              )}
+                              원
+                            </span>
+                          </div>
+                        )}
+                        <div className="flex items-end justify-end gap-x-10 ">
                           <span className="font-semibold text-slate-700">
                             총 가격
                           </span>
-                          <span className="text-xl font-bold">
+                          <span className="w-36 text-right text-xl font-bold">
                             {parsePrice(totalItemListPrice)}원
                           </span>
                         </div>
