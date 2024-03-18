@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+const plugin = require("tailwindcss/plugin");
 
 const config: Config = {
   content: [
@@ -19,6 +20,16 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+
+  plugins: [
+    plugin(function ({ addComponents }: any) {
+      addComponents({
+        ".inner-content": {
+          margin: "0 auto",
+          maxWidth: "1280px",
+        },
+      });
+    }),
+  ],
 };
 export default config;
