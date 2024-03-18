@@ -1,155 +1,104 @@
 "use client";
-import React, { useEffect, useState } from "react";
 
-const receivedData = [
-  { id: 0, name: "a", price: 100 },
-  { id: 1, name: "b", price: 200 },
-  { id: 2, name: "c", price: 300 },
-];
-
-type selectedItemType = {
-  id: number;
-  name: string;
-  price: number;
-  quantity: number;
-  totalPrice: number;
-};
+import { cls } from "@/libs/utils";
+import { useState } from "react";
 
 const Cart = () => {
-  const [data, setData] = useState(receivedData);
+  const [totalQuantity, setTotalQuantity] = useState(0);
+  const [isSelectAllClick, setisSelectAllClick] = useState(false);
 
-  const [selectedItemList, setSelectedItemList] = useState<selectedItemType[]>(
-    [],
-  );
-  const [totalItemListPrice, setTotalItemListPrice] = useState(0);
-
-  const handleClick = (id: number, e: any) => {
-    const temp = [...quantity];
-    temp[id]++;
-    setQuantity(temp);
-
-    const clickedItem = data.find((v) => v.id === id) as any;
-    const isExistList = selectedItemList.find((v) => v.id === clickedItem.id);
-
-    if (!isExistList) {
-      const newClickedItem = {
-        ...clickedItem,
-        quantity: clickedItem.quantity ? clickedItem?.quantity + 1 : 1,
-        totalPrice: clickedItem.quantity
-          ? clickedItem.price * (clickedItem.quantity + 1)
-          : clickedItem.price,
-      };
-      setSelectedItemList((prev) => [...prev, newClickedItem]);
-    } else {
-      const newClickItem = [...selectedItemList];
-      const foundItem = newClickItem.find((v) => v.id === id);
-      if (foundItem) {
-        foundItem.quantity++;
-        foundItem.totalPrice = foundItem.price * foundItem.quantity;
-      }
-      setSelectedItemList(newClickItem);
-    }
+  const handleSelectAllClick = () => {
+    setisSelectAllClick((prev) => !prev);
   };
-
-  const handleButtonClick = (id: number, buttonType: "add" | "substract") => {
-    const newClickItem = [...selectedItemList];
-    const foundItem = newClickItem.find((v) => v.id === id);
-
-    if (foundItem) {
-      if (buttonType === "add") {
-        foundItem.quantity++;
-        foundItem.totalPrice += foundItem.price;
-        setQuantity((prev) => {
-          const temp = [...prev];
-          temp[id]++;
-          return temp;
-        });
-      } else if (buttonType === "substract") {
-        if (quantity[id] === 1) return;
-        foundItem.quantity--;
-        foundItem.totalPrice -= foundItem.price;
-        setQuantity((prev) => {
-          const temp = [...prev];
-          temp[id]--;
-          return temp;
-        });
-      }
-    }
-    setSelectedItemList(newClickItem);
-  };
-
-  const [quantity, setQuantity] = useState(Array(data.length).fill(0));
-
-  const handleChange = (id: number, e: any) => {
-    if (e.target.value < 1) {
-      return;
-    }
-    
-    const temp = [...quantity];
-    temp[id] = e.target.value;
-    setQuantity(temp);
-  };
-
-  const handleBlur = (id: number, e: any) => {
-    const newClickItem = [...selectedItemList];
-    const foundItem = newClickItem.find((v) => v.id === id);
-    if (foundItem) {
-      foundItem.quantity = e.target.value;
-      foundItem.totalPrice = foundItem.price * foundItem.quantity;
-    }
-    setSelectedItemList(newClickItem);
-  };
-
-  useEffect(() => {
-    setTotalItemListPrice(
-      selectedItemList
-        .map((item) => item.totalPrice)
-        .reduce((acc, cur) => acc + cur, 0),
-    );
-  }, [selectedItemList]);
 
   return (
-    <div className="flex flex-col gap-x-2 p-10 pt-28">
-      <div className="w-20 border">옵션 선택</div>
-      <div className="w-20 border">
-        {data.map((item) => (
-          <div key={item.id} onClick={(e) => handleClick(item.id, e)}>
-            {item.name}
+    <>
+      <div className="wrapper pt-20">
+        {/* Header */}
+        <div className="divide-y-[1px] shadow-xl">
+          {/* title  */}
+          <div className=" py-10">
+            <div className="inner-content max-w-screen-xl ">
+              <span className="text-3xl font-bold">장바구니</span>
+            </div>
           </div>
-        ))}
-      </div>
 
-      <div>
-        {selectedItemList.map((item) => (
-          <div key={item.id}>
-            {item.id} : {item.name}, {item.price}, quantity : {item.quantity},
-            totalPrice :{item.totalPrice}
-            <button
-              className="border p-2"
-              onClick={() => handleButtonClick(item.id, "substract")}
-            >
-              -
-            </button>
-            <input
-              type="number"
-              className="border"
-              min={1}
-              value={quantity[item.id]}
-              onChange={(e) => handleChange(item.id, e)}
-              onBlur={(e) => handleBlur(item.id, e)}
-            />
-            <button
-              className="border p-2"
-              onClick={() => handleButtonClick(item.id, "add")}
-            >
-              +
-            </button>
+          {/* total Qunatity */}
+          <div className=" py-5">
+            <div className="inner-content max-w-screen-xl">
+              <div className="flex gap-x-1 font-bold">
+                <span className="text-xl">전체</span>
+                <div className="flex h-5 w-5 items-center justify-center rounded-md bg-amber-200 p-3 text-lg">
+                  <span> {totalQuantity}</span>
+                </div>
+              </div>
+            </div>
           </div>
-        ))}
-      </div>
+          {/* check all */}
+          <div className=" py-5 text-sm">
+            <div className="inner-content max-w-screen-xl">
+              <div className="flex gap-x-2 divide-x-2">
+                <div className="">
+                  <button
+                    className={cls(
+                      isSelectAllClick
+                        ? "border-amber-400 bg-amber-400 text-white"
+                        : " border-amber-400 ",
+                      "flex items-center gap-x-1 rounded-md border-2 p-1 ",
+                    )}
+                    onClick={handleSelectAllClick}
+                  >
+                    <span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={3}
+                        stroke="currentColor"
+                        className="h-3 w-3"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m4.5 12.75 6 6 9-13.5"
+                        />
+                      </svg>
+                    </span>
+                    <span>전체선택</span>
+                  </button>
+                </div>
+                <div className="px-2">
+                  <button className="flex items-center rounded-md border-2 p-1 text-gray-600">
+                    <span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="h-4 w-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                        />
+                      </svg>
+                    </span>
+                    <span>선택삭제</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-      <div>총 가격 :{totalItemListPrice}</div>
-    </div>
+        {/* contents */}
+        <div className="h-96 bg-gray-100 pt-10">
+        
+        </div>
+      </div>
+    </>
   );
 };
 
