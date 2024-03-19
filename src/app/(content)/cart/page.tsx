@@ -5,7 +5,7 @@ import { useState } from "react";
 
 const Cart = () => {
   const [totalQuantity, setTotalQuantity] = useState(0);
-  const [isSelectAllClick, setisSelectAllClick] = useState(false);
+  const [isSelectAllClick, setisSelectAllClick] = useState(true);
 
   const handleSelectAllClick = () => {
     setisSelectAllClick((prev) => !prev);
@@ -44,26 +44,25 @@ const Cart = () => {
                       isSelectAllClick
                         ? "border-amber-400 bg-amber-400 text-white"
                         : " border-amber-400 ",
-                      "flex items-center gap-x-1 rounded-md border-2 p-1 ",
+                      "flex items-center gap-x-1 rounded-md border-2 p-1 text-gray-600",
                     )}
                     onClick={handleSelectAllClick}
                   >
-                    <span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={3}
-                        stroke="currentColor"
-                        className="h-3 w-3"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="m4.5 12.75 6 6 9-13.5"
-                        />
-                      </svg>
-                    </span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={3}
+                      stroke="currentColor"
+                      className="h-3 w-3"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="m4.5 12.75 6 6 9-13.5"
+                      />
+                    </svg>
+
                     <span>전체선택</span>
                   </button>
                 </div>
@@ -94,8 +93,97 @@ const Cart = () => {
         </div>
 
         {/* contents */}
-        <div className="h-96 bg-gray-100 pt-10">
-        
+        <div className="h-full bg-gray-100 py-10">
+          <div className="m-auto h-96 max-w-screen-xl rounded-md bg-white">
+            {/* header */}
+            <div>
+              <div className="flex border-b border-t-2 border-t-black p-4 text-center font-bold">
+                <button
+                  className={cls(
+                    isSelectAllClick
+                      ? "border-amber-400 bg-amber-400 text-white"
+                      : " border-amber-400 text-gray-400 ",
+                    "absolute flex items-center gap-x-1 rounded-md border-2 p-1",
+                  )}
+                  onClick={handleSelectAllClick}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={3}
+                    stroke="currentColor"
+                    className="h-3 w-3"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m4.5 12.75 6 6 9-13.5"
+                    />
+                  </svg>
+                </button>
+                <span className="w-[848px]">상품정보</span>
+                <span className="w-[200px]">상품금액</span>
+                <span className="w-[200px]">배송비</span>
+              </div>
+            </div>
+            {/* products */}
+            <div>
+              <div className="flex p-4">
+                <button
+                  className={cls(
+                    isSelectAllClick
+                      ? "border-amber-400 bg-amber-400 text-white"
+                      : " border-amber-400 text-gray-400 ",
+                    "absolute flex items-center gap-x-1 rounded-md border-2 p-1",
+                  )}
+                  onClick={handleSelectAllClick}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={3}
+                    stroke="currentColor"
+                    className="h-3 w-3"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m4.5 12.75 6 6 9-13.5"
+                    />
+                  </svg>
+                </button>
+                <div className="flex justify-center divide-x-[1px]">
+
+                  <div className="flex w-[848px] pl-10">
+                    <div className="relative">
+                      <div className="h-20 w-20 bg-slate-500"></div>
+                    </div>
+                    <div className="flex flex-col px-10 ">
+                      <strong>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing
+                        elit. Ab earum quos, illum unde eos, illum unde eos,
+                        illum unde eos, illum unde eos
+                      </strong>
+                      <ul className="flex flex-col gap-y-4 pt-2 text-gray-500 [&>li]:border-b-[1px] [&>li]:py-2">
+                        <li>01. This is a option.</li>
+                        <li>02. This is a option.</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div className="flex w-[200px] items-center justify-center ">
+                    <span>350,000원</span>
+                  </div>
+
+                  <div className="flex w-[200px] items-center justify-center">
+                    <span>7,000원</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </>
