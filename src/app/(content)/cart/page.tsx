@@ -94,8 +94,8 @@ const Cart = () => {
         </div>
 
         {/* contents */}
-        <div className="h-screen bg-gray-100 py-10">
-          <div className="m-auto max-w-screen-xl rounded-md bg-white">
+        <div className="bg-gray-100 py-10">
+          <div className="m-auto max-w-screen-xl rounded-md bg-white shadow-xl">
             {/* header */}
             <div>
               <div className="flex border-b border-t-2 border-t-black p-4 text-center font-bold">
@@ -132,12 +132,57 @@ const Cart = () => {
             {Array(totalQuantity)
               .fill(0)
               .map((e, index) => (
-                <div key={index} className="border-b-[1px] border-gray-400">
+                <div key={index} className="border-b-[1px] border-gray-300">
                   <Products />
                 </div>
               ))}
+
+            {/* Total */}
+            <div className="flex px-4 py-6 border-b">
+              <div className="flex w-[848px] items-center justify-center gap-x-16 border-r">
+                <div className="flex flex-col">
+                  <span className="text-center text-gray-400">상품금액</span>
+                  <span className="font-bold">33,000,000원</span>
+                </div>
+                <div>
+                  <span className="text-4xl">-</span>
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-center text-gray-400">할인금액</span>
+                  <span className="font-bold text-red-500">3,200,000원</span>
+                </div>
+
+                <div>
+                  <span className="text-4xl">+</span>
+                </div>
+
+                <div className="flex flex-col">
+                  <span className="text-center text-gray-400">배송비</span>
+                  <span className="font-bold text-green-500">7,000원</span>
+                </div>
+              </div>
+
+              <div className="flex w-[400px] flex-col items-center justify-center rounded-xl">
+                <span className="font-bold text-gray-600">주문금액</span>
+                <span className="text-2xl font-bold text-blue-500">
+                  28,507,000원
+                </span>
+              </div>
+            </div>
+
+            <div className="flex justify-center gap-x-10 py-5">
+              <button className="rounded-md border border-amber-500 p-5 px-16 text-xl  font-bold text-amber-500">
+                돌아가기
+              </button>
+              <button className="rounded-md bg-amber-500 p-5 px-16 text-xl font-bold text-white">
+                주문하기
+              </button>
+            </div>
           </div>
         </div>
+
+        {/* footer */}
+        <div className="pt-20">footer</div>
       </div>
     </>
   );
