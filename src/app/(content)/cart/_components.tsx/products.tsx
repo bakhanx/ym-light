@@ -12,7 +12,6 @@ const Products = () => {
     <div className="flex pl-4">
       <div className="flex justify-center divide-x-[1px]">
         <div className="relative flex w-[848px] p-10">
-
           <button
             className={cls(
               isSelectAllClick
@@ -41,16 +40,65 @@ const Products = () => {
           <div className="relative">
             <div className="h-20 w-20 bg-slate-500"></div>
           </div>
-          
-          <div className="flex flex-col px-10 ">
-            <strong>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab earum
-              quos, illum unde eos, illum unde eos, illum unde eos, illum unde
-              eos
+
+          <div className="flex w-full flex-col px-10">
+            <strong className="flex flex-col gap-y-2">
+              <p>메가 크리스탈 라이트</p>
+              <p className="flex gap-x-2">
+                <span>1,920,000원</span>
+                <span className="text-red-500 line-through">3,200,000원</span>
+              </p>
             </strong>
-            <ul className="flex flex-col gap-y-4 pt-2 text-gray-500 [&>li]:border-b-[1px] [&>li]:py-2">
-              <li>01. This is a option.</li>
-              <li>02. This is a option.</li>
+
+            <ul className="flex flex-col gap-y-4 pt-2 text-gray-500 [&>li]:border-b-[1px] [&>li]:py-2 [&>li]:text-sm">
+              <li className="">
+                <div className="flex justify-between">
+                  <span>01. 색상 : 화이트 / 1개</span>
+                  <div className="flex items-center gap-x-2">
+                    
+                    <button className=" text-gray-400">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={2}
+                        stroke="currentColor"
+                        className="h-4 w-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M6 18 18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div className="flex justify-between">
+                  <span>02. 색상 : 블랙 / 1개</span>
+                  <div className="flex items-center gap-x-2">
+                    <span> ( +1,132,000원 )</span>
+                    <button className=" text-gray-400">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={2}
+                        stroke="currentColor"
+                        className="h-4 w-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M6 18 18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </li>
             </ul>
           </div>
 
