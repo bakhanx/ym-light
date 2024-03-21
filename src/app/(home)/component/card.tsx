@@ -36,7 +36,7 @@ const Card = ({ name }: CardProps) => {
 
   const overlayStyle = {
     background:
-      "linear-gradient(105deg, transparent 40%, rgba(255,219,112,0.8) 45%, rgba(132,50,255,0.6) 50%, transparent 54%)",
+      "linear-gradient(105deg, transparent 30%, rgba(255,219,112,0.4) 45%, rgba(230, 158, 51, 0.3)50%, transparent 80%)",
     backgroundSize: "150% 150%",
     backgroundPosition: bgPosition,
     filter: `brightness(1.2) opacity(${bgOpacity})`,
