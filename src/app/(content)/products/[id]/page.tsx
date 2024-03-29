@@ -6,6 +6,7 @@ import TempImage from "@/../public/images/entro-chandelier-001.jpg";
 import Image from "next/image";
 import ProductInfo from "../_components/productInfo";
 import { cls } from "@/libs/utils";
+import { HeartIcon, ShoppingBagIcon, TruckIcon } from "@heroicons/react/24/outline";
 
 type Props = {
   params: {
@@ -400,14 +401,17 @@ const ProductDetail = ({ params }: Props) => {
                   </div>
 
                   <div className="my-btn-wrap mt-20 flex flex-col gap-y-5 font-bold text-white">
-                    <button className="w-full rounded-md bg-red-700 p-5 hover:bg-red-600">
+                    <button className="w-full rounded-md bg-amber-500 p-5 hover:bg-amber-600 flex justify-center items-center gap-x-1">
+                      <TruckIcon className="w-7 h-7 "/>
                       구매하기
                     </button>
                     <div className="flex gap-x-4">
-                      <button className="w-full rounded-md bg-blue-500 p-5 hover:bg-blue-400">
-                        장바구니
+                      <button className="flex w-full items-center justify-center gap-x-1 rounded-md bg-blue-500 p-5 hover:bg-blue-600">
+                        <ShoppingBagIcon className="h-5 w-5 stroke-2" />
+                        <span>장바구니</span>
                       </button>
-                      <button className="w-full rounded-md bg-slate-700 p-5 hover:bg-slate-600">
+                      <button className="w-full rounded-md bg-red-600 p-5 hover:bg-red-700 flex justify-center items-center gap-x-1">
+                        <HeartIcon className="w-5 h-5 stroke-2"/>
                         찜하기
                       </button>
                     </div>
