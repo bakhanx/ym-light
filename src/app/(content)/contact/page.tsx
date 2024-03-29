@@ -1,6 +1,8 @@
 import React from "react";
 import Image01 from "@/../public/images/contact01-lg.jpg";
 import Image from "next/image";
+import FormInput from "@/components/form-input";
+import FormButton from "@/components/form-button";
 
 const Contact = () => {
   return (
@@ -75,51 +77,39 @@ const Contact = () => {
                   <div className="w-full pt-5">
                     <form>
                       <div className="flex flex-col gap-y-5">
-                        <div className="flex flex-col ">
-                          <label htmlFor="name">
-                            이름<span className="text-red-500">*</span>
-                          </label>
-                          <input
-                            type="text"
-                            name="name"
-                            className=" p-2 text-black"
-                          />
-                        </div>
+                        <FormInput
+                          label="이름"
+                          type="text"
+                          placeholder="홍길동"
+                          error="이름을 입력하세요."
+                          requried
+                        />
+                        <FormInput
+                          label="회사이름"
+                          type="text"
+                          placeholder=""
+                          error=""
+                        />
+                        <FormInput
+                          label="연락처"
+                          type="text"
+                          placeholder="전화번호 또는 이메일주소"
+                          error="연락처를 입력하세요."
+                          requried
+                        />
 
-                        <div className="flex flex-col ">
-                          <label htmlFor="name">회사이름</label>
-                          <input
-                            type="text"
-                            name="name"
-                            className=" p-2 text-black"
-                          />
-                        </div>
-
-                        <div className="flex flex-col ">
-                          <label htmlFor="name">
-                            연락처<span className="text-red-500">*</span>
-                          </label>
-                          <input
-                            type="text"
-                            name="name"
-                            className=" p-2 text-black"
-                          />
-                        </div>
-                        <div className="flex flex-col ">
-                          <label htmlFor="name">
-                            내용<span className="text-red-500">*</span>
-                          </label>
-                          <textarea
-                            name="content"
-                            className="h-28 resize-none text-black"
-                          />
-                        </div>
+                        <FormInput
+                          label="내용"
+                          type="text"
+                          placeholder="안녕하세요"
+                          error="내용을 입력하세요."
+                          textarea
+                          requried
+                        />
                       </div>
 
                       <div className="pt-5">
-                        <button className="w-full rounded-md bg-blue-500 p-4">
-                          제출하기
-                        </button>
+                       <FormButton name="제출하기" loading={false}/>
                       </div>
                     </form>
                   </div>
