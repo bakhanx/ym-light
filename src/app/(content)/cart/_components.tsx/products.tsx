@@ -1,4 +1,5 @@
 import { cls } from "@/libs/utils";
+import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import React, { useState } from "react";
 
 const Products = () => {
@@ -21,20 +22,7 @@ const Products = () => {
             )}
             onClick={handleSelectAllClick}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={3}
-              stroke="currentColor"
-              className="h-3 w-3"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="m4.5 12.75 6 6 9-13.5"
-              />
-            </svg>
+            <CheckIcon className="h-3 w-3 stroke-2" />
           </button>
 
           <div className="relative">
@@ -55,22 +43,8 @@ const Products = () => {
                 <div className="flex justify-between">
                   <span>01. 색상 : 화이트 / 1개</span>
                   <div className="flex items-center gap-x-2">
-                    
                     <button className=" text-gray-400">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={2}
-                        stroke="currentColor"
-                        className="h-4 w-4"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M6 18 18 6M6 6l12 12"
-                        />
-                      </svg>
+                      <XMarkIcon className="h-4 w-4 stroke-2" />
                     </button>
                   </div>
                 </div>
@@ -81,20 +55,7 @@ const Products = () => {
                   <div className="flex items-center gap-x-2">
                     <span> ( +1,132,000원 )</span>
                     <button className=" text-gray-400">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={2}
-                        stroke="currentColor"
-                        className="h-4 w-4"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M6 18 18 6M6 6l12 12"
-                        />
-                      </svg>
+                      <XMarkIcon className="h-4 w-4 stroke-2" />
                     </button>
                   </div>
                 </div>
@@ -103,20 +64,7 @@ const Products = () => {
           </div>
 
           <button className="absolute right-6 text-gray-400">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-              className="h-6 w-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6 18 18 6M6 6l12 12"
-              />
-            </svg>
+            <XMarkIcon className="h-6 w-6 stroke-2" />
           </button>
         </div>
 
