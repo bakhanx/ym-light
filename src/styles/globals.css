@@ -27,7 +27,9 @@ div {
 
 }
 
+
 @layer base {
+
 
     input[type="number"]::-webkit-inner-spin-button,
     input[type="number"]::-webkit-outer-spin-button {
@@ -35,8 +37,17 @@ div {
         appearance: none;
         margin: 0;
     }
-    input[type="number"]{
+
+    input[type="number"] {
         /* firefox */
         -moz-appearance: textfield;
     }
+}
+
+@layer utilities {
+
+}
+
+@layer components {
+   
 }
