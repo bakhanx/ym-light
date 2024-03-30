@@ -4,6 +4,7 @@
             "id": 1,
             "name": "메가 크리스탈 라이트",
             "price": 3200000,
+            "discount" : 40,
             "color": "화이트",
             "ingradient": [
                 "스틸",
@@ -19,6 +20,7 @@
             "description": "한정판 핸드메이드 크리스탈 조명",
             "image": ""
         },
+        
         {
             "id": 2,
             "name": "엔트로 샹들리에",
@@ -40,6 +42,63 @@
         },
         {
             "id": 3,
+            "name": "네온 벽등",
+            "price": 119000,
+            "color": "풀컬러",
+            "ingradient": [
+                "스틸",
+                "패브릭"
+            ],
+            "size": {
+                "width": 600,
+                "height": 600
+            },
+            "weight": 5.33,
+            "bulb": "Neon",
+            "manufacture": "YM Light",
+            "description": "한정판 핸드메이드 크리스탈 조명",
+            "image": ""
+        },
+        {
+            "id": 4,
+            "name": "네온 벽등",
+            "price": 119000,
+            "color": "풀컬러",
+            "ingradient": [
+                "스틸",
+                "패브릭"
+            ],
+            "size": {
+                "width": 600,
+                "height": 600
+            },
+            "weight": 5.33,
+            "bulb": "Neon",
+            "manufacture": "YM Light",
+            "description": "한정판 핸드메이드 크리스탈 조명",
+            "image": ""
+        },
+        {
+            "id": 5,
+            "name": "네온 벽등",
+            "price": 119000,
+            "color": "풀컬러",
+            "ingradient": [
+                "스틸",
+                "패브릭"
+            ],
+            "size": {
+                "width": 600,
+                "height": 600
+            },
+            "weight": 5.33,
+            "bulb": "Neon",
+            "manufacture": "YM Light",
+            "description": "한정판 핸드메이드 크리스탈 조명",
+            "image": ""
+        },
+        {
+            "id": 6,
             "name": "네온 벽등",
             "price": 119000,
             "color": "풀컬러",
