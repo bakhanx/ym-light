@@ -1,13 +1,20 @@
+"use client"
+
 import React from "react";
+import { useFormStatus } from "react-dom";
 
 type FormButtonType = {
   name: string;
-  loading: boolean;
 };
-const FormButton = ({ name, loading }: FormButtonType) => {
+const FormButton = ({ name }: FormButtonType) => {
+  const { pending } = useFormStatus();
+
   return (
-    <button disabled={loading} className="w-full rounded-md bg-amber-500 p-4 disabled:bg-gray-500 disabled:text-gray-300 disabled:cursor-wait">
-      {loading ? "로딩중..." : name}
+    <button
+      disabled={pending}
+      className="w-full rounded-md bg-amber-500 p-4 disabled:cursor-wait disabled:bg-gray-500 disabled:text-gray-300"
+    >
+      {pending ? "로딩중..." : name}
     </button>
   );
 };
