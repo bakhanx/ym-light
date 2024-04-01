@@ -1,19 +1,52 @@
-import React from "react";
+"use client";
+
+import React, { useEffect } from "react";
 import Image01 from "@/../public/images/contact01-lg.jpg";
 import Image from "next/image";
 import FormInput from "@/components/form-input";
 import FormButton from "@/components/form-button";
+import { useFormState } from "react-dom";
+import { handleForm } from "./actions";
+
+type formType = {
+  username: string;
+  company: string;
+  contact: string;
+  content: string;
+};
+
+type stateProps = {
+  ok: boolean;
+  data: any;
+};
 
 const Contact = () => {
+  const [state, dispatch] = useFormState(handleForm, null);
+
+  // useEffect(() => {
+  //   if(state?.ok){
+  //     console.log(state?.)
+  //   }
+  //   else {
+  //     console.log("Error");
+  //   }
+  // }, [state]);
+
   return (
     <>
-      <div className="top-wrap">
-        <div className="Image-Wrap relative h-screen w-full">
-          <div className="absolute z-10 h-full w-full bg-black opacity-80" />
-          <Image src={Image01} alt="contact" fill objectFit="cover" />
-          <div className="flex h-full items-center ">
-            <div className="absolute z-20 flex w-full px-20 text-white">
-              <div className="left flex w-[50%] flex-col items-center ">
+      {/* Issue: items-center와 screen-h에 따른 pt 충돌 */}
+      <div className="">
+        <div className="Image-Wrap h-screen w-full pt-20">
+          <div className="absolute h-screen w-full">
+            <div className="relative h-screen w-full">
+              <Image src={Image01} alt="contact" fill objectFit="cover" />
+              <div className="h-full w-full bg-black opacity-80" />
+            </div>
+          </div>
+
+          <div className="Content-Wrap flex h-full items-center ">
+            <div className="z-20 flex w-full px-20 pt-8 text-white">
+              <div className="left flex w-[50%] flex-col items-center">
                 <div className="flex flex-col gap-y-10">
                   <div>
                     <p className="text-3xl font-bold">
@@ -75,41 +108,50 @@ const Contact = () => {
                   </p>
 
                   <div className="w-full pt-5">
-                    <form>
+                    <form action={dispatch}>
                       <div className="flex flex-col gap-y-5">
                         <FormInput
                           label="이름"
+                          name="username"
                           type="text"
                           placeholder="홍길동"
-                          error="이름을 입력하세요."
-                          requried
+                          error={state?.fieldErrors.username}
+                          
                         />
                         <FormInput
                           label="회사이름"
+                          name="company"
                           type="text"
                           placeholder=""
-                          error=""
+                          error={state?.fieldErrors.company}
                         />
                         <FormInput
                           label="연락처"
+                          name="contact"
                           type="text"
                           placeholder="전화번호 또는 이메일주소"
-                          error="연락처를 입력하세요."
-                          requried
+                          error={state?.fieldErrors.contact}
+                        />
+                        <FormInput
+                          label="연락처 재확인"
+                          name="contact_confirm"
+                          type="text"
+                          placeholder="전화번호 또는 이메일주소"
+                          error={state?.fieldErrors.contact_confirm}
                         />
 
                         <FormInput
                           label="내용"
+                          name="content"
                           type="text"
                           placeholder="안녕하세요"
-                          error="내용을 입력하세요."
+                          error={state?.fieldErrors.content}
                           textarea
-                          requried
                         />
                       </div>
 
                       <div className="pt-5">
-                       <FormButton name="제출하기" loading={false}/>
+                        <FormButton name="제출하기" />
                       </div>
                     </form>
                   </div>
