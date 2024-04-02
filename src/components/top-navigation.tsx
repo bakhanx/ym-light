@@ -27,12 +27,13 @@ const TopNav = () => {
         <li>
           <Link href="/faq">FAQ</Link>
         </li>
-
+        <li>
+          <Link href="/login">Login</Link>
+        </li>
         <li>
           <Link href="/cart">
             <span className="flex h-6 w-6 items-center justify-center">
               <ShoppingCartIcon className="h-6 w-6" />
-              
             </span>
           </Link>
         </li>
