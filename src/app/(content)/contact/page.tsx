@@ -116,7 +116,9 @@ const Contact = () => {
                           type="text"
                           placeholder="홍길동"
                           error={state?.fieldErrors.username}
-                          
+                          required
+                          minLength={2}
+                          maxLength={30}
                         />
                         <FormInput
                           label="회사이름"
@@ -124,6 +126,8 @@ const Contact = () => {
                           type="text"
                           placeholder=""
                           error={state?.fieldErrors.company}
+                          minLength={1}
+                          maxLength={30}
                         />
                         <FormInput
                           label="연락처"
@@ -131,6 +135,7 @@ const Contact = () => {
                           type="text"
                           placeholder="전화번호 또는 이메일주소"
                           error={state?.fieldErrors.contact}
+                          required
                         />
                         <FormInput
                           label="연락처 재확인"
@@ -138,15 +143,20 @@ const Contact = () => {
                           type="text"
                           placeholder="전화번호 또는 이메일주소"
                           error={state?.fieldErrors.contact_confirm}
+                          required
+                          minLength={6}
+                          maxLength={30}
                         />
-
                         <FormInput
                           label="내용"
                           name="content"
                           type="text"
                           placeholder="안녕하세요"
                           error={state?.fieldErrors.content}
+                          required
                           textarea
+                          minLength={1}
+                          maxLength={1000}
                         />
                       </div>
 
