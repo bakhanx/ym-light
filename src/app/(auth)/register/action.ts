@@ -1,6 +1,13 @@
-import { PASSWORD_MIN_LENGTH, PASSWORD_REGEX } from "@/libs/constants";
-import { useFormStatus } from "react-dom";
+import {
+  PASSWORD_CONFIRM_ERROR,
+  PASSWORD_MIN_LENGTH,
+  PASSWORD_REGEX,
+  PASSWORD_REGEX_ERROR,
+  PASSWORD_REQUIRED_ERROR,
+  WORDS_MAX_LENGTH,
+} from "@/libs/constants";
 import { z } from "zod";
+import validator from "validator";
 
 const checkPassowrd = ({
   password,
@@ -10,25 +17,35 @@ const checkPassowrd = ({
   password_confirm: string;
 }) => password === password_confirm;
 
+type ActionStateType = {
+  token :boolean
+}
+
 const registerSchema = z
   .object({
-    userId: z
-      .string()
-      .min(PASSWORD_MIN_LENGTH, "4자 이상 입력해주세요")
-      .toLowerCase(),
+    userId: z.string().max(WORDS_MAX_LENGTH).toLowerCase(),
     password: z
-      .string()
+      .string({
+        required_error: PASSWORD_REQUIRED_ERROR,
+      })
       .min(PASSWORD_MIN_LENGTH)
-      .regex(PASSWORD_REGEX, "숫자, 소문자, 대문자, 특수문자를 조합해주세요."),
+      .regex(PASSWORD_REGEX, PASSWORD_REGEX_ERROR),
     password_confirm: z.string(),
-    username: z.string(),
-    phone: z.string().optional(),
+    username: z.string().max(WORDS_MAX_LENGTH),
+    phone: z.string().trim().optional().refine((phone)=> validator.isMobilePhone(phone || "" , "ko-KR")),
     email: z.string(),
   })
   .refine(checkPassowrd, {
-    message: "두 비밀번호가 일치하지 않습니다.",
+    message: PASSWORD_CONFIRM_ERROR,
     path: ["password_confirm"],
   });
+
+const tokenSchema = z.coerce
+  .number({
+    required_error: "인증번호를 입력하세요.",
+  })
+  .min(10000)
+  .max(99999);
 
 export const registerAction = (prevState: any, formData: FormData) => {
   const data = {
@@ -38,9 +55,17 @@ export const registerAction = (prevState: any, formData: FormData) => {
     username: formData.get("username"),
     phone: formData.get("phone"),
     email: formData.get("email"),
+    
   };
 
+  const data2 = {
+    token: (formData.get("token")),
+  }
+
   const result = registerSchema.safeParse(data);
+
+  const result2 = tokenSchema.safeParse(data2);
+
   if (!result.success) {
     return result.error.flatten();
   } else {
