@@ -6,11 +6,10 @@ import Link from "next/link";
 import React from "react";
 import { useFormState } from "react-dom";
 import { loginActions } from "./actions";
+import { PASSWORD_MIN_LENGTH, WORDS_MAX_LENGTH } from "@/libs/constants";
 
 const Login = () => {
   const [state, dispatch] = useFormState(loginActions, null);
-
-  console.log(state);
 
   return (
     <div className="h-screen bg-gray-800  text-white">
@@ -22,25 +21,24 @@ const Login = () => {
               name="userId"
               type="text"
               placeholder="ymlight123"
-              // error={state?.fieldErrors.username}
               required
-              minLength={2}
-              maxLength={30}
+              max={WORDS_MAX_LENGTH}
+              error={state?.fieldErrors.userId}
             />
+
             <FormInput
               label="비밀번호"
               name="password"
               type="password"
               placeholder="****"
-              // error={state?.fieldErrors.content}
               required
-              minLength={1}
-              maxLength={1000}
+              min={PASSWORD_MIN_LENGTH}
+              error={state?.fieldErrors.password}
             />
           </div>
 
           <div className="pt-5">
-            <FormButton name="로그인" />
+            <FormButton name="로그인"/>
           </div>
           <div className="pt-5 text-sm text-gray-400">
             <ul className="flex justify-center divide-x-[1px] divide-gray-400 hover:[&>li]:underline">
