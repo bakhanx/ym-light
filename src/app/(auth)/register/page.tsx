@@ -77,6 +77,7 @@ const Register = () => {
               error={state?.fieldErrors.email}
               required
             />
+
             <div className="">
               <FormInput
                 label="인증번호"
@@ -88,54 +89,44 @@ const Register = () => {
                 max={99999}
               />
 
-             
-                <legend>인증 방식</legend>
-                <div className="flex gap-x-5">
-                  <div>
-                    <input
-                      id="draft"
-                      className="peer/draft"
-                      type="radio"
-                      name="mailbtn"
-                      checked
-                    />
-                    <label
-                     
-                      htmlFor="draft"
-                      className="peer-checked/draft:text-sky-500"
-                    >
-                      이메일
-                    </label>
-                  </div>
-                  <div>
-                    <input
-                      id="published"
-                      className="peer/published"
-                      type="radio"
-                      name="phonebtn"
-                    />
-                    <label
-                      htmlFor="published"
-                      className="peer-checked/published:text-sky-500"
-                    >
-                      전화번호
-                    </label>
-                  </div>
+              <div className="flex gap-x-5">
+                <div>
+                  <input
+                    id="tokenMail"
+                    className="peer/tokenMail"
+                    type="radio"
+                    name="tokenType"
+                    defaultChecked
+                  />
+                  <label
+                    htmlFor="tokenMail"
+                    className="peer-checked/tokenMail:text-sky-500"
+                  >
+                    이메일
+                  </label>
                 </div>
-      
+                <div>
+                  <input
+                    id="tokenPhone"
+                    className="peer/tokenPhone"
+                    type="radio"
+                    name="tokenType"
+                  />
+                  <label
+                    htmlFor="tokenPhone"
+                    className="peer-checked/tokenPhone:text-sky-500"
+                  >
+                    전화번호
+                  </label>
+                </div>
+              </div>
 
               <div className="flex w-full justify-between gap-x-5 py-5">
                 <button
                   onClick={handleButtonClick}
-                  className="asd w-[50%] rounded-md border-2 bg-blue-500 p-2"
+                  className="w-full rounded-md bg-blue-500 p-4"
                 >
-                  이메일로 인증
-                </button>
-                <button
-                  onClick={handleButtonClick}
-                  className="peer-[asd]::border-none w-[50%] rounded-md bg-blue-500 p-2 hover:border-2"
-                >
-                  번호로 인증
+                  인증 요청
                 </button>
               </div>
             </div>
