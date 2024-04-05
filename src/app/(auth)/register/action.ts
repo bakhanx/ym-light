@@ -18,8 +18,8 @@ const checkPassowrd = ({
 }) => password === password_confirm;
 
 type ActionStateType = {
-  token :boolean
-}
+  token: boolean;
+};
 
 const registerSchema = z
   .object({
@@ -32,7 +32,19 @@ const registerSchema = z
       .regex(PASSWORD_REGEX, PASSWORD_REGEX_ERROR),
     password_confirm: z.string(),
     username: z.string().max(WORDS_MAX_LENGTH),
-    phone: z.string().trim().optional().refine((phone)=> validator.isMobilePhone(phone || "" , "ko-KR")),
+    phone: z
+      .string()
+      .trim()
+      .refine((phone) => {
+        if (phone === "") {
+          return true;
+        }
+        if (!validator.isMobilePhone(phone || "", "ko-KR")) {
+          return false;
+        }
+        return true;
+      }, {message:"유효하지 않은 번호입니다."}),
+
     email: z.string(),
   })
   .refine(checkPassowrd, {
@@ -55,12 +67,11 @@ export const registerAction = (prevState: any, formData: FormData) => {
     username: formData.get("username"),
     phone: formData.get("phone"),
     email: formData.get("email"),
-    
   };
 
   const data2 = {
-    token: (formData.get("token")),
-  }
+    token: formData.get("token"),
+  };
 
   const result = registerSchema.safeParse(data);
 
