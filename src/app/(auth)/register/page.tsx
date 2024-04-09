@@ -2,7 +2,7 @@
 
 import FormButton from "@/components/form-button";
 import FormInput from "@/components/form-input";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormState } from "react-dom";
 import { registerAction } from "./action";
 import { PASSWORD_MIN_LENGTH, WORDS_MAX_LENGTH } from "@/libs/constants";
@@ -15,11 +15,12 @@ const Register = () => {
     setIsClick(true);
   };
 
-  const initialState = {
+  const initFormState = {
     token: false,
+    error: undefined,
   };
 
-  const [state, dispatch] = useFormState(registerAction, null);
+  const [state, dispatch] = useFormState(registerAction, initFormState);
 
   return (
     <div className="h-screen bg-gray-800  text-white">
@@ -31,7 +32,7 @@ const Register = () => {
               name="userId"
               type="text"
               placeholder="ymlight123"
-              error={state?.fieldErrors.userId}
+              error={state?.error?.fieldErrors.userId}
               required
               maxLength={WORDS_MAX_LENGTH}
             />
@@ -40,7 +41,7 @@ const Register = () => {
               name="password"
               type="text"
               placeholder="****"
-              error={state?.fieldErrors.password}
+              error={state?.error?.fieldErrors.password}
               required
               minLength={PASSWORD_MIN_LENGTH}
             />
@@ -49,7 +50,7 @@ const Register = () => {
               name="password_confirm"
               type="text"
               placeholder="****"
-              error={state?.fieldErrors.password_confirm}
+              error={state?.error?.fieldErrors.password_confirm}
               required
               minLength={PASSWORD_MIN_LENGTH}
             />
@@ -58,7 +59,7 @@ const Register = () => {
               name="username"
               type="text"
               placeholder="홍길동"
-              error={state?.fieldErrors.username}
+              error={state?.error?.fieldErrors.username}
               maxLength={WORDS_MAX_LENGTH}
               required
             />
@@ -67,27 +68,29 @@ const Register = () => {
               name="phone"
               type="text"
               placeholder="01012345678"
-              error={state?.fieldErrors.phone}
+              error={state?.error?.fieldErrors.phone}
             />
             <FormInput
               label="이메일"
               name="email"
               type="email"
               placeholder="ymlight@ym.com"
-              error={state?.fieldErrors.email}
+              error={state?.error?.fieldErrors.email}
               required
             />
 
             <div className="">
-              <FormInput
-                label="인증번호"
-                name="token"
-                type="number"
-                // error={state?.fieldErrors.token}
-                required
-                min={10000}
-                max={99999}
-              />
+              {state?.token && (
+                <FormInput
+                  label="인증번호"
+                  name="token"
+                  type="number"
+                  error={state?.error?.fieldErrors.token}
+                  required
+                  min={10000}
+                  max={99999}
+                />
+              )}
 
               <div className="flex gap-x-5">
                 <div>
@@ -120,20 +123,12 @@ const Register = () => {
                   </label>
                 </div>
               </div>
-
-              <div className="flex w-full justify-between gap-x-5 py-5">
-                <button
-                  onClick={handleButtonClick}
-                  className="w-full rounded-md bg-blue-500 p-4"
-                >
-                  인증 요청
-                </button>
-              </div>
             </div>
           </div>
 
           <div className="pt-10">
-            <FormButton name="회원가입 하기" color="gray" />
+            <FormButton name="인증요청 하기" color="gray" />
+            {/* <FormButton name="회원가입 하기" color="gray" /> */}
           </div>
         </form>
       </div>
