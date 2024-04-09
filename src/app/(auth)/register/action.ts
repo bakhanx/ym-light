@@ -8,6 +8,7 @@ import {
 } from "@/libs/constants";
 import { z } from "zod";
 import validator from "validator";
+import { redirect } from "next/navigation";
 
 const checkPassowrd = ({
   password,
@@ -53,8 +54,9 @@ const registerSchema = z
       .number({
         required_error: "인증번호를 입력하세요.",
       })
-      .min(10000, "6자리 입력해주세요")
-      .max(99999, "6자리 입력해주세요").optional(),
+      .min(10000, "5자리 입력해주세요")
+      .max(99999, "5자리 입력해주세요")
+      .optional(),
   })
   .refine(checkPassowrd, {
     message: PASSWORD_CONFIRM_ERROR,
@@ -83,7 +85,14 @@ const registerSchema = z
 //   }
 // };
 
-export const registerAction = async (prevState: any, formData: FormData) => {
+type ActionState = {
+  token: boolean;
+};
+
+export const registerAction = async (
+  prevState: ActionState,
+  formData: FormData,
+) => {
   const data = {
     userId: formData.get("userId"),
     password: formData.get("password"),
@@ -97,15 +106,21 @@ export const registerAction = async (prevState: any, formData: FormData) => {
 
   if (!prevState.token) {
     const result = registerSchema.safeParse(data);
+
     if (!result.success) {
       return { token: false, error: result.error.flatten() };
     } else {
-      const result = await registerSchema.spa(token);
-      console.log("torken spa : ",result);
-      if (!result.success) {
-        return { token: true, error: result.error.flatten() };
-      } else {
-      }
+      return { token: true };
+    }
+  } else {
+    const result = registerSchema.safeParse({ token, ...data });
+    if (!result.success) {
+      return {
+        token: true,
+        error: result.error.flatten(),
+      };
+    } else {
+      redirect("/login");
     }
   }
 };
