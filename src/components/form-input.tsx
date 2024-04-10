@@ -10,7 +10,7 @@ type FormInputType = {
 const FormInput = ({
   label,
   name,
-  error = [],
+  error =[],
   required = false,
   textarea = false,
   ...rest

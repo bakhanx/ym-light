@@ -5,8 +5,9 @@ import { useFormStatus } from "react-dom";
 
 type FormButtonType = {
   name: string;
+  color? : string
 };
-const FormButton = ({ name }: FormButtonType) => {
+const FormButton = ({ name, color }: FormButtonType) => {
   const { pending } = useFormStatus();
 
   return (
