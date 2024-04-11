@@ -12,6 +12,7 @@ import { z } from "zod";
 import validator from "validator";
 import { redirect } from "next/navigation";
 import db from "@/libs/db";
+import bcrypt from "bcrypt";
 
 const checkPassowrd = ({
   password,
@@ -45,7 +46,7 @@ const checkPhone = async (phone: string) => {
       id: true,
     },
   });
-  return !Boolean(user);
+  return Boolean(user);
 };
 const checkEmail = async (email: string) => {
   const user = await db.user.findUnique({
@@ -78,7 +79,8 @@ const registerSchema = z
       .string()
       .trim()
       .refine(
-        (phone) => {
+        async (phone) => {
+          console.log(phone);
           if (phone === "") {
             return true;
           }
@@ -89,8 +91,18 @@ const registerSchema = z
         },
         { message: "유효하지 않은 번호입니다." },
       )
-      .refine(checkPhone, "이미 가입된 번호입니다.")
-      .refine(validator.isMobilePhone),
+    .refine(
+      async (phone) => {
+        if (phone === "") {
+          return true;
+        }
+        if (await checkPhone(phone)) {
+          return false;
+        }
+        return true;
+      },
+      { message: "이미 가입된 번호입니다." },
+    ),
 
     email: z.string().refine(checkEmail, "이미 가입된 이메일입니다."),
     token: z.coerce
@@ -105,28 +117,6 @@ const registerSchema = z
     message: PASSWORD_CONFIRM_ERROR,
     path: ["password_confirm"],
   });
-
-// const tokenSchema = z.coerce
-//   .number({
-//     required_error: "인증번호를 입력하세요.",
-//   })
-//   .min(10000)
-//   .max(99999);
-
-// export const tokenAction = (prevState: any, formData: FormData) => {
-//   const token = formData.get("token");
-
-//   if (!prevState.token) {
-//     const result = tokenSchema.safeParse(token);
-//     if (!result.success) {
-//       return {
-//         token: false,
-//       };
-//     } else {
-//       return { token: true };
-//     }
-//   }
-// };
 
 type ActionState = {
   token: boolean;
@@ -147,7 +137,7 @@ export const registerAction = async (
 
   const token = formData.get("token");
 
-  if (!prevState.token) {
+  if (!prevState?.token) {
     const result = await registerSchema.safeParseAsync(data);
 
     // Form invalidate
@@ -161,13 +151,27 @@ export const registerAction = async (
     }
   } else {
     // Form validate
-    const result = registerSchema.safeParse({ token, ...data });
+    const result = await registerSchema.safeParseAsync({ token, ...data });
     if (!result.success) {
       return {
         token: true,
         error: result.error.flatten(),
       };
     } else {
+      const hashPassword = await bcrypt.hash(result.data.password, 10);
+      const user = await db.user.create({
+        data: {
+          loginId: result.data.loginId,
+          password: hashPassword,
+          username: result.data.username,
+          email: result.data.email,
+          phone: result.data?.phone || null,
+        },
+        select: {
+          id: true,
+        },
+      });
+      console.log(user);
       redirect("/login");
     }
   }
