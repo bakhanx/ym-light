@@ -1,3 +1,5 @@
+"use server";
+
 import {
   PASSWORD_CONFIRM_ERROR,
   PASSWORD_MIN_LENGTH,
@@ -9,6 +11,7 @@ import {
 import { z } from "zod";
 import validator from "validator";
 import { redirect } from "next/navigation";
+import db from "@/libs/db";
 
 const checkPassowrd = ({
   password,
@@ -22,9 +25,47 @@ type ActionStateType = {
   token: boolean;
 };
 
+const checkLoginId = async (loginId: string) => {
+  const user = await db.user.findUnique({
+    where: {
+      loginId: loginId,
+    },
+    select: {
+      id: true,
+    },
+  });
+  return !Boolean(user);
+};
+const checkPhone = async (phone: string) => {
+  const user = await db.user.findUnique({
+    where: {
+      phone: phone,
+    },
+    select: {
+      id: true,
+    },
+  });
+  return !Boolean(user);
+};
+const checkEmail = async (email: string) => {
+  const user = await db.user.findUnique({
+    where: {
+      email: email,
+    },
+    select: {
+      id: true,
+    },
+  });
+  return !Boolean(user);
+};
+
 const registerSchema = z
   .object({
-    userId: z.string().max(WORDS_MAX_LENGTH).toLowerCase(),
+    loginId: z
+      .string()
+      .max(WORDS_MAX_LENGTH)
+      .toLowerCase()
+      .refine(checkLoginId, "이미 가입된 아이디입니다."),
     password: z
       .string({
         required_error: PASSWORD_REQUIRED_ERROR,
@@ -47,9 +88,11 @@ const registerSchema = z
           return true;
         },
         { message: "유효하지 않은 번호입니다." },
-      ),
+      )
+      .refine(checkPhone, "이미 가입된 번호입니다.")
+      .refine(validator.isMobilePhone),
 
-    email: z.string(),
+    email: z.string().refine(checkEmail, "이미 가입된 이메일입니다."),
     token: z.coerce
       .number({
         required_error: "인증번호를 입력하세요.",
@@ -94,7 +137,7 @@ export const registerAction = async (
   formData: FormData,
 ) => {
   const data = {
-    userId: formData.get("userId"),
+    loginId: formData.get("loginId"),
     password: formData.get("password"),
     password_confirm: formData.get("password_confirm"),
     username: formData.get("username"),
@@ -105,14 +148,19 @@ export const registerAction = async (
   const token = formData.get("token");
 
   if (!prevState.token) {
-    const result = registerSchema.safeParse(data);
+    const result = await registerSchema.safeParseAsync(data);
 
+    // Form invalidate
     if (!result.success) {
-      return { token: false, error: result.error.flatten() };
+      return {
+        token: false,
+        error: result.error.flatten(),
+      };
     } else {
       return { token: true };
     }
   } else {
+    // Form validate
     const result = registerSchema.safeParse({ token, ...data });
     if (!result.success) {
       return {
