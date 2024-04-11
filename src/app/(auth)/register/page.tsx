@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { useFormState } from "react-dom";
 import { registerAction } from "./action";
 import { PASSWORD_MIN_LENGTH, WORDS_MAX_LENGTH } from "@/libs/constants";
+// import { } from '@/libs/db'
 
 const Register = () => {
   const [isClick, setIsClick] = useState(false);
@@ -29,10 +30,10 @@ const Register = () => {
           <div className="flex flex-col gap-y-5">
             <FormInput
               label="아이디"
-              name="userId"
+              name="loginId"
               type="text"
               placeholder="ymlight123"
-              error={state?.error?.fieldErrors.userId}
+              error={state?.error?.fieldErrors.loginId}
               required
               maxLength={WORDS_MAX_LENGTH}
             />
