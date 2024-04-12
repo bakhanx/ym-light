@@ -18,12 +18,12 @@ const Login = () => {
           <div className="flex flex-col gap-y-5">
             <FormInput
               label="아이디"
-              name="userId"
+              name="loginId"
               type="text"
               placeholder="ymlight123"
               required
               max={WORDS_MAX_LENGTH}
-              error={state?.fieldErrors.userId}
+              error={state?.fieldErrors.loginId}
             />
 
             <FormInput
