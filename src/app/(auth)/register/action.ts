@@ -13,6 +13,9 @@ import validator from "validator";
 import { redirect } from "next/navigation";
 import db from "@/libs/db";
 import bcrypt from "bcrypt";
+import { getIronSession } from "iron-session";
+import { cookies } from "next/headers";
+import getSession from "@/libs/session";
 
 const checkPassowrd = ({
   password,
@@ -91,18 +94,18 @@ const registerSchema = z
         },
         { message: "유효하지 않은 번호입니다." },
       )
-    .refine(
-      async (phone) => {
-        if (phone === "") {
+      .refine(
+        async (phone) => {
+          if (phone === "") {
+            return true;
+          }
+          if (await checkPhone(phone)) {
+            return false;
+          }
           return true;
-        }
-        if (await checkPhone(phone)) {
-          return false;
-        }
-        return true;
-      },
-      { message: "이미 가입된 번호입니다." },
-    ),
+        },
+        { message: "이미 가입된 번호입니다." },
+      ),
 
     email: z.string().refine(checkEmail, "이미 가입된 이메일입니다."),
     token: z.coerce
@@ -138,7 +141,7 @@ export const registerAction = async (
   const token = formData.get("token");
 
   if (!prevState?.token) {
-    const result = await registerSchema.safeParseAsync(data);
+    const result = await registerSchema.spa(data);
 
     // Form invalidate
     if (!result.success) {
@@ -151,7 +154,7 @@ export const registerAction = async (
     }
   } else {
     // Form validate
-    const result = await registerSchema.safeParseAsync({ token, ...data });
+    const result = await registerSchema.spa({ token, ...data });
     if (!result.success) {
       return {
         token: true,
@@ -171,7 +174,11 @@ export const registerAction = async (
           id: true,
         },
       });
-      console.log(user);
+
+      const session = await getSession();
+      session.id = user.id;
+      await session.save();
+
       redirect("/login");
     }
   }
