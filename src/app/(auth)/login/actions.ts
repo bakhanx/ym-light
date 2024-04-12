@@ -1,18 +1,36 @@
+"use server";
+
 import {
   PASSWORD_REGEX,
   PASSWORD_REGEX_ERROR,
   PASSWORD_REQUIRED_ERROR,
-  USERID_REQUIRED_ERROR,
+  LOGINID_REQUIRED_ERROR,
 } from "@/libs/constants";
 import db from "@/libs/db";
 import { z } from "zod";
+import bcrypt from "bcrypt";
+import getSession from "@/libs/session";
+import { redirect } from "next/navigation";
+
+const checkLoginIdExists = async (loginId: string) => {
+  const user = await db.user.findUnique({
+    where: {
+      loginId,
+    },
+    select: {
+      id: true,
+    },
+  });
+  return Boolean(user);
+};
 
 const loginSchema = z.object({
   loginId: z
     .string({
-      required_error: USERID_REQUIRED_ERROR,
+      required_error: LOGINID_REQUIRED_ERROR,
     })
-    .toLowerCase(),
+    .toLowerCase()
+    .refine(checkLoginIdExists, { message: "존재하지 않는 아이디입니다." }),
   password: z.string({
     required_error: PASSWORD_REQUIRED_ERROR,
   }),
@@ -20,21 +38,38 @@ const loginSchema = z.object({
 
 export const loginActions = async (prevState: any, formData: FormData) => {
   const data = {
-    loginId: formData.get("userId"),
+    loginId: formData.get("loginId"),
     password: formData.get("password"),
   };
 
-  const result = loginSchema.safeParse(data);
+  const result = await loginSchema.spa(data);
 
-  // const data = await db.user.findUnique({
-  //   where:{
-  //     loginId : data.loginId
-  //   }
-  // })
   if (!result.success) {
-    console.log(result.error.flatten());
     return result.error.flatten();
   } else {
-    console.log(result.data);
+    const user = await db.user.findUnique({
+      where: {
+        loginId: result.data.loginId,
+      },
+      select: {
+        id: true,
+        password: true,
+      },
+    });
+    const ok = await bcrypt.compare(result.data.password, user!.password);
+
+    if (ok) {
+      const session = await getSession();
+      session.id = user!.id;
+      session.save();
+      redirect("/");
+    } else {
+      return {
+        fieldErrors: {
+          loginId: [],
+          password: ["잘못된 비밀번호 입니다."],
+        },
+      };
+    }
   }
 };
