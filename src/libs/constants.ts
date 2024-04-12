@@ -8,7 +8,7 @@ export const PASSWORD_CONFIRM_ERROR = "두 비밀번호가 일치하지 않습�
 
 export const PASSWORD_REQUIRED_ERROR = "비밀번호를 입력해주세요."
 
-export const USERID_REQUIRED_ERROR = "아이디를 입력해주세요."
+export const LOGINID_REQUIRED_ERROR = "아이디를 입력해주세요."
 
 // 숫자,소문자,대문자,특수문자 조합 비밀번호
 export const PASSWORD_REGEX = new RegExp(
