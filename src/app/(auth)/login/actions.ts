@@ -10,7 +10,8 @@ import db from "@/libs/db";
 import { z } from "zod";
 import bcrypt from "bcrypt";
 import getSession from "@/libs/session";
-import { redirect } from "next/navigation";
+import { RedirectType, redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 const checkLoginIdExists = async (loginId: string) => {
   const user = await db.user.findUnique({
@@ -62,7 +63,8 @@ export const loginActions = async (prevState: any, formData: FormData) => {
       const session = await getSession();
       session.id = user!.id;
       session.save();
-      redirect("/");
+      revalidatePath("/");
+      redirect("/", );
     } else {
       return {
         fieldErrors: {
