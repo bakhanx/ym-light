@@ -1,10 +1,56 @@
+"use client";
+
 import Input from "@/app/(admin)/_components/Input";
 import { formatOfPrice } from "@/libs/utils";
-import { PhotoIcon } from "@heroicons/react/16/solid";
+import { ArchiveBoxXMarkIcon, PhoneXMarkIcon, PhotoIcon, XCircleIcon, XMarkIcon } from "@heroicons/react/16/solid";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 
 const Upload = () => {
+  const [preview, setPreview] = useState<string[]>([]);
+
+  const handleChangeImage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const {
+      target: { files },
+    } = event;
+    if (files) {
+      const {
+        target: { id },
+      } = event;
+      const index = +id.charAt(id.length - 1);
+      const file = files[0];
+      const url = URL.createObjectURL(file);
+
+      if (preview[index]) {
+        setPreview((prev) => {
+          const temp = [...prev];
+          temp.splice(index, 1, url);
+          return temp;
+        });
+      } else {
+        setPreview((prev) => {
+          const temp = [...prev];
+          temp.push(url);
+          return temp;
+        });
+      }
+      console.log(preview);
+    }
+  };
+
+  const handleDeleteImage = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    console.log(event.currentTarget.id);
+    const {
+      currentTarget: { id },
+    } = event;
+    setPreview((prev) => {
+      const temp = [...prev];
+      temp.splice(+id, 1);
+      return temp;
+    });
+  };
+
   return (
     <div className="h-screen  pt-24">
       <div className="my-container pt-20">
@@ -13,16 +59,73 @@ const Upload = () => {
             {/* left */}
             <div className="my-column-left w-[50%] pr-10">
               <div className="my-column-box">
-                <div className="my-banner-image ">
-                  <label htmlFor="photo">
-                    <div className="flex aspect-square w-full cursor-pointer items-center justify-center border-2 border-dashed border-gray-400">
-                      <PhotoIcon className="w-56 text-gray-400" />
-                    </div>
+                <div className="my-banner-image">
+                  <label
+                    htmlFor="photo0"
+                    className="flex aspect-square w-full cursor-pointer flex-col items-center justify-center border-2 border-dashed border-gray-400 text-gray-500"
+                    style={{
+                      backgroundImage: `url(${preview[0]})`,
+                      backgroundSize: "contain",
+                      backgroundRepeat: "no-repeat",
+                      backgroundPosition: "50% 50%",
+                    }}
+                  >
+                    {!preview[0] && (
+                      <>
+                        <PhotoIcon className="w-56 text-gray-400" />
+                        <div>사진을 추가해주세요.</div>
+                      </>
+                    )}
                   </label>
-                  <input type="file" className="hidden" id="photo" name="photo"/>
-                </div> 
+                  <input
+                    onChange={handleChangeImage}
+                    type="file"
+                    className="hidden"
+                    id="photo0"
+                    name="photo0"
+                    accept="image/*"
+                  />
+                </div>
                 <div className="my-banner-func pt-5">
-                  <div className="h-16 w-full border-2">이미지 슬라이드</div>
+                  <div className="flex h-24 w-full items-center justify-center gap-x-5 border-2 ">
+                    {[...Array(3)].map((_, index) => (
+                      <label
+                        key={index}
+                        htmlFor={`photo${index + 1}`}
+                        className="relative flex aspect-square  h-24 cursor-pointer flex-col items-center justify-center border-2 border-dashed border-gray-400 text-gray-500"
+                        style={{
+                          backgroundImage: `url(${preview[index + 1]})`,
+                          backgroundSize: "contain",
+                          backgroundRepeat: "no-repeat",
+                          backgroundPosition: "50% 50%",
+                        }}
+                      >
+                        {preview[index + 1] ? (
+                          <button
+                            id={String(index + 1)}
+                            onClick={handleDeleteImage}
+                            className="absolute right-0 top-0 z-20 p-[2px] bg-red-500 hover:bg-red-600 rounded-md"
+                          >
+                            <XMarkIcon className="size-5 text-white " />
+                          </button>
+                        ) : (
+                          <>
+                            <PhotoIcon className="w-8" />
+                            <div className="text-sm">추가사진{index + 1}</div>
+                          </>
+                        )}
+
+                        <input
+                          onChange={handleChangeImage}
+                          type="file"
+                          className="hidden"
+                          id={`photo${index + 1}`}
+                          name={`photo${index + 1}`}
+                          accept="image/*"
+                        />
+                      </label>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
