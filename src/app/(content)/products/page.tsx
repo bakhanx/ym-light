@@ -1,17 +1,27 @@
-import db from "@/libs/db";
 import Image from "next/image";
+import getProduct from "./[id]/getProduct";
+import AddBtn from "./component";
 
-const getProduct = async () => {
-  const product = await db.product.findUnique({
-    where: {
-      id: 1,
-    },
-  });
-  return product;
+type ProductType = {
+  id: number;
+  title: string;
+  price: number;
+  discount: number | null;
+  photo: string;
+  color: string;
+  material: string;
+  size: string;
+  bulb: string;
+  manufacturer: string;
+  description: string;
+  created_at: Date;
+  updated_at: Date;
+  options: string;
+  userId: number;
 };
 
 const Product = async () => {
-  const product = await getProduct();
+  const product = await getProduct(1);
 
   return (
     <div>
@@ -20,11 +30,23 @@ const Product = async () => {
           <div>This is Product</div>
           <div>{product.title}</div>
           <div>{product.color}</div>
-          <div className="relative size-36 rounded-md overflow-hidden">
-            <Image alt={product.title} src={product.photo} fill quality={75}/>
+          <div className="relative size-36 overflow-hidden rounded-md">
+            <Image alt={product.title} src={product.photo} fill quality={75} />
           </div>
+          <div>{product.price}</div>
+
+          <AddBtn />
+          
         </div>
       )}
+
+
+      <div className="pt-20 flex max-w-screen-lg justify-center">
+        <div>asd</div>
+        <input type="text" />
+      </div>
+
+
     </div>
   );
 };
