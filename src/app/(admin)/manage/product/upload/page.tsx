@@ -2,9 +2,18 @@
 
 import Input from "@/app/(admin)/_components/Input";
 import { formatOfPrice } from "@/libs/utils";
-import { ArchiveBoxXMarkIcon, PhoneXMarkIcon, PhotoIcon, XCircleIcon, XMarkIcon } from "@heroicons/react/16/solid";
+import {
+  ArchiveBoxXMarkIcon,
+  PhoneXMarkIcon,
+  PhotoIcon,
+  PlusIcon,
+  XCircleIcon,
+  XMarkIcon,
+} from "@heroicons/react/16/solid";
 import Image from "next/image";
 import React, { useState } from "react";
+import uploadProduct from "./actions";
+import { useFormState } from "react-dom";
 
 const Upload = () => {
   const [preview, setPreview] = useState<string[]>([]);
@@ -51,118 +60,147 @@ const Upload = () => {
     });
   };
 
+  const [state, action] = useFormState(uploadProduct, null);
+
   return (
     <div className="h-screen  pt-24">
       <div className="my-container pt-20">
         <div className="my-content m-auto w-[1280px] max-w-screen-xl px-10 pb-28 pt-8 ">
-          <div className="my-column_bind flex divide-x-2 divide-slate-300">
-            {/* left */}
-            <div className="my-column-left w-[50%] pr-10">
-              <div className="my-column-box">
-                <div className="my-banner-image">
-                  <label
-                    htmlFor="photo0"
-                    className="flex aspect-square w-full cursor-pointer flex-col items-center justify-center border-2 border-dashed border-gray-400 text-gray-500"
-                    style={{
-                      backgroundImage: `url(${preview[0]})`,
-                      backgroundSize: "contain",
-                      backgroundRepeat: "no-repeat",
-                      backgroundPosition: "50% 50%",
-                    }}
-                  >
-                    {!preview[0] && (
-                      <>
-                        <PhotoIcon className="w-56 text-gray-400" />
-                        <div>사진을 추가해주세요.</div>
-                      </>
-                    )}
-                  </label>
-                  <input
-                    onChange={handleChangeImage}
-                    type="file"
-                    className="hidden"
-                    id="photo0"
-                    name="photo0"
-                    accept="image/*"
-                  />
-                </div>
-                <div className="my-banner-func pt-5">
-                  <div className="flex h-24 w-full items-center justify-center gap-x-5 border-2 ">
-                    {[...Array(3)].map((_, index) => (
-                      <label
-                        key={index}
-                        htmlFor={`photo${index + 1}`}
-                        className="relative flex aspect-square  h-24 cursor-pointer flex-col items-center justify-center border-2 border-dashed border-gray-400 text-gray-500"
-                        style={{
-                          backgroundImage: `url(${preview[index + 1]})`,
-                          backgroundSize: "contain",
-                          backgroundRepeat: "no-repeat",
-                          backgroundPosition: "50% 50%",
-                        }}
-                      >
-                        {preview[index + 1] ? (
-                          <button
-                            id={String(index + 1)}
-                            onClick={handleDeleteImage}
-                            className="absolute right-0 top-0 z-20 p-[2px] bg-red-500 hover:bg-red-600 rounded-md"
-                          >
-                            <XMarkIcon className="size-5 text-white " />
-                          </button>
-                        ) : (
-                          <>
-                            <PhotoIcon className="w-8" />
-                            <div className="text-sm">추가사진{index + 1}</div>
-                          </>
-                        )}
-
-                        <input
-                          onChange={handleChangeImage}
-                          type="file"
-                          className="hidden"
-                          id={`photo${index + 1}`}
-                          name={`photo${index + 1}`}
-                          accept="image/*"
-                        />
-                      </label>
-                    ))}
+          <form action={action}>
+            <div className="my-column_bind flex divide-x-2 divide-slate-300">
+              {/* left */}
+              <div className="my-column-left w-[50%] pr-10">
+                <div className="my-column-box">
+                  <div className="my-banner-image">
+                    <label
+                      htmlFor="photo0"
+                      className="flex aspect-square w-full cursor-pointer flex-col items-center justify-center border-2 border-dashed border-gray-400 text-gray-500"
+                      style={{
+                        backgroundImage: `url(${preview[0]})`,
+                        backgroundSize: "contain",
+                        backgroundRepeat: "no-repeat",
+                        backgroundPosition: "50% 50%",
+                      }}
+                    >
+                      {!preview[0] && (
+                        <>
+                          <PhotoIcon className="w-56 text-gray-400" />
+                          <div>사진을 추가해주세요.</div>
+                          <div className="text-red-500">{state?.fieldErrors.photo0}</div>
+                        </>
+                      )}
+                    </label>
+                    <input
+                      onChange={handleChangeImage}
+                      type="file"
+                      className="hidden"
+                      id="photo0"
+                      name="photo0"
+                      accept="image/*"
+                    />
                   </div>
-                </div>
-              </div>
-            </div>
+                  <div className="my-banner-func pt-5">
+                    <div className="flex h-24 w-full items-center justify-center gap-x-5 border-2 ">
+                      {[...Array(3)].map((_, index) => (
+                        <label
+                          key={index}
+                          htmlFor={`photo${index + 1}`}
+                          className="relative flex aspect-square  h-24 cursor-pointer flex-col items-center justify-center border-2 border-dashed border-gray-400 text-gray-500"
+                          style={{
+                            backgroundImage: `url(${preview[index + 1]})`,
+                            backgroundSize: "contain",
+                            backgroundRepeat: "no-repeat",
+                            backgroundPosition: "50% 50%",
+                          }}
+                        >
+                          {preview[index + 1] ? (
+                            <button
+                              id={String(index + 1)}
+                              onClick={handleDeleteImage}
+                              className="absolute right-0 top-0 z-20 rounded-md bg-red-500 p-[2px] hover:bg-red-600"
+                            >
+                              <XMarkIcon className="size-5 text-white " />
+                            </button>
+                          ) : (
+                            <>
+                              <PhotoIcon className="w-8" />
+                              <div className="text-sm">추가사진{index + 1}</div>
+                            </>
+                          )}
 
-            {/* right */}
-            <div className="my-column-right w-[50%] pl-10">
-              <div className="my-column-box">
-                {/* Info */}
-                <div className="my-product-info">
-                  <div className="">
-                    <div className="text-3xl font-bold"></div>
-
-                    <div className="flex flex-col gap-y-2 pt-5">
-                      <div className="">
-                        <form action="" className="flex flex-col gap-y-2">
-                          <Input label="상품명" name="name" />
-                          <Input label="가격" name="price" />
-                          <Input label="할인율" name="discount" />
-                          <Input label="색상" name="color" />
-                          <Input label="재질" name="material" />
-                          <Input label="사이즈" name="size" />
-                          <Input label="전구규격" name="bulb" />
-                          <Input
-                            label="제조사"
-                            name="manufacturer"
-                            defaultValue="YM Light"
+                          <input
+                            onChange={handleChangeImage}
+                            type="file"
+                            className="hidden"
+                            id={`photo${index + 1}`}
+                            name={`photo${index + 1}`}
+                            accept="image/*"
                           />
-                          <Input label="설명" name="description" textarea />
-                          <Input label="옵션" name="options" />
-                        </form>
-                      </div>
+                        </label>
+                      ))}
                     </div>
                   </div>
                 </div>
               </div>
+
+              {/* right */}
+              <div className="my-column-right w-[50%] pl-10">
+                <div className="my-column-box">
+                  {/* Info */}
+                  <div className="my-product-info">
+                    <div className="">
+                      <div className="text-3xl font-bold"></div>
+
+                      <div className="flex flex-col gap-y-2 pt-5">
+                        <div className="">
+                          <div className="flex flex-col gap-y-2">
+                            <Input
+                              label="상품명"
+                              name="name"
+                              required
+                              error={state?.fieldErrors.name}
+                            />
+                            <Input
+                              label="가격"
+                              name="price"
+                              required
+                              error={state?.fieldErrors.price}
+                            />
+                            <Input label="할인율" name="discount" />
+                            <Input label="색상" name="color" />
+                            <Input label="재질" name="material" />
+                            <Input label="사이즈" name="size" />
+                            <Input
+                              label="전구규격"
+                              name="bulb"
+                              required
+                              error={state?.fieldErrors.bulb}
+                            />
+                            <Input
+                              label="제조사"
+                              name="manufacturer"
+                              defaultValue="YM Light"
+                              required
+                              error={state?.fieldErrors.manufacturer}
+                            />
+                            <Input label="설명" name="description" textarea />
+                            <Input label="옵션" name="options" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Button */}
+                  <div className="pt-10">
+                    <button className="flex w-full items-center justify-center gap-x-1 rounded-md bg-amber-300 p-5 hover:bg-amber-400 font-semibold">
+                      상품 등록하기
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
+          </form>
 
           <div className="my-product-detail-content mt-14 ">
             <div className="my-product-detail-tap-wrap">
