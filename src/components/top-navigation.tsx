@@ -56,6 +56,10 @@ const TopNav = async () => {
         <li>
           <Link href="/faq">FAQ</Link>
         </li>
+        <li>
+          <Link href="/manage">Admin</Link>
+        </li>
+        
 
         {user ? (
           <>
