@@ -16,12 +16,12 @@ const productSchema = z.object({
   description: z.string().optional(),
   options: z.string().optional(),
   photo0: z.string({ required_error: "사진을 등록해주세요." }),
-  photo1: z.string().optional(),
-  photo2: z.string().optional(),
-  photo3: z.string().optional(),
+  // photo1: z.string().optional(),
+  // photo2: z.string().optional(),
+  // photo3: z.string().optional(),
 });
 
-const uploadProduct = async (_:any , formData: FormData) => {
+export const uploadProduct = async (formData: FormData) => {
   const data = {
     name: formData.get("name"),
     price: formData.get("price"),
@@ -34,9 +34,9 @@ const uploadProduct = async (_:any , formData: FormData) => {
     description: formData.get("description"),
     options: formData.get("options"),
     photo0: formData.get("photo0"),
-    photo1: formData.get("photo1"),
-    photo2: formData.get("photo2"),
-    photo3: formData.get("photo3"),
+    // photo1: formData.get("photo1"),
+    // photo2: formData.get("photo2"),
+    // photo3: formData.get("photo3"),
   };
 
   const result = productSchema.safeParse(data);
@@ -56,17 +56,29 @@ const uploadProduct = async (_:any , formData: FormData) => {
         description: result.data.description || "",
         options: result.data.options || "",
         photo: result.data.photo0,
-
-        purchaser: undefined,
-        userId: 0,
       },
       select: {
         id: true,
       },
     });
-
-    redirect(`/prducts/${product.id}`);
+    console.log("Create success");
+    // redirect(`/prducts/${product.id}`);
   }
 };
 
-export default uploadProduct;
+export const getUploadURL = async () => {
+  console.log(process.env.CF_ACCOUNT_ID);
+  console.log(process.env.CF_API_KEY);
+  const response = await fetch(
+    `https://api.cloudflare.com/client/v4/accounts/${process.env.CF_ACCOUNT_ID}/images/v2/direct_upload`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.CF_API_KEY}`,
+      },
+    },
+  );
+  const data = response.json();
+  console.log(data);
+  return data;
+};
