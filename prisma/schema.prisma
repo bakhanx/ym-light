@@ -17,7 +17,7 @@ model User {
   created_at DateTime   @default(now())
   updated_at DateTime   @updatedAt
   SMSToken   SMSToken[]
-  Products    Product[]
+  Products   Product[]
 }
 
 model SMSToken {
@@ -27,6 +27,8 @@ model SMSToken {
   updated_at DateTime @updatedAt
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     Int
+
+  @@index([userId])
 }
 
 model Product {
@@ -44,6 +46,5 @@ model Product {
   created_at   DateTime @default(now())
   updated_at   DateTime @updatedAt
   options      String
-  purchaser    User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId       Int?
+  purchaser    User[]
 }
