@@ -1,24 +1,21 @@
 "use client";
 
 import Input from "@/app/(admin)/_components/Input";
-import { formatOfPrice } from "@/libs/utils";
-import {
-  ArchiveBoxXMarkIcon,
-  PhoneXMarkIcon,
-  PhotoIcon,
-  PlusIcon,
-  XCircleIcon,
-  XMarkIcon,
-} from "@heroicons/react/16/solid";
-import Image from "next/image";
+import { PhotoIcon, XMarkIcon } from "@heroicons/react/16/solid";
 import React, { useState } from "react";
-import uploadProduct from "./actions";
-import { useFormState } from "react-dom";
+import { getUploadURL, uploadProduct } from "./actions";
+import { useFormState, useFormStatus } from "react-dom";
 
 const Upload = () => {
   const [preview, setPreview] = useState<string[]>([]);
 
-  const handleChangeImage = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const [uploadURL, setUploadURL] = useState("");
+  const [photoId, setPhotoId] = useState("");
+  const { pending } = useFormStatus();
+
+  const handleChangeImage = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const {
       target: { files },
     } = event;
@@ -43,7 +40,12 @@ const Upload = () => {
           return temp;
         });
       }
-      console.log(preview);
+      const { result, success } = await getUploadURL();
+      if (success) {
+        const { id: URLId, uploadURL } = result;
+        setPhotoId(URLId);
+        setUploadURL(uploadURL);
+      }
     }
   };
 
@@ -60,7 +62,32 @@ const Upload = () => {
     });
   };
 
-  const [state, action] = useFormState(uploadProduct, null);
+  const interceptAction = async (_: any, formData: FormData) => {
+    const file = formData.get("photo0");
+    if (!file) {
+      console.log("not found file");
+      return;
+    }
+
+    const cloudflareForm = new FormData();
+    cloudflareForm.append("file", file);
+
+    const response = await fetch(uploadURL, {
+      method: "post",
+      body: cloudflareForm,
+    });
+    console.log(await response.text());
+    if (response.status !== 200) {
+      console.log("Error!!");
+      return;
+    }
+
+    const photoURL = `https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${photoId}`;
+    formData.set("photo0", photoURL);
+    return uploadProduct(formData);
+  };
+
+  const [state, action] = useFormState(interceptAction, null);
 
   return (
     <div className="h-screen  pt-24">
@@ -86,7 +113,9 @@ const Upload = () => {
                         <>
                           <PhotoIcon className="w-56 text-gray-400" />
                           <div>사진을 추가해주세요.</div>
-                          <div className="text-red-500">{state?.fieldErrors.photo0}</div>
+                          <div className="text-red-500">
+                            {state?.fieldErrors.photo0}
+                          </div>
                         </>
                       )}
                     </label>
@@ -193,7 +222,10 @@ const Upload = () => {
 
                   {/* Button */}
                   <div className="pt-10">
-                    <button className="flex w-full items-center justify-center gap-x-1 rounded-md bg-amber-300 p-5 hover:bg-amber-400 font-semibold">
+                    <button
+                      disabled={pending}
+                      className="flex w-full items-center justify-center gap-x-1 rounded-md bg-amber-300 p-5 font-semibold hover:bg-amber-400"
+                    >
                       상품 등록하기
                     </button>
                   </div>
