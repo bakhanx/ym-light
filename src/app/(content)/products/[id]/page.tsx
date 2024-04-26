@@ -7,9 +7,9 @@ import {
   ShoppingBagIcon,
   TruckIcon,
 } from "@heroicons/react/24/outline";
-import getProduct from "./getProduct";
 import Options from "../_components/options";
 import NotFound from "@/app/not-found";
+import db from "@/libs/db";
 
 type Props = {
   params: {
@@ -19,6 +19,31 @@ type Props = {
 
 // 쿠폰시스템
 // const coupon = [{ id: 1, name: "신규할인쿠폰", rate: 10 }];
+
+const getProduct = async (id: number) => {
+  const product = await db.product.findUnique({
+    where: {
+      id: +id,
+    },
+    select: {
+      id: true,
+      title: true,
+      price: true,
+      discount: true,
+      photo: true,
+      color: true,
+      material: true,
+      size: true,
+      bulb: true,
+      manufacturer: true,
+      description: true,
+      created_at: true,
+      updated_at: true,
+      options: true,
+    },
+  });
+  return product;
+};
 
 const ProductDetail = async ({ params }: Props) => {
   const product = await getProduct(params.id);
@@ -33,8 +58,12 @@ const ProductDetail = async ({ params }: Props) => {
               <div className="my-column-left w-[50%] pr-10">
                 <div className="my-column-box">
                   <div className="my-banner-image ">
-                    <div className="aspect-square w-full bg-slate-500">
-                      <Image src={TempImage} alt="temp" />
+                    <div className="relative aspect-square w-full bg-slate-500">
+                      <Image
+                        src={`${product.photo}/sharpen=1,fit=scale-down,w=640`}
+                        fill
+                        alt="temp"
+                      />
                     </div>
                   </div>
                   <div className="my-banner-func pt-5">
@@ -182,7 +211,9 @@ const ProductDetail = async ({ params }: Props) => {
             </div>
           </div>
         </div>
-      ) : <NotFound/>}
+      ) : (
+        <NotFound />
+      )}
     </>
   );
 };
