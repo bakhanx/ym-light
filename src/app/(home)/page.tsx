@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import bannerImage from "@/../public/images/main-banner-1920.jpg";
 import productData from "@/db/productInfo-kor.json";
@@ -8,6 +6,9 @@ import product3 from "@/../public/images/neon-001.jpg";
 import { useState } from "react";
 import Card from "./component/card";
 import Link from "next/link";
+import getProduct from "../(content)/products/[id]/getProduct";
+import db from "@/libs/db";
+import { Prisma } from "@prisma/client";
 
 // export const metadata: Metadata = {
 //   title: "Home",
@@ -30,8 +31,36 @@ type ProductResponse = {
   products: ProductType[];
 };
 
-export default function Home() {
-  const { products }: ProductResponse = productData;
+type ProductsType = {
+  id: number;
+  title: string;
+  photo: string;
+  created_at: Date;
+  updated_at: Date;
+};
+
+const getProducts = async () => {
+  const products = await db.product.findMany({
+    select: {
+      id: true,
+      title: true,
+      created_at: true,
+      updated_at: true,
+      photo: true,
+      discount: true,
+    },
+    orderBy: {
+      updated_at: "desc",
+    },
+  });
+
+  return products;
+};
+
+export default async function Home() {
+  const products = await getProducts();
+  const discountedProducts = products.filter((product) => product.discount);
+  console.log(products);
 
   return (
     <>
@@ -65,24 +94,33 @@ export default function Home() {
 
       <div className="mx-auto max-w-screen-xl pt-10">
         <div className="flex flex-col gap-y-10 divide-y-2">
-
           <div className="my-product-wrap">
-            <div className="pl-5 text-2xl font-bold pt-6">새로 등록된 상품</div>
-            <div className="grid gap-10 px-5 min-[320px]:grid-cols-2 sm:gap-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-10 pt-4">
+            <div className="pl-5 pt-6 text-2xl font-bold">새로 등록된 상품</div>
+            <div className="grid gap-10 px-5 pt-4 min-[320px]:grid-cols-2 sm:gap-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-10">
               {products.map((product) => (
                 <Link key={product.id} href={`/products/${product.id}`}>
-                  <Card key={product.id} name={product.name} />
+                  <Card
+                    key={product.id}
+                    name={product.title}
+                    photoURL={product.photo}
+                    discount={product.discount || 0}
+                  />
                 </Link>
               ))}
             </div>
           </div>
 
           <div className="my-product-wrap">
-            <div className="pl-5 text-2xl font-bold pt-6">할인 상품</div>
-            <div className="grid gap-10 px-5 min-[320px]:grid-cols-2 sm:gap-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-10 pt-4">
-              {products.map((product) => (
+            <div className="pl-5 pt-6 text-2xl font-bold">할인 상품</div>
+            <div className="grid gap-10 px-5 pt-4 min-[320px]:grid-cols-2 sm:gap-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-10">
+              {discountedProducts.map((product) => (
                 <Link key={product.id} href={`/products/${product.id}`}>
-                  <Card key={product.id} name={product.name} />
+                  <Card
+                    key={product.id}
+                    name={product.title}
+                    photoURL={product.photo}
+                    discount={product.discount || undefined}
+                  />
                 </Link>
               ))}
             </div>
