@@ -1,12 +1,16 @@
+"use client";
+
 import Image from "next/image";
 import React, { useRef, useState } from "react";
 import product2 from "@/../../public/images/entro-chandelier-001.jpg";
 
 type CardProps = {
   name: string;
+  photoURL: string;
+  discount: number | undefined;
 };
 
-const Card = ({ name }: CardProps) => {
+const Card = ({ name, discount, photoURL }: CardProps) => {
   const [rotateX, setRotateX] = useState(0);
   const [rotateY, setRotateY] = useState(0);
   const [bgPosition, setBgPosition] = useState<number | string>(0);
@@ -53,7 +57,7 @@ const Card = ({ name }: CardProps) => {
       <div className="h-64 w-40 rounded-xl bg-gray-800 shadow-md max-[480px]:w-36 sm:h-80 sm:w-64 ">
         <div className="relative h-full rounded-xl bg-slate-200">
           <Image
-            src={product2}
+            src={`${photoURL}/fit=scale-down,w=480,sharpen=1`}
             fill
             style={{ objectFit: "cover", objectPosition: "top" }}
             quality={100}
@@ -65,9 +69,14 @@ const Card = ({ name }: CardProps) => {
           {/* Light overlay */}
           <div className="absolute z-30 h-full w-full" style={overlayStyle} />
 
-          <div className="absolute bottom-0 z-20 flex w-full items-center  justify-center rounded-b-md bg-black bg-opacity-50 p-5 text-white ">
+          <div className="absolute bottom-0 z-20 flex w-full items-center  justify-center rounded-b-md border-t bg-black bg-opacity-50 p-5 text-white ">
             {name}
           </div>
+          {discount && (
+            <div className="absolute right-0 top-0 rounded-bl-md rounded-tr-md bg-red-500 p-2 text-xl font-bold text-white">
+              {discount}%
+            </div>
+          )}
 
           {/* black opacity overlay */}
           <div className="absolute z-10 hidden h-full w-full bg-black opacity-40" />
