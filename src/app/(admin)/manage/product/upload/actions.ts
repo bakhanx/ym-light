@@ -47,7 +47,7 @@ export const uploadProduct = async (formData: FormData) => {
       data: {
         title: result.data.name,
         price: result.data.price,
-        discount: result.data.discount || 0,
+        discount: result.data.discount,
         color: result.data.color || "",
         material: result.data.material || "",
         size: result.data.size || "",
@@ -62,7 +62,7 @@ export const uploadProduct = async (formData: FormData) => {
       },
     });
     console.log("Create success");
-    // redirect(`/prducts/${product.id}`);
+    redirect(`/prducts/${product.id}`);
   }
 };
 
