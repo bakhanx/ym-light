@@ -1,14 +1,9 @@
 import Image from "next/image";
 import bannerImage from "@/../public/images/main-banner-1920.jpg";
-import productData from "@/db/productInfo-kor.json";
-import product1 from "@/../public/images/mega-crystal-001.jpg";
-import product3 from "@/../public/images/neon-001.jpg";
-import { useState } from "react";
 import Card from "./component/card";
 import Link from "next/link";
-import getProduct from "../(content)/products/[id]/getProduct";
+
 import db from "@/libs/db";
-import { Prisma } from "@prisma/client";
 
 // export const metadata: Metadata = {
 //   title: "Home",
@@ -60,8 +55,6 @@ const getProducts = async () => {
 export default async function Home() {
   const products = await getProducts();
   const discountedProducts = products.filter((product) => product.discount);
-  console.log(products);
-
   return (
     <>
       <div className="h-[768px]">
