@@ -6,8 +6,6 @@ type SessionType = {
   id: number;
 };
 
-console.log("PW", process.env.COOKIE_PASSWORD!);
-
 const getSession = () => {
   return getIronSession<SessionType>(cookies(), {
     cookieName: "ymlight-cookie",
