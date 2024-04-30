@@ -45,7 +45,7 @@ const TopNav = async () => {
           </select>
         </li>
         <li>
-          <Link href="/product">Product</Link>
+          <Link href="/products">Product</Link>
         </li>
         <li>
           <Link href="/about">About</Link>
