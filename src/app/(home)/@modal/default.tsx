@@ -1,11 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const Default = () => {
-  return (
-    <div>
-      Default
-    </div>
-  )
-}
+  return null;
+};
 
-export default Default
+export default Default;
