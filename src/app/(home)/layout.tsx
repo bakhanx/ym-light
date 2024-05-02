@@ -10,7 +10,6 @@ const HomeLayout = ({
 }) => {
   return (
     <div>
-      <TopNav />
       {children}
       {modal}
     </div>
