@@ -91,7 +91,11 @@ export default async function Home() {
             <div className="pl-5 pt-6 text-2xl font-bold">새로 등록된 상품</div>
             <div className="grid gap-10 px-5 pt-4 min-[320px]:grid-cols-2 sm:gap-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-10">
               {products.map((product) => (
-                <Link key={product.id} href={`/products/${product.id}`}>
+                <Link
+                  key={product.id}
+                  href={`/products/${product.id}`}
+                  scroll={false}
+                >
                   <Card
                     key={product.id}
                     name={product.title}
