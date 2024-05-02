@@ -1,26 +1,29 @@
-"use client"
+"use client";
 
 import { PhotoIcon, XMarkIcon } from "@heroicons/react/16/solid";
+import { useRouter } from "next/navigation";
+
 // import { useRouter } from "next/router";
 import React from "react";
 
 const Modal = () => {
-  console.log("modal");
-  // const router = useRouter();
-  // const onCloseClick = () => {
-  //   router.back();
-  // };
+  const router = useRouter();
+  const onCloseClick = () => {
+    router.back();
+  };
   return (
-    <div className="absolute left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-black bg-opacity-60">
-      {/* <button
-        onClick={onCloseClick}
-        className="absolute right-5 top-5 text-neutral-200"
-      >
-        <XMarkIcon className="size-10" />
-      </button> */}
-      <div className="flex h-1/2  w-full max-w-screen-sm justify-center">
-        <div className="flex  aspect-square items-center  justify-center rounded-md bg-neutral-700 text-neutral-200">
-          <PhotoIcon className="h-28" />
+    <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center">
+      <div className="absolute flex h-[75%] w-[75%] items-center justify-center bg-black bg-opacity-60">
+        <button
+          onClick={onCloseClick}
+          className="absolute right-5 top-5 text-neutral-200"
+        >
+          <XMarkIcon className="size-10" />
+        </button>
+        <div className="flex h-1/2  w-full max-w-screen-sm justify-center">
+          <div className="flex  aspect-square items-center  justify-center rounded-md bg-neutral-700 text-neutral-200">
+            <PhotoIcon className="h-28" />
+          </div>
         </div>
       </div>
     </div>
