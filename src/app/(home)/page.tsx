@@ -1,13 +1,15 @@
 import Image from "next/image";
 import bannerImage from "@/../public/images/main-banner-1920.jpg";
-import Card from "./component/card";
+import Card from "./_components/card";
 import Link from "next/link";
 
 import db from "@/libs/db";
+import { Metadata } from "next";
+import { unstable_cache as nextCache } from "next/cache";
 
-// export const metadata: Metadata = {
-//   title: "Home",
-// };
+export const metadata: Metadata = {
+  title: "Home",
+};
 
 type ProductType = {
   id: number;
@@ -51,6 +53,9 @@ const getProducts = async () => {
 
   return products;
 };
+// const getCachedProducts = nextCache(getProducts, ["home-products"], {
+//   tags: ["products"],
+// });
 
 export default async function Home() {
   const products = await getProducts();
@@ -111,7 +116,11 @@ export default async function Home() {
             <div className="pl-5 pt-6 text-2xl font-bold">할인 상품</div>
             <div className="grid gap-10 px-5 pt-4 min-[320px]:grid-cols-2 sm:gap-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-10">
               {discountedProducts.map((product) => (
-                <Link key={product.id} href={`/products/${product.id}`}>
+                <Link
+                  key={product.id}
+                  href={`/products/${product.id}`}
+                  scroll={false}
+                >
                   <Card
                     key={product.id}
                     name={product.title}
