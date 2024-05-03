@@ -48,6 +48,9 @@ const TopNav = async () => {
           <Link href="/products">Product</Link>
         </li>
         <li>
+          <Link href="/gallery">Gallery</Link>
+        </li>
+        <li>
           <Link href="/about">About</Link>
         </li>
         <li>
