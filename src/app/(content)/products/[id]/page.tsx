@@ -47,7 +47,6 @@ const getProduct = async (id: number) => {
 
 const ProductDetail = async ({ params }: Props) => {
   const product = await getProduct(params.id);
-  console.log(product);
   return (
     <>
       {product ? (

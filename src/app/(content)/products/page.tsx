@@ -30,9 +30,7 @@ const Product = async () => {
           <div>This is Product</div>
           <div>{product.title}</div>
           <div>{product.color}</div>
-          <div className="relative size-36 overflow-hidden rounded-md">
-            <Image alt={product.title} src={product.photo} fill quality={75} />
-          </div>
+
           <div>{product.price}</div>
 
           <AddBtn />
@@ -40,11 +38,6 @@ const Product = async () => {
         </div>
       )}
 
-
-      <div className="pt-20 flex max-w-screen-lg justify-center">
-        <div>asd</div>
-        <input type="text" />
-      </div>
 
 
     </div>
