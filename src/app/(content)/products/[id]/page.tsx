@@ -10,6 +10,7 @@ import {
 import Options from "../_components/options";
 import NotFound from "@/app/not-found";
 import db from "@/libs/db";
+import { unstable_cache as nextCache } from "next/cache";
 
 type Props = {
   params: {
@@ -45,8 +46,12 @@ const getProduct = async (id: number) => {
   return product;
 };
 
+const getCahcedProduct = nextCache(getProduct, ["product"], {
+  tags: ["light"],
+});
+
 const ProductDetail = async ({ params }: Props) => {
-  const product = await getProduct(params.id);
+  const product = await getCahcedProduct(params.id);
   return (
     <>
       {product ? (
