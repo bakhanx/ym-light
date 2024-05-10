@@ -37,6 +37,7 @@ type ProductsType = {
 };
 
 const getProducts = async () => {
+  console.log('getproducts')
   const products = await db.product.findMany({
     select: {
       id: true,
@@ -53,12 +54,12 @@ const getProducts = async () => {
 
   return products;
 };
-// const getCachedProducts = nextCache(getProducts, ["home-products"], {
-//   tags: ["products"],
-// });
+const getCachedProducts = nextCache(getProducts, ["home-products"], {
+  tags: ["products"],
+});
 
 export default async function Home() {
-  const products = await getProducts();
+  const products = await getCachedProducts();
   const discountedProducts = products.filter((product) => product.discount);
   return (
     <>
@@ -116,11 +117,7 @@ export default async function Home() {
             <div className="pl-5 pt-6 text-2xl font-bold">할인 상품</div>
             <div className="grid gap-10 px-5 pt-4 min-[320px]:grid-cols-2 sm:gap-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-10">
               {discountedProducts.map((product) => (
-                <Link
-                  key={product.id}
-                  href={`/products/${product.id}`}
-                  scroll={false}
-                >
+                <Link key={product.id} href={`/products/${product.id}`}>
                   <Card
                     key={product.id}
                     name={product.title}
