@@ -2,10 +2,10 @@ import Image from "next/image";
 import bannerImage from "@/../public/images/main-banner-1920.jpg";
 import Card from "./_components/card";
 import Link from "next/link";
-
 import db from "@/libs/db";
 import { Metadata } from "next";
 import { unstable_cache as nextCache } from "next/cache";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -37,7 +37,6 @@ type ProductsType = {
 };
 
 const getProducts = async () => {
-  console.log('getproducts')
   const products = await db.product.findMany({
     select: {
       id: true,
@@ -54,6 +53,7 @@ const getProducts = async () => {
 
   return products;
 };
+
 const getCachedProducts = nextCache(getProducts, ["home-products"], {
   tags: ["products"],
 });
@@ -91,45 +91,49 @@ export default async function Home() {
         </div>
       </div>
 
-      <div className="mx-auto max-w-screen-xl pt-10">
-        <div className="flex flex-col gap-y-10 divide-y-2">
-          <div className="my-product-wrap">
-            <div className="pl-5 pt-6 text-2xl font-bold">새로 등록된 상품</div>
-            <div className="grid gap-10 px-5 pt-4 min-[320px]:grid-cols-2 sm:gap-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-10">
-              {products.map((product) => (
-                <Link
-                  key={product.id}
-                  href={`/products/${product.id}`}
-                  scroll={false}
-                >
-                  <Card
+      <Suspense fallback="Loading...">
+        <div className="mx-auto max-w-screen-xl pt-10">
+          <div className="flex flex-col gap-y-10 divide-y-2">
+            <div className="my-product-wrap">
+              <div className="pl-5 pt-6 text-2xl font-bold">
+                새로 등록된 상품
+              </div>
+              <div className="grid gap-10 px-5 pt-4 min-[320px]:grid-cols-2 sm:gap-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-10">
+                {products.map((product) => (
+                  <Link
                     key={product.id}
-                    name={product.title}
-                    photoURL={product.photo}
-                    discount={product.discount || 0}
-                  />
-                </Link>
-              ))}
+                    href={`/products/${product.id}`}
+                    scroll={false}
+                  >
+                    <Card
+                      key={product.id}
+                      name={product.title}
+                      photoURL={product.photo}
+                      discount={product.discount || 0}
+                    />
+                  </Link>
+                ))}
+              </div>
             </div>
-          </div>
 
-          <div className="my-product-wrap">
-            <div className="pl-5 pt-6 text-2xl font-bold">할인 상품</div>
-            <div className="grid gap-10 px-5 pt-4 min-[320px]:grid-cols-2 sm:gap-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-10">
-              {discountedProducts.map((product) => (
-                <Link key={product.id} href={`/products/${product.id}`}>
-                  <Card
-                    key={product.id}
-                    name={product.title}
-                    photoURL={product.photo}
-                    discount={product.discount || undefined}
-                  />
-                </Link>
-              ))}
+            <div className="my-product-wrap">
+              <div className="pl-5 pt-6 text-2xl font-bold">할인 상품</div>
+              <div className="grid gap-10 px-5 pt-4 min-[320px]:grid-cols-2 sm:gap-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-10">
+                {discountedProducts.map((product) => (
+                  <Link key={product.id} href={`/products/${product.id}`}>
+                    <Card
+                      key={product.id}
+                      name={product.title}
+                      photoURL={product.photo}
+                      discount={product.discount || undefined}
+                    />
+                  </Link>
+                ))}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </Suspense>
     </>
   );
 }
