@@ -226,7 +226,7 @@ const Upload = () => {
                       disabled={pending}
                       className="flex w-full items-center justify-center gap-x-1 rounded-md bg-amber-300 p-5 font-semibold hover:bg-amber-400"
                     >
-                      상품 등록하기
+                      {pending ? "상품 등록중" : "상품 등록"}
                     </button>
                   </div>
                 </div>
