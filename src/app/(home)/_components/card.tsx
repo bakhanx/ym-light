@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import React, { useRef, useState } from "react";
-import product2 from "@/../../public/images/entro-chandelier-001.jpg";
 
 type CardProps = {
   name: string;
