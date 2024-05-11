@@ -67,6 +67,7 @@ const ProductDetail = async ({ params }: Props) => {
                         src={`${product.photo}/sharpen=1,fit=scale-down,w=640`}
                         fill
                         alt="temp"
+                        objectFit="cover"
                       />
                     </div>
                   </div>
@@ -223,3 +224,15 @@ const ProductDetail = async ({ params }: Props) => {
 };
 
 export default ProductDetail;
+
+export async function generateStaticParams() {
+  const products = await db.product.findMany({
+    select: {
+      id: true,
+    },
+  });
+
+  return products.map((product) => ({
+    id: product.id + "",
+  }));
+}
