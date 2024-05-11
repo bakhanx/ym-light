@@ -1,6 +1,7 @@
 "use server";
 
 import db from "@/libs/db";
+import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
@@ -62,6 +63,7 @@ export const uploadProduct = async (formData: FormData) => {
       },
     });
     console.log("Create success");
+    revalidateTag("products");
     redirect(`/prducts/${product.id}`);
   }
 };
