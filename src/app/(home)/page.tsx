@@ -95,7 +95,7 @@ export default async function Home() {
         <div className="mx-auto max-w-screen-xl pt-10">
           <div className="flex flex-col gap-y-10 divide-y-2">
             <div className="my-product-wrap">
-              <div className="pl-5 pt-6 text-2xl font-bold">
+              <div className="pl-5 pt-6 text-2xl font-semibold">
                 새로 등록된 상품
               </div>
               <div className="grid gap-10 px-5 pt-4 min-[320px]:grid-cols-2 sm:gap-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-10">
@@ -117,7 +117,7 @@ export default async function Home() {
             </div>
 
             <div className="my-product-wrap">
-              <div className="pl-5 pt-6 text-2xl font-bold">할인 상품</div>
+              <div className="pl-5 pt-6 text-2xl font-semibold">할인 상품</div>
               <div className="grid gap-10 px-5 pt-4 min-[320px]:grid-cols-2 sm:gap-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-10">
                 {discountedProducts.map((product) => (
                   <Link key={product.id} href={`/products/${product.id}`}>

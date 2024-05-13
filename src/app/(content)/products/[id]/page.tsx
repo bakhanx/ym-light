@@ -83,9 +83,9 @@ const ProductDetail = async ({ params }: Props) => {
                   {/* Info */}
                   <div className="my-product-info">
                     <div className="">
-                      <div className="text-3xl font-bold">{product.title}</div>
+                      <div className="text-3xl font-semibold">{product.title}</div>
 
-                      <div className="gap-x-2 pt-5 font-bold">
+                      <div className="gap-x-2 pt-5 font-semibold">
                         {product?.discount && (
                           <div className="flex gap-x-2">
                             <span className="text-xl text-red-600">
