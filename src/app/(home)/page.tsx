@@ -49,18 +49,47 @@ const getProducts = async () => {
     orderBy: {
       updated_at: "desc",
     },
+    take: 4,
+  });
+
+  return products;
+};
+
+const getDiscontProducts = async () => {
+  const products = await db.product.findMany({
+    where: {
+      discount: {
+        not: null,
+      },
+    },
+    select: {
+      id: true,
+      title: true,
+      created_at: true,
+      updated_at: true,
+      photo: true,
+      discount: true,
+    },
+
+    orderBy: {
+      updated_at: "desc",
+    },
+    take: 4,
   });
 
   return products;
 };
 
 const getCachedProducts = nextCache(getProducts, ["home-products"], {
-  tags: ["products"],
+  tags: ["products", "product"],
+});
+const getCachedDiscontProducts = nextCache(getDiscontProducts, ["home-discount-products"], {
+  tags: ["products", "product"],
 });
 
 export default async function Home() {
   const products = await getCachedProducts();
-  const discountedProducts = products.filter((product) => product.discount);
+  const discountedProducts = await getCachedDiscontProducts();
   return (
     <>
       <div className="h-[768px]">
@@ -92,24 +121,23 @@ export default async function Home() {
       </div>
 
       <Suspense fallback="Loading...">
-        <div className="mx-auto max-w-screen-xl pt-10">
+        <div className="mx-auto max-w-screen-2xl px-10 pt-10">
           <div className="flex flex-col gap-y-10 divide-y-2">
             <div className="my-product-wrap">
-              <div className="pl-5 pt-6 text-2xl font-semibold">
+              <div className=" pt-6 text-2xl font-semibold">
                 새로 등록된 상품
               </div>
-              <div className="grid gap-10 px-5 pt-4 min-[320px]:grid-cols-2 sm:gap-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-10">
+              <div className="grid gap-2 pt-4 min-[320px]:grid-cols-2 sm:gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-2">
                 {products.map((product) => (
                   <Link
                     key={product.id}
                     href={`/products/${product.id}`}
-                    scroll={false}
                   >
                     <Card
                       key={product.id}
                       name={product.title}
                       photoURL={product.photo}
-                      discount={product.discount || 0}
+                      discount={product.discount || undefined}
                     />
                   </Link>
                 ))}
@@ -117,8 +145,8 @@ export default async function Home() {
             </div>
 
             <div className="my-product-wrap">
-              <div className="pl-5 pt-6 text-2xl font-semibold">할인 상품</div>
-              <div className="grid gap-10 px-5 pt-4 min-[320px]:grid-cols-2 sm:gap-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-10">
+              <div className="pt-6 text-2xl font-semibold">할인 상품</div>
+              <div className="grid gap-10  pt-4 min-[320px]:grid-cols-2 sm:gap-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-10">
                 {discountedProducts.map((product) => (
                   <Link key={product.id} href={`/products/${product.id}`}>
                     <Card
