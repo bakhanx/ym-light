@@ -1,19 +1,29 @@
-"use client";
-
+import { revalidatePath, revalidateTag } from "next/cache";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+
 import React from "react";
 
+const revalidateProducts = async () => {
+  "use server";
+  revalidateTag("product");
+};
 
 const Product = () => {
-  const pathName = usePathname();
-
   return (
-    <div className="pt-20">
+    <div className="pt-20 ">
       <div>상품관리페이지</div>
-      <button className="boerder-sm border border-blue-500 p-2">
-        <Link href={`${pathName}/upload`}>업로드</Link>
-      </button>
+
+      <div className="flex gap-x-5 p-10">
+        <button className="boerder-sm border border-blue-500 p-2">
+          <Link href={`products/upload`}>업로드</Link>
+        </button>
+        <form action={revalidateProducts}>
+          <button className="boerder-sm border border-blue-500 p-2">
+            상품 정보 갱신
+          </button>
+        </form>
+
+      </div>
     </div>
   );
 };
