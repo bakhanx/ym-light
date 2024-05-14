@@ -47,7 +47,7 @@ const getProduct = async (id: number) => {
 };
 
 const getCahcedProduct = nextCache(getProduct, ["product"], {
-  tags: ["light"],
+  tags: ["light", "product"],
 });
 
 const ProductDetail = async ({ params }: Props) => {
@@ -56,7 +56,7 @@ const ProductDetail = async ({ params }: Props) => {
     <>
       {product ? (
         <div className="my-container pt-20">
-          <div className="my-content m-auto w-[1280px] max-w-screen-xl px-10 pb-28 pt-8 ">
+          <div className="my-content m-auto max-w-screen-xl px-10 pb-28 pt-8 ">
             <div className="my-column_bind flex divide-x-2 divide-slate-300">
               {/* left */}
               <div className="my-column-left w-[50%] pr-10">
@@ -83,7 +83,9 @@ const ProductDetail = async ({ params }: Props) => {
                   {/* Info */}
                   <div className="my-product-info">
                     <div className="">
-                      <div className="text-3xl font-semibold">{product.title}</div>
+                      <div className="text-3xl font-semibold">
+                        {product.title}
+                      </div>
 
                       <div className="gap-x-2 pt-5 font-semibold">
                         {product?.discount && (
@@ -103,7 +105,6 @@ const ProductDetail = async ({ params }: Props) => {
                             ? formatOfPrice(
                                 product?.price *
                                   ((100 - product.discount) / 100),
-                                "zh-CN",
                               )
                             : formatOfPrice(product?.price)}
                           원
