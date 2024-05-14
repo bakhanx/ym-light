@@ -1,7 +1,7 @@
 "use server";
 
 import db from "@/libs/db";
-import { revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
@@ -48,7 +48,7 @@ export const uploadProduct = async (formData: FormData) => {
       data: {
         title: result.data.name,
         price: result.data.price,
-        discount: result.data.discount,
+        discount: result.data.discount || null,
         color: result.data.color || "",
         material: result.data.material || "",
         size: result.data.size || "",
@@ -64,7 +64,8 @@ export const uploadProduct = async (formData: FormData) => {
     });
     console.log("Create success");
     revalidateTag("products");
-    redirect(`/prducts/${product.id}`);
+    revalidatePath(`/products/${product.id}`);
+    redirect(`/products/${product.id}`);
   }
 };
 
