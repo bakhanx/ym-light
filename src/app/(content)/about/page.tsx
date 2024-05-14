@@ -20,7 +20,7 @@ const About = () => {
           </div>
         </div>
 
-        <div className="Image-list z-20  flex w-full justify-center pt-28">
+        <div className="Image-list z-20  flex max-w-screen-xl mx-auto justify-center pt-28">
           <div className="flex gap-x-20">
             <div className="relative aspect-square w-[320px]">
               <Image src={Image03} alt="worker07" fill objectFit="cover" />

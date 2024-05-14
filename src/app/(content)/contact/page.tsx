@@ -44,7 +44,7 @@ const Contact = () => {
             </div>
           </div>
 
-          <div className="Content-Wrap flex h-full items-center ">
+          <div className="Content-Wrap flex h-full max-w-screen-xl mx-auto items-center ">
             <div className="z-20 flex w-full px-20 pt-8 text-white">
               <div className="left flex w-[50%] flex-col items-center">
                 <div className="flex flex-col gap-y-10">

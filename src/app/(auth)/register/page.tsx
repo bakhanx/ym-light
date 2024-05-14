@@ -25,7 +25,7 @@ const Register = () => {
 
   return (
     <div className="h-screen bg-gray-800  text-white">
-      <div className="flex h-full max-w-screen-lg items-center justify-center">
+      <div className="flex h-full mx-auto max-w-screen-lg items-center justify-center">
         <form action={dispatch} className="w-80">
           <div className="flex flex-col gap-y-5">
             <FormInput

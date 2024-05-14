@@ -13,7 +13,7 @@ const Login = () => {
 
   return (
     <div className="h-screen bg-gray-800  text-white">
-      <div className="flex h-full max-w-screen-lg items-center justify-center">
+      <div className="mx-auto flex h-full max-w-screen-xl items-center justify-center">
         <form action={dispatch}>
           <div className="flex flex-col gap-y-5">
             <FormInput
@@ -38,7 +38,7 @@ const Login = () => {
           </div>
 
           <div className="pt-5">
-            <FormButton name="로그인"/>
+            <FormButton name="로그인" />
           </div>
           <div className="pt-5 text-sm text-gray-400">
             <ul className="flex justify-center divide-x-[1px] divide-gray-400 hover:[&>li]:underline">
