@@ -83,9 +83,13 @@ const getDiscontProducts = async () => {
 const getCachedProducts = nextCache(getProducts, ["home-products"], {
   tags: ["products", "product"],
 });
-const getCachedDiscontProducts = nextCache(getDiscontProducts, ["home-discount-products"], {
-  tags: ["products", "product"],
-});
+const getCachedDiscontProducts = nextCache(
+  getDiscontProducts,
+  ["home-discount-products"],
+  {
+    tags: ["products", "product"],
+  },
+);
 
 export default async function Home() {
   const products = await getCachedProducts();
@@ -121,7 +125,7 @@ export default async function Home() {
       </div>
 
       <Suspense fallback="Loading...">
-        <div className="mx-auto max-w-screen-2xl px-10 pt-10">
+        <div className="mx-auto max-w-screen-2xl px-10 py-10">
           <div className="flex flex-col gap-y-10 divide-y-2">
             <div className="my-product-wrap">
               <div className=" pt-6 text-2xl font-semibold">
@@ -129,10 +133,7 @@ export default async function Home() {
               </div>
               <div className="grid gap-2 pt-4 min-[320px]:grid-cols-2 sm:gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-2">
                 {products.map((product) => (
-                  <Link
-                    key={product.id}
-                    href={`/products/${product.id}`}
-                  >
+                  <Link key={product.id} href={`/products/${product.id}`}>
                     <Card
                       key={product.id}
                       name={product.title}
@@ -146,7 +147,7 @@ export default async function Home() {
 
             <div className="my-product-wrap">
               <div className="pt-6 text-2xl font-semibold">할인 상품</div>
-              <div className="grid gap-10  pt-4 min-[320px]:grid-cols-2 sm:gap-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-10">
+              <div className="grid gap-2 pt-4 min-[320px]:grid-cols-2 sm:gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-2">
                 {discountedProducts.map((product) => (
                   <Link key={product.id} href={`/products/${product.id}`}>
                     <Card
@@ -161,6 +162,8 @@ export default async function Home() {
             </div>
           </div>
         </div>
+
+        <footer className="h-48 w-full bg-slate-300"></footer>
       </Suspense>
     </>
   );
