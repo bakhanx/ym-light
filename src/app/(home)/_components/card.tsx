@@ -48,7 +48,7 @@ const Card = ({ name, discount, photoURL }: CardProps) => {
 
   return (
     <div
-      className=""
+      className="flex justify-center"
       onMouseMove={handleMouseMove}
       onMouseOut={handleMouseOut}
       style={cardStyle}
