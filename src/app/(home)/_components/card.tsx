@@ -53,7 +53,7 @@ const Card = ({ name, discount, photoURL }: CardProps) => {
       onMouseOut={handleMouseOut}
       style={cardStyle}
     >
-      <div className="rounded-xl bg-gray-800 max-[480px]:w-36 sm:h-[474px] sm:w-[300px] border-4">
+      <div className="rounded-xl bg-gray-800 max-[480px]:w-36 xl:h-[474px] xl:w-[300px] sm:w-[200px] sm:h-[316px] border-4">
         <div className="relative h-full rounded-xl bg-slate-200 border-4">
           <Image
             src={`${photoURL}/fit=scale-down,w=480,sharpen=1`}

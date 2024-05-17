@@ -131,7 +131,7 @@ export default async function Home() {
               <div className=" pt-6 text-2xl font-semibold">
                 새로 등록된 상품
               </div>
-              <div className="grid gap-2 pt-4 min-[320px]:grid-cols-2 sm:gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-2">
+              <div className="grid gap-2 pt-4 min-[320px]:grid-cols-2 sm:gap-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 xl:gap-2">
                 {products.map((product) => (
                   <Link key={product.id} href={`/products/${product.id}`}>
                     <Card
@@ -147,7 +147,7 @@ export default async function Home() {
 
             <div className="my-product-wrap">
               <div className="pt-6 text-2xl font-semibold">할인 상품</div>
-              <div className="grid gap-2 pt-4 min-[320px]:grid-cols-2 sm:gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-2">
+              <div className="grid gap-2 pt-4 min-[320px]:grid-cols-2 sm:gap-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 xl:gap-2">
                 {discountedProducts.map((product) => (
                   <Link key={product.id} href={`/products/${product.id}`}>
                     <Card
