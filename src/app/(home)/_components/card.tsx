@@ -34,7 +34,7 @@ const Card = ({ name, discount, photoURL }: CardProps) => {
   };
 
   const cardStyle = {
-    transform: `perspective(350px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
+    transform: `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
   };
 
   const overlayStyle = {
