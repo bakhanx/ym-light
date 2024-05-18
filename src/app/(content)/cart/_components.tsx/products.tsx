@@ -10,9 +10,9 @@ const Products = () => {
   };
 
   return (
-    <div className="flex pl-4">
-      <div className="flex justify-center divide-x-[1px]">
-        <div className="relative flex w-[848px] p-10">
+    <div className="flex px-4">
+      <div className="flex w-full justify-center divide-x-[1px]">
+        <div className="relative flex w-[70%] p-10">
           <button
             className={cls(
               isSelectAllClick
@@ -68,11 +68,11 @@ const Products = () => {
           </button>
         </div>
 
-        <div className="flex w-[200px] items-center justify-center p-5">
+        <div className="flex w-[15%] items-center justify-center p-5">
           <span>350,000원</span>
         </div>
 
-        <div className="flex w-[200px] items-center justify-center p-10">
+        <div className="flex w-[15%] items-center justify-center p-10">
           <span>7,000원</span>
         </div>
       </div>
