@@ -1,6 +1,7 @@
 import db from "@/libs/db";
 import React from "react";
 import DateTime from "@/components/datetime";
+import Link from "next/link";
 
 const getProducts = async () => {
   const products = await db.product.findMany({
@@ -28,9 +29,14 @@ const Edit = async () => {
         <li className="w-[30%]">게시일</li>
       </ul>
       {products.map((product) => (
-        <div key={product.id} className="flex items-center border-b-2 border-black pb-4">
+        <div
+          key={product.id}
+          className="flex items-center border-b-2 border-black pb-4"
+        >
           <div className="w-[5%]">
-            <button className="bg-slate-200 p-2">편집</button>
+            <Link href={`edit/${product.id}`}>
+              <button className="bg-slate-200 p-2">편집</button>
+            </Link>
           </div>
           <div className="w-[5%]">{product.id}</div>
           <div className="w-[30%]">{product.title}</div>
