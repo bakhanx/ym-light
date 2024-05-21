@@ -11,31 +11,6 @@ export const metadata: Metadata = {
   title: "Home",
 };
 
-type ProductType = {
-  id: number;
-  name: string;
-  price: number;
-  color: string;
-  ingradient: string[];
-  weight: number;
-  bulb: string;
-  manufacture: string;
-  description: string;
-  image: string;
-};
-
-type ProductResponse = {
-  products: ProductType[];
-};
-
-type ProductsType = {
-  id: number;
-  title: string;
-  photo: string;
-  created_at: Date;
-  updated_at: Date;
-};
-
 const getProducts = async () => {
   const products = await db.product.findMany({
     select: {
