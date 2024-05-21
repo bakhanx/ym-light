@@ -15,7 +15,10 @@ const Product = () => {
 
       <div className="flex gap-x-5 p-10">
         <button className="boerder-sm border border-blue-500 p-2">
-          <Link href={`products/upload`}>업로드</Link>
+          <Link href={`product/upload`}>업로드</Link>
+        </button>
+        <button className="boerder-sm border border-blue-500 p-2">
+          <Link href={`product/edit`}>상품수정</Link>
         </button>
         <form action={revalidateProducts}>
           <button className="boerder-sm border border-blue-500 p-2">
