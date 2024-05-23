@@ -22,7 +22,7 @@ const productSchema = z.object({
   // photo3: z.string().optional(),
 });
 
-export const uploadProduct = async (formData: FormData) => {
+export const uploadProduct = async (formData: FormData, productId?: number) => {
   const data = {
     name: formData.get("name"),
     price: formData.get("price"),
@@ -44,24 +44,44 @@ export const uploadProduct = async (formData: FormData) => {
   if (!result.success) {
     return result.error.flatten();
   } else {
-    const product = await db.product.create({
-      data: {
-        title: result.data.name,
-        price: result.data.price,
-        discount: result.data.discount || null,
-        color: result.data.color || "",
-        material: result.data.material || "",
-        size: result.data.size || "",
-        bulb: result.data.bulb,
-        manufacturer: result.data.manufacturer,
-        description: result.data.description || "",
-        options: result.data.options || "",
-        photo: result.data.photo0,
-      },
-      select: {
-        id: true,
-      },
-    });
+    const product = productId
+      ? await db.product.update({
+          where: {
+            id: Number(productId),
+          },
+          data: {
+            title: result.data.name,
+            price: result.data.price,
+            discount: result.data.discount || null,
+            color: result.data.color || "",
+            material: result.data.material || "",
+            size: result.data.size || "",
+            bulb: result.data.bulb,
+            manufacturer: result.data.manufacturer,
+            description: result.data.description || "",
+            options: result.data.options || "",
+            photo: result.data.photo0,
+          },
+        })
+      : await db.product.create({
+          data: {
+            title: result.data.name,
+            price: result.data.price,
+            discount: result.data.discount || null,
+            color: result.data.color || "",
+            material: result.data.material || "",
+            size: result.data.size || "",
+            bulb: result.data.bulb,
+            manufacturer: result.data.manufacturer,
+            description: result.data.description || "",
+            options: result.data.options || "",
+            photo: result.data.photo0,
+          },
+          select: {
+            id: true,
+          },
+        });
+
     console.log("Create success");
     revalidateTag("products");
     revalidatePath(`/products/${product.id}`);
