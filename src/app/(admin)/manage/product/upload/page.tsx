@@ -5,7 +5,6 @@ import { PhotoIcon, XMarkIcon } from "@heroicons/react/16/solid";
 import React, { useState } from "react";
 import { getUploadURL, uploadProduct } from "./actions";
 import { useFormState, useFormStatus } from "react-dom";
-import Image from "next/image";
 
 type ProductType = {
   id: number;
@@ -31,9 +30,9 @@ export const Upload = ({
   product: ProductType;
   isEdit?: boolean;
 }) => {
-  const [preview, setPreview] = useState<string[]>([
-    `${product?.photo}/public` || "",
-  ]);
+  const [preview, setPreview] = useState<string[]>(
+    product ? [`${product?.photo}/public`] : [],
+  );
 
   const [uploadURL, setUploadURL] = useState("");
   const [photoId, setPhotoId] = useState("");
@@ -89,8 +88,16 @@ export const Upload = ({
   };
 
   const interceptAction = async (_: any, formData: FormData) => {
-    const file = formData.get("photo0");
-    if (!file) {
+    const file = formData.get("photo0") as File;
+    const isExistsFile = file.size > 0;
+
+    if (preview[0] && !isExistsFile) {
+      console.log("preview exists!");
+      formData.set("photo0", preview[0]);
+      return uploadProduct(formData, product?.id);
+    }
+
+    if (!isExistsFile && !preview[0]) {
       console.log("not found file");
       return;
     }
@@ -110,7 +117,7 @@ export const Upload = ({
 
     const photoURL = `https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${photoId}`;
     formData.set("photo0", photoURL);
-    return uploadProduct(formData);
+    return uploadProduct(formData, product?.id);
   };
 
   const [state, action] = useFormState(interceptAction, null);
