@@ -8,26 +8,32 @@ import { useFormState, useFormStatus } from "react-dom";
 import Image from "next/image";
 
 type ProductType = {
-  product: {
-    id: number;
-    title: string;
-    price: number;
-    discount: number | null;
-    photo: string;
-    color: string;
-    material: string;
-    size: string;
-    bulb: string;
-    manufacturer: string;
-    description: string;
-    created_at: Date;
-    updated_at: Date;
-    options: string;
-  } | null;
-};
+  id: number;
+  title: string;
+  price: number;
+  discount: number | null;
+  photo: string;
+  color: string;
+  material: string;
+  size: string;
+  bulb: string;
+  manufacturer: string;
+  description: string;
+  created_at: Date;
+  updated_at: Date;
+  options: string;
+} | null;
 
-export const Upload = ({ product }: ProductType) => {
-  const [preview, setPreview] = useState<string[]>([`${product?.photo}/public` || ""]);
+export const Upload = ({
+  product,
+  isEdit = false,
+}: {
+  product: ProductType;
+  isEdit?: boolean;
+}) => {
+  const [preview, setPreview] = useState<string[]>([
+    `${product?.photo}/public` || "",
+  ]);
 
   const [uploadURL, setUploadURL] = useState("");
   const [photoId, setPhotoId] = useState("");
@@ -273,7 +279,13 @@ export const Upload = ({ product }: ProductType) => {
                       disabled={pending}
                       className="flex w-full items-center justify-center gap-x-1 rounded-md bg-amber-300 p-5 font-semibold hover:bg-amber-400"
                     >
-                      {pending ? "상품 등록중" : "상품 등록"}
+                      {isEdit
+                        ? pending
+                          ? "상품 편집중"
+                          : "상품 편집"
+                        : pending
+                          ? "상품 등록중"
+                          : "상품 등록"}
                     </button>
                   </div>
                 </div>
