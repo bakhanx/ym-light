@@ -5,9 +5,29 @@ import { PhotoIcon, XMarkIcon } from "@heroicons/react/16/solid";
 import React, { useState } from "react";
 import { getUploadURL, uploadProduct } from "./actions";
 import { useFormState, useFormStatus } from "react-dom";
+import Image from "next/image";
 
-const Upload = () => {
-  const [preview, setPreview] = useState<string[]>([]);
+type ProductType = {
+  product: {
+    id: number;
+    title: string;
+    price: number;
+    discount: number | null;
+    photo: string;
+    color: string;
+    material: string;
+    size: string;
+    bulb: string;
+    manufacturer: string;
+    description: string;
+    created_at: Date;
+    updated_at: Date;
+    options: string;
+  } | null;
+};
+
+export const Upload = ({ product }: ProductType) => {
+  const [preview, setPreview] = useState<string[]>([`${product?.photo}/public` || ""]);
 
   const [uploadURL, setUploadURL] = useState("");
   const [photoId, setPhotoId] = useState("");
@@ -88,7 +108,6 @@ const Upload = () => {
   };
 
   const [state, action] = useFormState(interceptAction, null);
-
   return (
     <div className="h-screen  pt-24">
       <div className="my-container pt-20">
@@ -188,32 +207,60 @@ const Upload = () => {
                               name="name"
                               required
                               error={state?.fieldErrors.name}
+                              defaultValue={product?.title}
                             />
                             <Input
                               label="가격"
                               name="price"
                               required
                               error={state?.fieldErrors.price}
+                              defaultValue={product?.price}
                             />
-                            <Input label="할인율" name="discount" />
-                            <Input label="색상" name="color" />
-                            <Input label="재질" name="material" />
-                            <Input label="사이즈" name="size" />
+                            <Input
+                              label="할인율"
+                              name="discount"
+                              defaultValue={product?.discount || ""}
+                            />
+                            <Input
+                              label="색상"
+                              name="color"
+                              defaultValue={product?.color}
+                            />
+                            <Input
+                              label="재질"
+                              name="material"
+                              defaultValue={product?.material}
+                            />
+                            <Input
+                              label="사이즈"
+                              name="size"
+                              defaultValue={product?.size}
+                            />
                             <Input
                               label="전구규격"
                               name="bulb"
                               required
                               error={state?.fieldErrors.bulb}
+                              defaultValue={product?.bulb}
                             />
                             <Input
                               label="제조사"
                               name="manufacturer"
-                              defaultValue="YM Light"
                               required
                               error={state?.fieldErrors.manufacturer}
+                              defaultValue={product?.manufacturer || "YM Light"}
                             />
-                            <Input label="설명" name="description" textarea />
-                            <Input label="옵션" name="options" />
+                            <Input
+                              label="설명"
+                              name="description"
+                              textarea
+                              defaultValue={product?.description}
+                            />
+                            <Input
+                              label="옵션"
+                              name="options"
+                              defaultValue={product?.options}
+                            />
                           </div>
                         </div>
                       </div>
