@@ -1,4 +1,8 @@
-import React, { InputHTMLAttributes, TextareaHTMLAttributes } from "react";
+import React, {
+  FocusEvent,
+  InputHTMLAttributes,
+  TextareaHTMLAttributes,
+} from "react";
 
 type FormInputType = {
   name: string;
@@ -10,9 +14,10 @@ type FormInputType = {
 const FormInput = ({
   label,
   name,
-  error =[],
+  error = [],
   required = false,
   textarea = false,
+  onBlur,
   ...rest
 }: FormInputType &
   InputHTMLAttributes<HTMLInputElement> &
@@ -30,6 +35,7 @@ const FormInput = ({
             name={name}
             required={required}
             className="h-28 resize-none rounded-sm p-2 text-black transition focus:outline-none focus:ring-4 focus:ring-amber-500"
+            onBlur={onBlur}
             {...rest}
           />
         ) : (
@@ -37,6 +43,7 @@ const FormInput = ({
             name={name}
             required={required}
             className="rounded-sm p-2 text-black transition focus:outline-none focus:ring-4 focus:ring-amber-500"
+            onBlur={onBlur}
             {...rest}
           />
         )}
