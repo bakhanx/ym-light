@@ -3,16 +3,14 @@
 import FormButton from "@/components/form-button";
 import FormInput from "@/components/form-input";
 import { BoltIcon, PhotoIcon } from "@heroicons/react/16/solid";
-import React, {
-  useState,
-} from "react";
+import React, { useState } from "react";
 import { useFormState } from "react-dom";
 import { handleForm } from "./actions";
 
-const DEFAULT_CONTENT = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus sint architecto ut commodi. Optio nostrum aliquid tenetur labore voluptate consequuntur dolorem eius!"
+const DEFAULT_CONTENT =
+  "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus sint architecto ut commodi. Optio nostrum aliquid tenetur labore voluptate consequuntur dolorem eius!";
 
-const DEFAULT_TAG = "#서울전시회 #날씨좋음"
-
+const DEFAULT_TAG = "#서울전시회 #날씨좋음";
 
 const Upload = () => {
   const [state, dispatch] = useFormState(handleForm, null);
@@ -46,20 +44,19 @@ const Upload = () => {
               <div className="flex flex-col p-3 ">
                 <ul>
                   <li className="flex items-center gap-x-1">
-                    <div className="font-semibold">
-                    YM Light
-                    </div>
+                    <div className="font-semibold">YM Light</div>
                     <div className="flex h-4 w-4 items-center justify-center rounded-full bg-black">
-                      <BoltIcon className="rounded-full h-3 w-3 text-amber-300" />
+                      <BoltIcon className="h-3 w-3 rounded-full text-amber-300" />
                     </div>
                     <div className="text-gray-500">ymlight@gmail.com</div>
                     <div>·</div>
                     <div className="text-gray-500">2024-00-00</div>
-                  </li> 
+                  </li>
                   <li className="pt-2">{formValue[0]}</li>
-                  
-                  <li className="font-semibold pt-5 text-blue-600">{formValue[1]}</li>
-                
+
+                  <li className="pt-5 font-semibold text-blue-600">
+                    {formValue[1]}
+                  </li>
                 </ul>
               </div>
             </div>
