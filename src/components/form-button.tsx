@@ -13,7 +13,7 @@ const FormButton = ({ name, color }: FormButtonType) => {
   return (
     <button
       disabled={pending}
-      className="w-full rounded-md bg-amber-500 p-4 disabled:cursor-wait disabled:bg-gray-500 disabled:text-gray-300"
+      className="w-full rounded-md bg-amber-300 p-4 disabled:cursor-wait disabled:bg-gray-500 disabled:text-gray-300"
     >
       {pending ? "로딩중..." : name}
     </button>
