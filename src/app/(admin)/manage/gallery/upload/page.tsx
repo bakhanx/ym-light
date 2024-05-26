@@ -8,9 +8,9 @@ import { useFormState } from "react-dom";
 import { handleForm } from "./actions";
 
 const DEFAULT_CONTENT =
-  "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus sint architecto ut commodi. Optio nostrum aliquid tenetur labore voluptate consequuntur dolorem eius!";
+  "(예시) Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus sint architecto ut commodi. Optio nostrum aliquid tenetur labore voluptate consequuntur dolorem eius!";
 
-const DEFAULT_TAG = "#서울전시회 #날씨좋음";
+const DEFAULT_TAG = "(예시) #서울전시회 #날씨좋음";
 
 const Upload = () => {
   const [state, dispatch] = useFormState(handleForm, null);
@@ -33,7 +33,7 @@ const Upload = () => {
       <div className="mx-auto flex h-full max-w-screen-xl items-center">
         <div className="flex w-full px-10">
           {/* 미리보기 */}
-          <div className="left flex  w-[50%] border-2 border-purple-500">
+          <div className="left flex  w-[50%] border-2 border-gray-300">
             <div className="w-full border p-10">
               {/* Image */}
               <div className="relative">
@@ -63,7 +63,7 @@ const Upload = () => {
           </div>
 
           {/* 입력 */}
-          <div className="right w-[50%]  flex-col border-2 border-purple-500 ">
+          <div className="right w-[50%]  flex-col border-2 border-gray-300 ">
             <div className="flex flex-col p-10 ">
               <p className="text-3xl font-bold ">갤러리 업로드</p>
               <p>
