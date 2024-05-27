@@ -62,6 +62,9 @@ export const uploadProduct = async (formData: FormData, productId?: number) => {
             options: result.data.options || "",
             photo: result.data.photo0,
           },
+          select: {
+            id: true,
+          },
         })
       : await db.product.create({
           data: {
@@ -87,21 +90,4 @@ export const uploadProduct = async (formData: FormData, productId?: number) => {
     revalidatePath(`/products/${product.id}`);
     redirect(`/products/${product.id}`);
   }
-};
-
-export const getUploadURL = async () => {
-  console.log(process.env.CF_ACCOUNT_ID);
-  console.log(process.env.CF_API_KEY);
-  const response = await fetch(
-    `https://api.cloudflare.com/client/v4/accounts/${process.env.CF_ACCOUNT_ID}/images/v2/direct_upload`,
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${process.env.CF_API_KEY}`,
-      },
-    },
-  );
-  const data = response.json();
-  console.log(data);
-  return data;
 };
