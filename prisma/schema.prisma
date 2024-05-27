@@ -48,3 +48,21 @@ model Product {
   options      String
   purchaser    User[]
 }
+
+model Gallery {
+  id         Int      @id @default(autoincrement())
+  content    String
+  photo      String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  tags       Tag[]
+}
+
+model Tag {
+  id         Int      @id @default(autoincrement())
+  name       String   @unique
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  Gallery    Gallery? @relation(fields: [galleryId], references: [id])
+  galleryId  Int?
+}
