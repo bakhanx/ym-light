@@ -3,8 +3,9 @@
 import Input from "@/app/(admin)/_components/Input";
 import { PhotoIcon, XMarkIcon } from "@heroicons/react/16/solid";
 import React, { useState } from "react";
-import { getUploadURL, uploadProduct } from "./actions";
+import { uploadProduct } from "./actions";
 import { useFormState, useFormStatus } from "react-dom";
+import { getUploadURL } from "@/app/(admin)/_components/getUploadURL";
 
 type ProductType = {
   id: number;
@@ -160,6 +161,7 @@ export const Upload = ({
                       accept="image/*"
                     />
                   </div>
+
                   <div className="my-banner-func pt-5">
                     <div className="flex h-24 w-full items-center justify-center gap-x-5 border-2 ">
                       {[...Array(3)].map((_, index) => (
