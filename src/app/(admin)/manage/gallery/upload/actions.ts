@@ -19,11 +19,11 @@ const formSchema = z.object({
 export const uploadGallery = async (formData: FormData, galleryId?: number) => {
   const data = {
     content: formData.get("content"),
-    photo0: formData.get("photo"),
+    photo: formData.get("photo"),
     tag: formData.get("tag"),
   };
-
   const result = formSchema.safeParse(data);
+
   if (!result.success) {
     return result.error.flatten();
   } else {
