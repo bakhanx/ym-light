@@ -1,25 +1,15 @@
 import db from "@/libs/db";
 import Upload from "../../upload/page";
 
-
 const getGallery = async (id: string) => {
   const gallery = await db.gallery.findUnique({
     where: {
       id: Number(id),
     },
-    include:{
-        tags:{
-            select:{
-                id:true,
-                name:true
-            }
-        }
-    }
-    
+    include: { tags: true },
   });
   return gallery;
 };
-
 
 const EditProduct = async ({ params }: { params: { id: string } }) => {
   const gallery = await getGallery(params.id);
@@ -28,7 +18,7 @@ const EditProduct = async ({ params }: { params: { id: string } }) => {
   return (
     <div className="">
       <div className="[&>div]:pt-0">
-        <Upload gallery={gallery} isEdit={true}  />;
+        <Upload gallery={gallery} isEdit={true} />;
       </div>
     </div>
   );
