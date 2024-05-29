@@ -13,10 +13,28 @@ const DEFAULT_CONTENT =
 
 const DEFAULT_TAG = "(예시) #서울전시회 #날씨좋음";
 
-const Upload = () => {
+type galleryType = {
+  id: number;
+  content: string;
+  photo: string;
+  tags?: {
+    id: number;
+    name: string;
+  }[];
+} | null;
+
+export const Upload = ({
+  gallery,
+  isEdit = false,
+}: {
+  gallery: galleryType;
+  isEdit: boolean;
+}) => {
   const [formValue, setFormValue] = useState([DEFAULT_CONTENT, DEFAULT_TAG]);
 
-  const [preview, setPreview] = useState("");
+  const [preview, setPreview] = useState(
+    gallery ? `${gallery?.photo}/public` : "",
+  );
   const [uploadURL, setUploadURL] = useState("");
   const [photoId, setPhotoId] = useState("");
 
@@ -51,18 +69,18 @@ const Upload = () => {
 
   const interceptAction = async (_: any, formData: FormData) => {
     const file = formData.get("photo") as File;
-    // const isExistsFile = file.size > 0;
+    const isExistsFile = file.size > 0;
 
-    // if (preview[0] && !isExistsFile) {
-    //   console.log("preview exists!");
-    //   formData.set("photo", preview[0]);
-    //   return uploadGallery(formData, product?.id);
-    // }
+    if (preview && !isExistsFile) {
+      console.log("preview exists!");
+      formData.set("photo", preview);
+      return uploadGallery(formData, gallery?.id);
+    }
 
-    // if (!isExistsFile && !preview[0]) {
-    //   console.log("not found file");
-    //   return;
-    // }
+    if (!isExistsFile && !preview) {
+      console.log("not found file");
+      return;
+    }
 
     const cloudflareForm = new FormData();
     cloudflareForm.append("file", file);
@@ -132,7 +150,7 @@ const Upload = () => {
                 {/* Text */}
                 <div className="flex flex-col p-3 ">
                   <ul>
-                    <li className="flex items-center gap-x-1 w-full">
+                    <li className="flex w-full items-center gap-x-1">
                       <div className="font-semibold">YM Light</div>
                       <div className="flex h-4 w-4 items-center justify-center rounded-full bg-black">
                         <BoltIcon className="h-3 w-3 rounded-full text-amber-300" />
@@ -142,10 +160,14 @@ const Upload = () => {
                       <div className="text-gray-500">2024-00-00</div>
                     </li>
 
-                    <li className="pt-2 h-24">{formValue[0]}</li>
+                    <li className="h-24 pt-2">
+                      {gallery?.content || formValue[0]}
+                    </li>
 
-                    <li className="pt-5 w-full h-10 font-semibold text-blue-600">
-                      {formValue[1]}
+                    <li className="flex h-10 w-full gap-x-2 pt-5 font-semibold text-blue-600">
+                      {gallery?.tags?.map((tag) => (
+                        <span key={tag.id}>{tag.name}</span>
+                      ))}
                     </li>
                   </ul>
                 </div>
@@ -155,7 +177,9 @@ const Upload = () => {
             {/* 입력 */}
             <div className="right w-[50%]  flex-col border-2 border-gray-300 ">
               <div className="flex flex-col p-10 ">
-                <p className="text-3xl font-bold ">갤러리 업로드</p>
+                <p className="text-3xl font-bold ">
+                  갤러리 {isEdit ? "편집" : "수정"}
+                </p>
                 <p>
                   <span className="text-red-500">* </span>
                   <span className="opacity-70">는 필수 양식입니다.</span>
@@ -168,6 +192,7 @@ const Upload = () => {
                       name="content"
                       type="text"
                       placeholder="산뜻한 하루의 시작"
+                      defaultValue={gallery?.content}
                       error={state?.fieldErrors.content}
                       required
                       textarea
@@ -181,6 +206,7 @@ const Upload = () => {
                       name="tag"
                       type="text"
                       placeholder="#명품"
+                      defaultValue={gallery?.tags?.map((tag) => tag.name)}
                       error={state?.fieldErrors.tag}
                       maxLength={30}
                       onBlur={(e) => handleBlur(e, 1)}
@@ -189,7 +215,7 @@ const Upload = () => {
                   </div>
 
                   <div className="pt-20">
-                    <FormButton name="업로드 하기" />
+                    <FormButton name="갤러리" isEdit={true} />
                   </div>
                 </div>
               </div>
