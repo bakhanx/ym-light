@@ -1,8 +1,3 @@
-import Input from "@/app/(admin)/_components/Input";
-import { PhotoIcon, XMarkIcon } from "@heroicons/react/16/solid";
-import React, { useState } from "react";
-import { getUploadURL, uploadProduct } from "../../upload/actions";
-import { useFormState, useFormStatus } from "react-dom";
 import db from "@/libs/db";
 import Upload from "../../upload/page";
 
