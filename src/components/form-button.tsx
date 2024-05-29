@@ -1,21 +1,29 @@
-"use client"
+"use client";
 
 import React from "react";
 import { useFormStatus } from "react-dom";
 
 type FormButtonType = {
-  name: string;
-  color? : string
+  name?: string;
+  color?: string;
+  isEdit?: boolean;
 };
-const FormButton = ({ name, color }: FormButtonType) => {
+const FormButton = ({ name, color, isEdit }: FormButtonType) => {
   const { pending } = useFormStatus();
 
   return (
     <button
       disabled={pending}
-      className="w-full rounded-md bg-amber-300 p-4 disabled:cursor-wait disabled:bg-gray-500 disabled:text-gray-300"
+      className="flex w-full items-center justify-center gap-x-1 rounded-md bg-amber-300 p-5 font-semibold hover:bg-amber-400"
     >
-      {pending ? "로딩중..." : name}
+      {name} &nbsp;
+      {isEdit
+        ? pending
+          ? "수정중..."
+          : "수정하기"
+        : pending
+          ? "등록중..."
+          : "등록하기"}
     </button>
   );
 };
