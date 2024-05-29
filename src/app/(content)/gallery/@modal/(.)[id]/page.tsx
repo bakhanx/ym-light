@@ -41,6 +41,7 @@ const getGallery = async (id: number) => {
       id: true,
       content: true,
       photo: true,
+      tags: true,
       created_at: true,
       updated_at: true,
     },
@@ -62,7 +63,7 @@ const Modal = async ({ params }: Props) => {
 
   return (
     <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center">
-      <div className="absolute w-full h-full bg-black opacity-70" />
+      <div className="absolute h-full w-full bg-black opacity-70" />
       <div className="absolute flex h-[75%] w-[50%] flex-col justify-center bg-slate-50 ">
         <div className="flex h-full w-full items-center justify-center shadow-xl">
           <BackButton />
@@ -82,7 +83,7 @@ const Modal = async ({ params }: Props) => {
             </div>
 
             {/* Text */}
-            <div className="flex h-[25%] w-full flex-col text-sm p-2">
+            <div className="flex h-[25%] w-full flex-col p-2 text-sm">
               <div className="flex h-full flex-col">
                 {/* button - Like, Comment*/}
                 <div className="flex gap-x-2 py-2 ">
@@ -91,7 +92,7 @@ const Modal = async ({ params }: Props) => {
                 </div>
 
                 <div className="flex h-full flex-col justify-between ">
-                  {/* Writer */}
+                  {/* Contents */}
                   <div className="flex items-center gap-x-1">
                     <div className="font-semibold">YM Light</div>
                     <div className="flex h-3 w-3 items-center justify-center rounded-full bg-black">
@@ -99,6 +100,10 @@ const Modal = async ({ params }: Props) => {
                     </div>
 
                     <div>{gallery.content}</div>
+                  </div>
+                  {/* Tags */}
+                  <div className="text-blue-500 font-semibold text-sm">
+                    {gallery.tags.map((tag) => tag.name)}
                   </div>
 
                   {/* Date */}
