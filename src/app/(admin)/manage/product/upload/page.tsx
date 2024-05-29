@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import { uploadProduct } from "./actions";
 import { useFormState, useFormStatus } from "react-dom";
 import { getUploadURL } from "@/app/(admin)/_components/getUploadURL";
+import FormButton from "@/components/form-button";
 
 type ProductType = {
   id: number;
@@ -124,8 +125,10 @@ export const Upload = ({
   const [state, action] = useFormState(interceptAction, null);
   return (
     <div className="h-screen  pt-24">
-      <div className="my-container pt-20">
-        <div className="my-content m-auto w-[1280px] max-w-screen-xl px-10 pb-28 pt-8 ">
+      <div className="my-container">
+        <div className="my-content m-auto w-[1280px] max-w-screen-xl px-10 ">
+          <p className="text-3xl font-bold py-10">상품 {isEdit ? "편집" : "수정"}</p>
+
           <form action={action}>
             <div className="my-column_bind flex divide-x-2 divide-slate-300">
               {/* left */}
@@ -284,18 +287,7 @@ export const Upload = ({
 
                   {/* Button */}
                   <div className="pt-10">
-                    <button
-                      disabled={pending}
-                      className="flex w-full items-center justify-center gap-x-1 rounded-md bg-amber-300 p-5 font-semibold hover:bg-amber-400"
-                    >
-                      {isEdit
-                        ? pending
-                          ? "상품 편집중"
-                          : "상품 편집"
-                        : pending
-                          ? "상품 등록중"
-                          : "상품 등록"}
-                    </button>
+                    <FormButton name="상품" />
                   </div>
                 </div>
               </div>
