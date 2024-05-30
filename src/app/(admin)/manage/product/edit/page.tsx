@@ -3,6 +3,7 @@ import React from "react";
 import DateTime from "@/components/datetime";
 import Link from "next/link";
 import Image from "next/image";
+import DeleteForm from "@/app/(admin)/_components/deleteForm";
 
 const getProducts = async () => {
   const products = await db.product.findMany({
@@ -17,7 +18,6 @@ const getProducts = async () => {
 
   return products;
 };
-
 const Edit = async () => {
   const products = await getProducts();
 
@@ -34,12 +34,13 @@ const Edit = async () => {
       {products.map((product) => (
         <div
           key={product.id}
-          className="flex items-center border-b-2 gap-x-6 border-black pb-4"
+          className="flex items-center gap-x-6 border-b-2 border-black pb-4"
         >
-          <div className="w-[5%]">
+          <div className="flex w-[10%] gap-x-2">
             <Link href={`edit/${product.id}`}>
               <button className="bg-slate-200 p-2">편집</button>
             </Link>
+            <DeleteForm id={product.id} />
           </div>
           <div className="w-[2%] text-center">{product.id}</div>
           <div className="relative aspect-square w-[5%]">
