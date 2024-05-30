@@ -6,14 +6,11 @@ import { z } from "zod";
 
 const formSchema = z.object({
   content: z
-    .string({required_error : "내용을 입력해주세요."})
+    .string({ required_error: "내용을 입력해주세요." })
     .min(1, "내용을 입력해주세요.")
     .max(1000, "글자 수 한도를 초과하였습니다."),
   photo: z.string({ required_error: "사진을 등록해주세요." }),
-  tag: z
-    .string()
-    .min(1, "내용을 입력해주세요.")
-    .max(30, "태그 수가 너무 많습니다."),
+  tag: z.string().optional(),
 });
 
 export const uploadGallery = async (formData: FormData, galleryId?: number) => {
@@ -38,7 +35,7 @@ export const uploadGallery = async (formData: FormData, galleryId?: number) => {
     if (!isExistsTag) {
       await db.tag.create({
         data: {
-          name: result.data.tag,
+          name: result.data.tag || "",
         },
       });
     }
@@ -75,6 +72,7 @@ export const uploadGallery = async (formData: FormData, galleryId?: number) => {
             id: true,
           },
         });
+
     console.log(result.data);
     revalidateTag("gallery");
     revalidatePath(`gallery/${gallery.id}`);
