@@ -216,7 +216,7 @@ export const Upload = ({
                   </div>
 
                   <div className="pt-20">
-                    <FormButton name="갤러리" isEdit={true} />
+                    <FormButton name="갤러리" isEdit={isEdit} />
                   </div>
                 </div>
               </div>
