@@ -4,7 +4,7 @@ import Input from "@/app/(admin)/_components/Input";
 import { PhotoIcon, XMarkIcon } from "@heroicons/react/16/solid";
 import React, { useState } from "react";
 import { uploadProduct } from "./actions";
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormState } from "react-dom";
 import { getUploadURL } from "@/app/(admin)/_components/getUploadURL";
 import FormButton from "@/components/form-button";
 
@@ -38,7 +38,6 @@ export const Upload = ({
 
   const [uploadURL, setUploadURL] = useState("");
   const [photoId, setPhotoId] = useState("");
-  const { pending } = useFormStatus();
 
   const handleChangeImage = async (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -95,7 +94,7 @@ export const Upload = ({
 
     if (preview[0] && !isExistsFile) {
       console.log("preview exists!");
-      formData.set("photo0", preview[0]);
+      formData.set("photo0", product?.photo || "");
       return uploadProduct(formData, product?.id);
     }
 
@@ -127,7 +126,9 @@ export const Upload = ({
     <div className="h-screen  pt-24">
       <div className="my-container">
         <div className="my-content m-auto w-[1280px] max-w-screen-xl px-10 ">
-          <p className="text-3xl font-bold py-10">상품 {isEdit ? "편집" : "수정"}</p>
+          <p className="py-10 text-3xl font-bold">
+            상품 {isEdit ? "수정하기" : "등록하기"}
+          </p>
 
           <form action={action}>
             <div className="my-column_bind flex divide-x-2 divide-slate-300">
@@ -287,7 +288,7 @@ export const Upload = ({
 
                   {/* Button */}
                   <div className="pt-10">
-                    <FormButton name="상품" />
+                    <FormButton name="상품" isEdit={isEdit} />
                   </div>
                 </div>
               </div>
