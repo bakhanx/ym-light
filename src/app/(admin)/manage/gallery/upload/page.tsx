@@ -49,6 +49,7 @@ export const Upload = ({
       const url = URL.createObjectURL(file);
       setPreview(url);
     }
+
     const { result, success } = await getUploadURL();
     if (success) {
       const { id: URLId, uploadURL } = result;
@@ -73,7 +74,7 @@ export const Upload = ({
 
     if (preview && !isExistsFile) {
       console.log("preview exists!");
-      formData.set("photo", preview);
+      formData.set("photo", gallery?.photo || "");
       return uploadGallery(formData, gallery?.id);
     }
 
@@ -97,14 +98,14 @@ export const Upload = ({
 
     const photoURL = `https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${photoId}`;
     formData.set("photo", photoURL);
-    return uploadGallery(formData);
+    return uploadGallery(formData, gallery?.id);
   };
   const [state, action] = useFormState(interceptAction, null);
 
   // useForm으로 수정
 
   return (
-    <div className="h-screen border-2 border-blue-500 pt-20">
+    <div className="h-screen pt-20">
       <div className="m-auto flex h-full max-w-screen-xl items-center">
         <form action={action} className="w-full">
           <div className="flex w-full px-10">
@@ -164,7 +165,7 @@ export const Upload = ({
                       {gallery?.content || formValue[0]}
                     </li>
 
-                    <li className="flex h-10 w-full gap-x-2 pt-5 font-semibold text-blue-600">
+                    <li className="flex h-10 w-full gap-x-2 pt-5 font-semibold text-blue-500">
                       {gallery?.tags?.map((tag) => (
                         <span key={tag.id}>{tag.name}</span>
                       ))}
