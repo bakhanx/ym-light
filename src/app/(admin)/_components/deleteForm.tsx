@@ -1,12 +1,16 @@
 "use client";
 
-import { deleteProduct } from "../manage/product/edit/actions";
-
-const DeleteForm = ({ id}: { id: number}) => {
+const DeleteForm = ({
+  id,
+  action,
+}: {
+  id: number;
+  action: (id: number) => Promise<void>;
+}) => {
   const handleClickButton = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (confirm("삭제 하시겠습니까?")) {
-      await deleteProduct(id);
+      await action(id);
     }
   };
   return (
