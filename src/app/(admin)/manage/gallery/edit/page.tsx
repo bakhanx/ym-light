@@ -3,6 +3,8 @@ import React from "react";
 import DateTime from "@/components/datetime";
 import Link from "next/link";
 import Image from "next/image";
+import DeleteForm from "@/app/(admin)/_components/deleteForm";
+import { deleteGallery } from "./actions";
 
 const getGalleryList = async () => {
   const gallery = await db.gallery.findMany({
@@ -36,10 +38,11 @@ const Edit = async () => {
           key={gallery.id}
           className="flex items-center gap-x-6 border-b-2 border-black pb-4"
         >
-          <div className="w-[5%]">
+          <div className="flex w-[10%] gap-x-2">
             <Link href={`edit/${gallery.id}`}>
               <button className="bg-slate-200 p-2">편집</button>
             </Link>
+            <DeleteForm id={gallery.id} action={deleteGallery} />
           </div>
           <div className="w-[2%] text-center">{gallery.id}</div>
           <div className="relative aspect-square w-[5%]">
