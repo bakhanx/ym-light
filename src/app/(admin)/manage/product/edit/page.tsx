@@ -4,6 +4,7 @@ import DateTime from "@/components/datetime";
 import Link from "next/link";
 import Image from "next/image";
 import DeleteForm from "@/app/(admin)/_components/deleteForm";
+import { deleteProduct } from "./actions";
 
 const getProducts = async () => {
   const products = await db.product.findMany({
@@ -40,7 +41,7 @@ const Edit = async () => {
             <Link href={`edit/${product.id}`}>
               <button className="bg-slate-200 p-2">편집</button>
             </Link>
-            <DeleteForm id={product.id} />
+            <DeleteForm id={product.id} action={deleteProduct} />
           </div>
           <div className="w-[2%] text-center">{product.id}</div>
           <div className="relative aspect-square w-[5%]">
