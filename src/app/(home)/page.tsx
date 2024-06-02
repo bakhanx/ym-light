@@ -58,7 +58,7 @@ const getDiscontProducts = async () => {
 const getCachedProducts = nextCache(getProducts, ["home-products"], {
   tags: ["products", "product"],
 });
-const getCachedDiscontProducts = nextCache(
+const getCachedDiscountProducts = nextCache(
   getDiscontProducts,
   ["home-discount-products"],
   {
@@ -68,7 +68,7 @@ const getCachedDiscontProducts = nextCache(
 
 export default async function Home() {
   const products = await getCachedProducts();
-  const discountedProducts = await getCachedDiscontProducts();
+  const discountedProducts = await getCachedDiscountProducts();
   return (
     <>
       <div className="h-[768px]">
