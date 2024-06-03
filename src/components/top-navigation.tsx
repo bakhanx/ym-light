@@ -33,17 +33,11 @@ const TopNav = async () => {
   }
   return (
     <div className="fixed z-50 flex h-14 w-full items-center justify-between border-b-2 border-yellow-500 bg-black lg:px-20 md:px-10 px-5 py-10 text-white">
-      <div className="bg-gradient-to-tr from-yellow-500 to-yellow-200 bg-clip-text text-2xl font-bold text-transparent">
+      <div className="bg-gradient-to-tr from-yellow-500 to-yellow-200 bg-clip-text lg:text-2xl font-bold text-transparent text-sm shrink-0 w-20">
         <Link href="/">YM Light</Link>
       </div>
-      <ul className="flex divide-x-2 [&>li]:px-2">
-        <li className="text-black">
-          <select>
-            <option>한국어</option>
-            <option>English</option>
-            <option>中國語</option>
-          </select>
-        </li>
+      <ul className="md:flex md:divide-x-2 [&>li]:px-2 text-xs md:text-md columns-4 [&>li]:py-1 sm:columns-5">
+      
         <li>
           <Link href="/products">Product</Link>
         </li>
@@ -62,7 +56,7 @@ const TopNav = async () => {
         <li>
           <Link href="/manage">Admin</Link>
         </li>
-        
+
 
         {user ? (
           <>
@@ -85,6 +79,14 @@ const TopNav = async () => {
               <ShoppingCartIcon className="h-6 w-6" />
             </span>
           </Link>
+        </li>
+
+        <li className="text-black">
+          <select>
+            <option>한국어</option>
+            <option>English</option>
+            <option>中國語</option>
+          </select>
         </li>
       </ul>
     </div>
