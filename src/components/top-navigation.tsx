@@ -33,10 +33,10 @@ const TopNav = async () => {
   }
   return (
     <div className="fixed z-50 flex h-14 w-full items-center justify-between border-b-2 border-yellow-500 bg-black lg:px-20 md:px-10 px-5 py-10 text-white">
-      <div className="bg-gradient-to-tr from-yellow-500 to-yellow-200 bg-clip-text lg:text-2xl font-bold text-transparent text-sm shrink-0 w-20">
+      <div className="bg-gradient-to-tr from-yellow-500 to-yellow-200 bg-clip-text lg:text-2xl font-bold text-transparent text-base shrink-0 w-28">
         <Link href="/">YM Light</Link>
       </div>
-      <ul className="md:flex md:divide-x-2 [&>li]:px-2 text-xs md:text-md columns-4 [&>li]:py-1 sm:columns-5">
+      <ul className="md:flex md:divide-x-2 text-sm md:text-base [&>li]:px-2 columns-4 [&>li]:py-1 sm:columns-5">
       
         <li>
           <Link href="/products">Product</Link>
