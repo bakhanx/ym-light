@@ -64,7 +64,7 @@ const Modal = async ({ params }: Props) => {
   return (
     <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center">
       <div className="absolute h-full w-full bg-black opacity-70" />
-      <div className="absolute flex h-[75%] w-[50%] flex-col justify-center bg-slate-50 ">
+      <div className="absolute flex sm:w-[50%] sm:h-[75%] w-full h-full max-w-screen-md flex-col justify-center bg-slate-50 ">
         <div className="flex h-full w-full items-center justify-center shadow-xl">
           <BackButton />
           <div className="flex h-full w-full max-w-screen-sm flex-col justify-start gap-x-5">
