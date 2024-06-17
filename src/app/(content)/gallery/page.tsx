@@ -31,9 +31,9 @@ const Gallery = async () => {
   const galleryList = await getCachedGallery();
 
   return (
-    <div className="m-auto w-[100%-40px] max-w-screen-lg p-10 pt-20">
+    <div className="m-auto w-[100%-40px] max-w-screen-lg sm:p-10 px-4 pt-6 border-t-2">
       <div className=" flex flex-col">
-        <div className="flex items-center gap-x-10 px-8 pt-16">
+        <div className="flex items-center gap-x-10 px-8 sm:pt-16 ">
           <div className="fill relative h-32 w-32 ">
             <Image alt="profile" src={profile} className="rounded-full" />
           </div>
