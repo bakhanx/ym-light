@@ -55,7 +55,7 @@ const ProductDetail = async ({ params }: Props) => {
   return (
     <>
       {product ? (
-        <div className="my-container pt-20">
+        <div className="my-container">
           <div className="my-content m-auto max-w-screen-xl px-10 pb-28 pt-8 ">
             <div className="my-column_bind flex divide-x-2 divide-slate-300">
               {/* left */}
