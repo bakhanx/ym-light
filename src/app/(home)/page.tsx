@@ -71,7 +71,7 @@ export default async function Home() {
   const discountedProducts = await getCachedDiscountProducts();
   return (
     <>
-      <div className="h-[768px]">
+      <div className="sm:h-[768px] h-[576px]">
         <div className="relative h-full w-full">
           <Image
             src={bannerImage}
@@ -86,12 +86,12 @@ export default async function Home() {
 
           <div className="absolute z-10 flex h-full flex-col justify-center pl-20 text-white ">
             <div>
-              <span className="gradient-text animate-gradient text-5xl font-bold">
+              <span className="gradient-text animate-gradient text-2xl sm:text-5xl font-bold">
                 YM Light
               </span>
             </div>
 
-            <div className="text-balance pt-2 text-2xl">
+            <div className="text-balance pt-2 text-lg sm:text-2xl">
               YM Lights are always made by experts with over 30 years of
               experience.
             </div>
@@ -100,13 +100,13 @@ export default async function Home() {
       </div>
 
       <Suspense fallback="Loading...">
-        <div className="mx-auto max-w-screen-2xl px-10 py-10">
+        <div className="mx-auto max-w-screen-2xl px-4 py-10 sm:px-10">
           <div className="flex flex-col gap-y-10 divide-y-2">
             <div className="my-product-wrap">
               <div className=" pt-6 text-2xl font-semibold">
                 새로 등록된 상품
               </div>
-              <div className="grid gap-2 pt-4 min-[320px]:grid-cols-2 sm:gap-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 xl:gap-2">
+              <div className="grid gap-1 pt-4 min-[320px]:grid-cols-2 sm:gap-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 xl:gap-2">
                 {products.map((product) => (
                   <Link key={product.id} href={`/products/${product.id}`}>
                     <Card
