@@ -32,29 +32,31 @@ const TopNav = async () => {
     redirect("/")
   }
   return (
-    <div className="fixed z-50 flex h-14 w-full items-center justify-between border-b-2 border-yellow-500 bg-black lg:px-20 md:px-10 px-5 py-10 text-white">
-      <div className="bg-gradient-to-tr from-yellow-500 to-yellow-200 bg-clip-text lg:text-2xl font-bold text-transparent text-base shrink-0 w-28">
+    <div className="fixed z-50 sm:flex sm:h-14 w-full items-center justify-between border-b-2 border-yellow-500 bg-black lg:px-20 md:px-10 sm:py-10 sm:text-white">
+
+      <div className="bg-gradient-to-tr from-yellow-500 to-yellow-200 bg-clip-text lg:text-2xl font-bold text-transparent text-xl shrink-0 h-14 px-4 items-center flex">
         <Link href="/">YM Light</Link>
       </div>
-      <ul className="md:flex md:divide-x-2 text-sm md:text-base [&>li]:px-2 columns-4 [&>li]:py-1 sm:columns-5">
-      
+
+      <ul className="md:flex md:divide-x-2 text-sm md:text-base [&>li]:px-2 [&>li]:py-1 sm:columns-5 bg-white [&>li]:border sm:[&>li]:border-none text-center grid grid-cols-4 sm:bg-black">
+
         <li>
-          <Link href="/products">Product</Link>
+          <Link href="/products">조명</Link>
         </li>
         <li>
-          <Link href="/gallery">Gallery</Link>
+          <Link href="/gallery">갤러리</Link>
         </li>
         <li>
-          <Link href="/about">About</Link>
+          <Link href="/about">소개</Link>
         </li>
         <li>
-          <Link href="/contact">Contact</Link>
+          <Link href="/contact">문의</Link>
         </li>
         <li>
           <Link href="/faq">FAQ</Link>
         </li>
         <li>
-          <Link href="/manage">Admin</Link>
+          <Link href="/manage">관리자</Link>
         </li>
 
 
@@ -69,7 +71,7 @@ const TopNav = async () => {
           </>
         ) : (
           <li>
-            <Link href="/login">Login</Link>
+            <Link href="/login">로그인</Link>
           </li>
         )}
 
@@ -81,13 +83,13 @@ const TopNav = async () => {
           </Link>
         </li>
 
-        <li className="text-black">
+        {/* <li className="text-black">
           <select>
             <option>한국어</option>
             <option>English</option>
             <option>中國語</option>
           </select>
-        </li>
+        </li> */}
       </ul>
     </div>
   );
