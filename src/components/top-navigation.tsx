@@ -32,9 +32,9 @@ const TopNav = async () => {
     redirect("/")
   }
   return (
-    <div className="fixed z-50 sm:flex sm:h-14 w-full items-center justify-between border-b-2 border-yellow-500 bg-black lg:px-20 md:px-10 sm:py-10 sm:text-white">
+    <div className="fixed z-50 sm:flex sm:h-14 w-full items-center justify-between border-b-2 border-yellow-500 bg-black lg:px-20 md:px-10 sm:py-10 sm:text-white h-32">
 
-      <div className="bg-gradient-to-tr from-yellow-500 to-yellow-200 bg-clip-text lg:text-2xl font-bold text-transparent text-xl shrink-0 h-14 px-4 items-center flex">
+      <div className="bg-gradient-to-tr from-yellow-500 to-yellow-200 bg-clip-text lg:text-2xl font-bold text-transparent text-xl shrink-0 h-16 px-4 items-center flex">
         <Link href="/">YM Light</Link>
       </div>
 
