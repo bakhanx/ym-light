@@ -36,7 +36,7 @@ const Contact = () => {
     <>
       {/* Issue: items-center와 screen-h에 따른 pt 충돌 */}
       <div className="">
-        <div className="Image-Wrap h-screen w-full pt-20">
+        <div className="Image-Wrap h-screen w-full">
           <div className="absolute h-screen w-full">
             <div className="relative h-screen w-full">
               <Image src={Image01} alt="contact" fill objectFit="cover" />
@@ -45,54 +45,54 @@ const Contact = () => {
           </div>
 
           <div className="Content-Wrap flex h-full max-w-screen-xl mx-auto items-center ">
-            <div className="z-20 flex w-full px-20 pt-8 text-white">
+            <div className="z-20 flex w-full px-5 sm:px-20 pt-8 text-white">
               <div className="left flex w-[50%] flex-col items-center">
                 <div className="flex flex-col gap-y-10">
                   <div>
-                    <p className="text-3xl font-bold">
+                    <p className="text-xl sm:text-3xl font-bold">
                       Ask how we can help you
                     </p>
                     <div className="flex flex-col gap-y-10 pt-6">
                       <div>
                         <p className="font-bold">부담없는 1:1 친절 상담</p>
-                        <p className="opacity-70">
+                        <p className="opacity-70 text-sm">
                           오직 사장님과 다이렉트로 상담이 이루어집니다.
                         </p>
                       </div>
                       <div>
                         <p className="font-bold">24시간 이내 빠른 연락</p>
-                        <p className="opacity-70">
+                        <p className="opacity-70 text-sm">
                           퇴근 후에도 연락이 가능합니다. (새벽 제외)
                         </p>
                       </div>
                       <div>
                         <p className="font-bold">간단한 양식 제출</p>
-                        <p className="opacity-70">
+                        <p className="opacity-70 text-sm">
                           우측 양식을 간단하게 적어주셔도 좋습니다.
                         </p>
                       </div>
                     </div>
                   </div>
                   <div>
-                    <p className="text-3xl font-bold">Points of Contact</p>
+                    <p className="text-xl sm:text-3xl font-bold">Points of Contact</p>
                     <div className="flex flex-col gap-y-3 pt-6">
                       <div>
                         <p className="font-bold">Address | South Korea.</p>
-                        <p className="opacity-70">
+                        <p className="opacity-70 text-sm">
                           서울특별시 도봉구 길동로 123 1층
                         </p>
                       </div>
                       <div>
                         <p className="font-bold">FAX</p>
-                        <p className="opacity-70">(02)-000-0000</p>
+                        <p className="opacity-70 text-sm">(02)-000-0000</p>
                       </div>
                       <div>
                         <p className="font-bold">Email</p>
-                        <p className="opacity-70">ymlight@gmail.com</p>
+                        <p className="opacity-70 text-sm">ymlight@gmail.com</p>
                       </div>
                       <div>
                         <p className="font-bold">페이지 관리자</p>
-                        <p className="opacity-70">bkndev7@gmail.com</p>
+                        <p className="opacity-70 text-sm">bkndev7@gmail.com</p>
                       </div>
                     </div>
                   </div>
@@ -101,10 +101,10 @@ const Contact = () => {
 
               <div className="right flex w-[50%] flex-col items-center ">
                 <div className="flex w-[80%] flex-col">
-                  <p className="text-3xl font-bold ">Contact Us</p>
+                  <p className="text-xl sm:text-3xl font-bold ">Contact Us</p>
                   <p>
                     <span className="text-red-500">* </span>
-                    <span className="opacity-70">는 필수 양식입니다.</span>
+                    <span className="opacity-70 text-sm">는 필수 양식입니다.</span>
                   </p>
 
                   <div className="w-full pt-5">
