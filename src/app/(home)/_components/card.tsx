@@ -54,8 +54,8 @@ const Card = ({ name, discount, photoURL }: CardProps) => {
       style={cardStyle}
     >
       {/* 카드 황금비율 1:1.58 */}
-      <div className="rounded-xl bg-gray-800 xl:h-[474px] xl:w-[300px] min-[480px]:w-[200px] min-[480px]:h-[316px] sm:border-4 border-2 w-[150px] h-[237px]">
-        <div className="relative h-full rounded-xl bg-slate-200 border-4">
+      <div className="h-[237px] w-[150px] rounded-xl border-2 bg-gray-800 min-[480px]:h-[316px] min-[480px]:w-[200px] sm:border-4 xl:h-[474px] xl:w-[300px]">
+        <div className="relative h-full rounded-xl border-4 bg-slate-200">
           <Image
             src={`${photoURL}/fit=scale-down,w=480,sharpen=1`}
             fill
@@ -69,8 +69,8 @@ const Card = ({ name, discount, photoURL }: CardProps) => {
           {/* Light overlay */}
           <div className="absolute z-30 h-full w-full" style={overlayStyle} />
 
-          <div className="absolute bottom-0 z-20 flex w-full items-center  justify-center rounded-b-md border-t bg-black bg-opacity-50 p-5 text-white ">
-            {name}
+          <div className="absolute bottom-0 z-20 flex w-full items-center justify-center rounded-b-md border-t bg-black bg-opacity-50 p-5 text-xs text-white sm:p-5 sm:text-base">
+            <p className="truncate">{name}</p>
           </div>
           {discount && (
             <div className="absolute right-0 top-0 rounded-bl-md rounded-tr-md bg-red-500 p-2 text-xl font-bold text-white">
