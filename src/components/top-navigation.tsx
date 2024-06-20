@@ -36,7 +36,7 @@ const TopNav = async () => {
         <Link href="/">YM Light</Link>
       </div>
 
-      <ul className="grid grid-cols-4 bg-white text-center text-sm sm:flex sm:bg-black md:divide-x-2 md:text-base [&>li]:border [&>li]:px-2 [&>li]:py-1 sm:[&>li]:border-none h-16 items-center">
+      <ul className="grid grid-cols-4 bg-white text-center text-sm sm:flex sm:bg-black md:divide-x-2 md:text-base [&>li]:border [&>li]:px-2 [&>li]:py-2 sm:[&>li]:border-none h-16 items-center">
         <li>
           <Link href="/products">조명</Link>
         </li>
