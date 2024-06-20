@@ -188,10 +188,10 @@ const Options = ({ price, discount }: OptionsType) => {
   return (
     <div className="option pt-10">
       <div>
-        <label className="font-semibold">상품옵션</label>
+        <label className="font-semibold sm:text-base text-sm">상품옵션</label>
         <div
           className={cls(
-            "dropbox-option mt-2 border text-sm font-semibold text-slate-500",
+            "dropbox-option mt-2 border sm:text-sm text-xs font-semibold text-slate-500",
             isOpenOption ? "border-orange-300" : "border-slate-300",
           )}
         >
