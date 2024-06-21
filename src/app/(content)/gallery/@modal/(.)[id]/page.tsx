@@ -45,6 +45,7 @@ const getGallery = async (id: number) => {
       created_at: true,
       updated_at: true,
     },
+    
   });
   return gallery;
 };
@@ -64,19 +65,24 @@ const Modal = async ({ params }: Props) => {
   return (
     <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center">
       <div className="absolute h-full w-full bg-black opacity-70" />
-      <div className="absolute flex sm:w-[50%] sm:h-[75%] w-full h-full max-w-screen-md flex-col justify-center bg-slate-50 ">
+
+      <div className="absolute flex h-full w-full max-w-screen-sm flex-col justify-center bg-slate-50 sm:h-[75%] sm:w-[50%] ">
         <div className="flex h-full w-full items-center justify-center shadow-xl">
           <BackButton />
-          <div className="flex h-full w-full max-w-screen-sm flex-col justify-start gap-x-5">
+          <div className="flex h-full w-full flex-col justify-start gap-x-5 ">
             {/* Image */}
-            <div className="relative flex h-[75%] w-full">
+            <div className="relative flex h-[75%] w-full bg-black">
               {gallery.photo ? (
-                <Image
-                  src={`${gallery.photo}/sharpen=1,fit=scale-down,w=640`}
-                  alt="gallery"
-                  fill
-                  objectFit="cover"
-                />
+                <>
+                  <Image
+                    src={`${gallery.photo}/public`}
+                    alt="gallery"
+                    quality={90}
+                    fill
+                    className="z-40"
+                    objectFit="contain"
+                  />
+                </>
               ) : (
                 <PhotoIcon className="h-28" />
               )}
@@ -93,16 +99,18 @@ const Modal = async ({ params }: Props) => {
 
                 <div className="flex h-full flex-col justify-between ">
                   {/* Contents */}
-                  <div className="flex items-center gap-x-1">
-                    <div className="font-semibold">YM Light</div>
-                    <div className="flex h-3 w-3 items-center justify-center rounded-full bg-black">
+                  <div className="flex items gap-x-1">
+
+                    <div className="font-semibold shrink-0">YM Light</div>
+
+                    <div className="flex h-3 w-3 mt-1 items-center rounded-full bg-black ">
                       <BoltIcon className="rounded-ful h-3 w-3 text-amber-300" />
                     </div>
 
-                    <div>{gallery.content}</div>
+                    <div className="w-[80%] whitespace-pre-wrap">{gallery.content}</div>
                   </div>
                   {/* Tags */}
-                  <div className="text-blue-500 font-semibold text-sm">
+                  <div className="text-sm font-semibold text-blue-500">
                     {gallery.tags.map((tag) => tag.name)}
                   </div>
 
