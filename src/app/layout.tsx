@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Noto_Sans_KR } from "next/font/google";
 import "../styles/globals.css";
 import TopNav from "@/components/top-navigation";
+import Footer from "@/components/footer";
 
 // const inter = Inter({ subsets: ["latin"] });
 
@@ -29,7 +30,8 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${noto_sans_kr.className}`}>
         <TopNav />
-        <div className="sm:pt-20 pt-32">{children}</div>
+        <div className="pt-32 sm:pt-20">{children}</div>
+        <Footer />
       </body>
     </html>
   );
