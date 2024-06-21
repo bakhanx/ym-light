@@ -31,10 +31,13 @@ const Gallery = async () => {
   const galleryList = await getCachedGallery();
 
   return (
-    <div className="m-auto w-[100%-40px] max-w-screen-lg sm:p-10 px-4 pt-6 border-t-2">
-      <div className=" flex flex-col">
-        <div className="flex items-center gap-x-10 px-8 sm:pt-16 ">
-          <div className="fill relative h-32 w-32 ">
+    <div className="m-auto w-[100%-40px] max-w-screen-lg border-t-2 px-4 py-8 sm:px-10 md:px-20">
+      <div
+        className=" flex flex-col px-4 py-4 sm:px-8 sm:py-20
+"
+      >
+        <div className="flex items-center gap-x-10 ">
+          <div className="fill relative h-24 w-24 shrink-0 sm:h-32 sm:w-32">
             <Image alt="profile" src={profile} className="rounded-full" />
           </div>
           <div className="flex flex-col">
@@ -45,9 +48,11 @@ const Gallery = async () => {
                 <BoltIcon className="h-4 w-4 rounded-full text-amber-300" />
               </div>
             </div>
-            <div className="text-sm">Republic of Korea, Seoul (대한민국)</div>
+            <div className="truncate text-sm">
+              Republic of Korea, Seoul (대한민국)
+            </div>
 
-            <div className="flex gap-x-10 pt-8">
+            <div className="flex gap-x-10 pt-8 text-sm sm:text-base">
               <div>
                 게시물
                 <span className="font-semibold">{galleryList.length}</span>
@@ -62,9 +67,9 @@ const Gallery = async () => {
           </div>
         </div>
 
-        <div className="px-8 pb-16 pt-6">
-          <div className="text-lg font-semibold"> 영맨조명</div>
-          <div>조명 업계 경력 40년차</div>
+        <div className=" pt-4 sm:pt-8">
+          <div className="text-base font-semibold sm:text-lg"> 영맨조명</div>
+          <div className="text-sm sm:text-base">조명 업계 경력 40년차</div>
         </div>
       </div>
 
