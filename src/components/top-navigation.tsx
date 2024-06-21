@@ -32,8 +32,10 @@ const TopNav = async () => {
   };
   return (
     <div className="fixed z-50 h-36 w-full items-center justify-between border-b-2 border-yellow-500 bg-black text-white sm:flex sm:h-14 sm:py-10">
+      
       <div className="mx-auto flex w-full max-w-screen-2xl flex-col justify-between px-4 sm:flex-row md:px-20">
-        <div className="flex h-16 shrink-0 items-center bg-gradient-to-tr from-yellow-500 to-yellow-200 bg-clip-text text-xl font-bold text-transparent  md:text-2xl">
+
+        <div className="flex h-16 shrink-0 items-center bg-gradient-to-tr from-yellow-500 to-yellow-200 bg-clip-text text-xl font-bold text-transparent md:text-2xl">
           <Link href="/">YM Light</Link>
         </div>
 
