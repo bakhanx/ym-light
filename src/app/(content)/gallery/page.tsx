@@ -1,16 +1,21 @@
 import db from "@/libs/db";
-import {
-  BoltIcon,
-  ChatBubbleLeftEllipsisIcon,
-  HandThumbUpIcon,
-} from "@heroicons/react/16/solid";
-import { unstable_cache as nextCache } from "next/cache";
+import { BoltIcon } from "@heroicons/react/16/solid";
+
 import Image from "next/image";
-import Link from "next/link";
-import React from "react";
 import profile from "@/../public/images/ym-light-001.jpg";
+import GalleryList from "./@modal/_components/gallery-list";
+import { Prisma } from "@prisma/client";
 
 const getGallery = async () => {
+  const gallery = await db.gallery.findMany({
+    select: {
+      id: true,
+    },
+  });
+  return gallery;
+};
+
+const getInitialGalleryList = async () => {
   const gallery = await db.gallery.findMany({
     select: {
       id: true,
@@ -19,23 +24,20 @@ const getGallery = async () => {
     orderBy: {
       created_at: "desc",
     },
+    take: 3,
   });
   return gallery;
 };
 
-const getCachedGallery = nextCache(getGallery, ["gallery"], {
-  tags: ["gallery"],
-});
+export type InitialGalleryListType = Prisma.PromiseReturnType<typeof getInitialGalleryList>;
 
 const Gallery = async () => {
-  const galleryList = await getCachedGallery();
+  const gallery = await getGallery();
+  const initialGalleryList = await getInitialGalleryList();
 
   return (
     <div className="m-auto w-[100%-40px] max-w-screen-lg border-t-2 px-4 py-8 sm:px-10 md:px-20">
-      <div
-        className=" flex flex-col px-4 py-4 sm:px-8 sm:py-20
-"
-      >
+      <div className=" flex flex-col px-4 py-4 sm:px-8 sm:py-20">
         <div className="flex items-center gap-x-10 ">
           <div className="fill relative h-24 w-24 shrink-0 sm:h-32 sm:w-32">
             <Image alt="profile" src={profile} className="rounded-full" />
@@ -48,19 +50,20 @@ const Gallery = async () => {
                 <BoltIcon className="h-4 w-4 rounded-full text-amber-300" />
               </div>
             </div>
-            <div className="truncate text-sm">
-              Republic of Korea, Seoul (대한민국)
+            <div className="flex flex-col text-sm">
+              <span>Republic of Korea, Seoul </span>
+              <span>(대한민국)</span>
             </div>
 
             <div className="flex gap-x-10 pt-8 text-sm sm:text-base">
               <div>
                 게시물
-                <span className="font-semibold">{galleryList.length}</span>
+                <span className="font-semibold">{gallery.length}</span>
               </div>
               <div>
                 방문자
                 <span className="font-semibold">
-                  {galleryList.length * 3 + 200}
+                  {gallery.length * 3 + 200}
                 </span>
               </div>
             </div>
@@ -75,42 +78,7 @@ const Gallery = async () => {
 
       <div className="h-1 w-full border-t-2 p-4" />
 
-      <div className="grid  grid-cols-3 gap-2">
-        {galleryList.map((gallery) => (
-          <Link href={`gallery/${gallery.id}`} key={gallery.id} scroll={false}>
-            <div className="relative flex aspect-square items-center justify-center bg-slate-200 ">
-              <Image
-                alt={String(gallery.id)}
-                src={`${gallery.photo}/hvga`}
-                fill
-                quality={90}
-                className="object-cover"
-              />
-              <div className="group absolute  h-full w-full">
-                <div className="invisible h-full w-full group-hover:visible">
-                  <div
-                    className="flex h-full w-full items-center justify-center gap-x-10 text-white"
-                    style={{
-                      backgroundColor: `rgba(0,0,0,0.5)`,
-                    }}
-                  >
-                    <div className="flex items-center gap-x-2">
-                      <ChatBubbleLeftEllipsisIcon className="h-5 w-5" />
-                      {/* count of comments */}
-                      <span>{10}</span>
-                    </div>
-                    <div className="flex items-center gap-x-2">
-                      <HandThumbUpIcon className="h-5 w-5" />
-                      {/* count of hearts */}
-                      <span>5</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Link>
-        ))}
-      </div>
+      <GalleryList initialGalleryList={initialGalleryList} />
     </div>
   );
 };
