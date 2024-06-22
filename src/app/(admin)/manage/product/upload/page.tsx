@@ -288,7 +288,7 @@ export const Upload = ({
 
                   {/* Button */}
                   <div className="pt-10">
-                    <FormButton name="상품" isEdit={isEdit} />
+                    <FormButton name="상품 등록하기" isEdit={isEdit} />
                   </div>
                 </div>
               </div>
