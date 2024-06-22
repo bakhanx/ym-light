@@ -179,7 +179,7 @@ export const Upload = ({
             <div className="right w-[50%]  flex-col border-2 border-gray-300 ">
               <div className="flex flex-col p-10 ">
                 <p className="text-3xl font-bold ">
-                  갤러리 {isEdit ? "편집" : "수정"}
+                  갤러리 {isEdit ? "수정" : "등록"}
                 </p>
                 <p>
                   <span className="text-red-500">* </span>
@@ -216,7 +216,9 @@ export const Upload = ({
                   </div>
 
                   <div className="pt-20">
-                    <FormButton name="갤러리" isEdit={isEdit} />
+                    <FormButton
+                      name={`갤러리 ${isEdit ? "수정하기" : "등록하기"}`}
+                    />
                   </div>
                 </div>
               </div>
