@@ -128,7 +128,7 @@ const Register = () => {
           </div>
 
           <div className="pt-10">
-            <FormButton name="인증요청 하기" color="gray" />
+            <FormButton name="인증 요청하기" color="gray" />
             {/* <FormButton name="회원가입 하기" color="gray" /> */}
           </div>
         </form>
