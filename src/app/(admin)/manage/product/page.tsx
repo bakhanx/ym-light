@@ -10,22 +10,22 @@ const revalidateProducts = async () => {
 
 const Product = () => {
   return (
-    <div className="pt-20 ">
+    <div className="mx-auto h-[60vh] max-w-screen-2xl pt-10">
       <div>상품관리페이지</div>
 
-      <div className="flex gap-x-5 p-10">
-        <button className="boerder-sm border border-blue-500 p-2">
+      <div className="flex flex-col items-center gap-y-8 p-10  sm:gap-x-8 md:flex-row [&>button]:w-40 ">
+        <button className="boerder-sm border border-blue-500 p-4">
           <Link href={`product/upload`}>업로드</Link>
         </button>
-        <button className="boerder-sm border border-blue-500 p-2">
+        <button className="boerder-sm border border-blue-500 p-4">
           <Link href={`product/edit`}>상품수정</Link>
         </button>
+
         <form action={revalidateProducts}>
-          <button className="boerder-sm border border-blue-500 p-2">
+          <button className="boerder-sm w-40 border border-blue-500  p-4">
             상품 정보 갱신
           </button>
         </form>
-
       </div>
     </div>
   );
