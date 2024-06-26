@@ -123,17 +123,17 @@ export const Upload = ({
 
   const [state, action] = useFormState(interceptAction, null);
   return (
-    <div className="h-screen  pt-24">
+    <div className="">
       <div className="my-container">
-        <div className="my-content m-auto w-[1280px] max-w-screen-xl px-10 ">
+        <div className="my-content m-auto max-w-screen-xl px-4 md:px-10 ">
           <p className="py-10 text-3xl font-bold">
             상품 {isEdit ? "수정하기" : "등록하기"}
           </p>
 
           <form action={action}>
-            <div className="my-column_bind flex divide-x-2 divide-slate-300">
-              {/* left */}
-              <div className="my-column-left w-[50%] pr-10">
+            <div className="my-column_bind flex flex-col sm:divide-x-2 divide-slate-300 sm:flex-row">
+              {/* Photo */}
+              <div className="my-column-left sm:w-[50%] sm:pr-10">
                 <div className="my-column-box">
                   <div className="my-banner-image">
                     <label
@@ -148,7 +148,7 @@ export const Upload = ({
                     >
                       {!preview[0] && (
                         <>
-                          <PhotoIcon className="w-56 text-gray-400" />
+                          <PhotoIcon className="w-1/3 text-gray-400" />
                           <div>사진을 추가해주세요.</div>
                           <div className="text-red-500">
                             {state?.fieldErrors.photo0}
@@ -166,13 +166,13 @@ export const Upload = ({
                     />
                   </div>
 
-                  <div className="my-banner-func pt-5">
-                    <div className="flex h-24 w-full items-center justify-center gap-x-5 border-2 ">
+                  <div className="my-banner-func border-2 mt-4">
+                    <div className="flex w-full items-center justify-between gap-x-8">
                       {[...Array(3)].map((_, index) => (
                         <label
                           key={index}
                           htmlFor={`photo${index + 1}`}
-                          className="relative flex aspect-square  h-24 cursor-pointer flex-col items-center justify-center border-2 border-dashed border-gray-400 text-gray-500"
+                          className="relative flex aspect-square w-1/3 cursor-pointer flex-col items-center justify-center border-2 border-dashed border-gray-400 text-gray-500"
                           style={{
                             backgroundImage: `url(${preview[index + 1]})`,
                             backgroundSize: "contain",
@@ -184,14 +184,14 @@ export const Upload = ({
                             <button
                               id={String(index + 1)}
                               onClick={handleDeleteImage}
-                              className="absolute right-0 top-0 z-20 rounded-md bg-red-500 p-[2px] hover:bg-red-600"
+                              className="absolute right-0 top-0 z-20 rounded-sm bg-red-500 p-[2px] hover:bg-red-600"
                             >
                               <XMarkIcon className="size-5 text-white " />
                             </button>
                           ) : (
                             <>
-                              <PhotoIcon className="w-8" />
-                              <div className="text-sm">추가사진{index + 1}</div>
+                              <PhotoIcon className="w-1/3" />
+                              <div className="text-xs">추가사진{index + 1}</div>
                             </>
                           )}
 
@@ -210,8 +210,8 @@ export const Upload = ({
                 </div>
               </div>
 
-              {/* right */}
-              <div className="my-column-right w-[50%] pl-10">
+              {/* Info */}
+              <div className="my-column-right sm:w-[50%] sm:pl-10">
                 <div className="my-column-box">
                   {/* Info */}
                   <div className="my-product-info">
@@ -297,7 +297,7 @@ export const Upload = ({
 
           <div className="my-product-detail-content mt-14 ">
             <div className="my-product-detail-tap-wrap">
-              <div className="my-product-detail-tab flex justify-center gap-x-36 border-b-2 border-t-2 border-b-orange-300 py-5">
+              <div className="my-product-detail-tab flex justify-between text-sm md:text-base border-b-2 border-t-2 border-b-orange-300 py-5 px-4 sm:px-8 md:px-16">
                 <div>관련 상품</div>
                 <div>상품평</div>
                 <div>상품 문의</div>
