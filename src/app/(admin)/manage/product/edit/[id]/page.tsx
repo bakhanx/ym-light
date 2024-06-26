@@ -15,10 +15,8 @@ const EditProduct = async ({ params }: { params: { id: string } }) => {
   console.log(product);
 
   return (
-    <div className="pt-24">
-      <div className="[&>div]:pt-0">
-        <Upload product={product} isEdit={true} />;
-      </div>
+    <div>
+      <Upload product={product} isEdit={true} />;
     </div>
   );
 };
