@@ -23,27 +23,29 @@ const Edit = async () => {
   const products = await getProducts();
 
   return (
-    <div className="flex flex-col gap-y-5 p-2 pt-20">
+    <div className="flex flex-col gap-y-5 p-2 pt-20 sm:text-base text-sm max-w-screen-2xl sm:px-20 px-4 m-auto">
       <ul className="flex w-full gap-x-6 border-b-2 border-black py-4">
-        <li className="w-[5%]"></li>
+        <li className="sm:w-[10%] w-[8%]"></li>
         <li className="w-[2%] text-center">ID</li>
         <li className="w-[5%] text-center">사진</li>
         <li className="w-[30%]">상품명</li>
         <li className="w-[20%]">최근 업데이트</li>
-        <li className="w-[20%]">게시일</li>
+        <li className="w-[20%]">게시일</li> 
       </ul>
       {products.map((product) => (
         <div
           key={product.id}
-          className="flex items-center gap-x-6 border-b-2 border-black pb-4"
+          className="flex items-center gap-x-6 border-b-2 border-black pb-4 "
         >
-          <div className="flex w-[10%] gap-x-2">
+          <div className="flex flex-col xl:flex-row gap-y-1 sm:w-[10%] w-[8%] gap-x-2 ">
             <Link href={`edit/${product.id}`}>
               <button className="bg-slate-200 p-2">편집</button>
             </Link>
             <DeleteForm id={product.id} action={deleteProduct} />
           </div>
+
           <div className="w-[2%] text-center">{product.id}</div>
+
           <div className="relative aspect-square w-[5%]">
             <Image
               fill
