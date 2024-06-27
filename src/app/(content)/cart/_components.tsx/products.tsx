@@ -10,9 +10,9 @@ const Products = () => {
   };
 
   return (
-    <div className="flex px-4">
-      <div className="flex w-full justify-center divide-x-[1px]">
-        <div className="relative flex w-[70%] p-10">
+    <div className="flex px-4 py-4">
+      <div className="flex lg:flex-row flex-col w-full justify-center lg:divide-x-[1px]">
+        <div className="relative flex lg:w-[70%] p-10">
           <button
             className={cls(
               isSelectAllClick
@@ -68,11 +68,14 @@ const Products = () => {
           </button>
         </div>
 
-        <div className="flex w-[15%] items-center justify-center p-5">
+
+        <div className="flex lg:w-[15%] items-center lg:justify-center justify-between lg:p-5 px-20 gap-x-5 lg:pr-0">
+          <span className="lg:hidden">주문금액</span>
           <span>350,000원</span>
         </div>
 
-        <div className="flex w-[15%] items-center justify-center p-10">
+        <div className="flex lg:w-[15%] items-center lg:justify-center justify-between lg:p-5 gap-x-5 px-20 lg:pr-0">
+          <span className="lg:hidden">총 배송비</span>
           <span>7,000원</span>
         </div>
       </div>
