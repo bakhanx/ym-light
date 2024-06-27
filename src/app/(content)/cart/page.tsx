@@ -17,19 +17,19 @@ const Cart = () => {
 
   return (
     <>
-      <div className="wrapper pt-20 ">
+      <div className="wrapper">
         {/* Header */}
         <div className="divide-y-[1px] shadow-xl">
           {/* title  */}
           <div className="py-10">
-            <div className="inner-content xl:max-w-screen-xl lg:max-w-screen-lg">
-              <span className="text-3xl font-bold ">장바구니</span>
+            <div className="inner-content xl:max-w-screen-xl lg:max-w-screen-lg px-4 lg:px-0">
+              <span className="text-3xl font-bold">장바구니</span>
             </div>
           </div>
 
           {/* total Qunatity */}
           <div className=" py-5">
-            <div className="inner-content xl:max-w-screen-xl lg:max-w-screen-lg">
+            <div className="inner-content xl:max-w-screen-xl lg:max-w-screen-lg px-4 lg:px-0">
               <div className="flex gap-x-1 font-bold">
                 <span className="text-xl ">전체</span>
                 <div className="flex h-5 w-5 items-center justify-center rounded-md bg-amber-200 p-3 text-lg">
@@ -40,7 +40,7 @@ const Cart = () => {
           </div>
           {/* check all */}
           <div className=" py-5 text-sm">
-            <div className="inner-content xl:max-w-screen-xl lg:max-w-screen-lg">
+            <div className="inner-content xl:max-w-screen-xl lg:max-w-screen-lg px-4 lg:px-0">
               <div className="flex gap-x-2 divide-x-2">
                 <div className="">
                   <button
@@ -72,7 +72,7 @@ const Cart = () => {
 
         {/* contents */}
         <div className="bg-gray-100 py-10 ">
-          <div className="m-auto xl:max-w-screen-xl rounded-md bg-white shadow-xl max-w-screen-lg">
+          <div className="m-auto xl:max-w-screen-xl rounded-md bg-white shadow-xl max-w-screen-lg px-4 lg:px-0">
             {/* header */}
             <div>
               <div className="flex border-b border-t-2 border-t-black p-4 text-center font-bold">
@@ -87,9 +87,9 @@ const Cart = () => {
                 >
                   <CheckIcon className="h-3 w-3 stroke-[3px] " />
                 </button>
-                <span className="w-[70%]">상품정보</span>
-                <span className="w-[15%]">상품금액</span>
-                <span className="w-[15%]">배송비</span>
+                <span className="lg:w-[70%] w-full">상품정보</span>
+                <span className="w-[15%] hidden lg:block">상품금액</span>
+                <span className="w-[15%] hidden lg:block">배송비</span>
               </div>
             </div>
             {/* products */}
@@ -103,32 +103,32 @@ const Cart = () => {
 
             {/* Total */}
             <div className="flex border-b px-4 py-6">
-              <div className="flex  w-[70%] items-center justify-center gap-x-16 border-r">
-                <div className="flex flex-col">
+              <div className="flex  w-[70%] items-center justify-center lg:gap-x-16 border-r md:gap-x-8 gap-x-4">
+                <div className="flex flex-col md:text-base text-sm">
                   <span className="text-center text-gray-400">상품금액</span>
                   <span className="font-bold">33,000,000원</span>
                 </div>
                 <div>
-                  <span className="text-4xl">-</span>
+                  <span className="lg:text-4xl text-2xl ">-</span>
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col md:text-base text-sm">
                   <span className="text-center text-gray-400">할인금액</span>
                   <span className="font-bold text-red-500">3,200,000원</span>
                 </div>
 
                 <div>
-                  <span className="text-4xl">+</span>
+                  <span className="lg:text-4xl text-2xl ">+</span>
                 </div>
 
-                <div className="flex flex-col">
+                <div className="flex flex-col md:text-base text-sm">
                   <span className="text-center text-gray-400">배송비</span>
                   <span className="font-bold text-green-500">7,000원</span>
                 </div>
               </div>
 
-              <div className="flex  w-[30%] flex-col items-center justify-center rounded-xl">
+              <div className="flex  w-[30%] flex-col items-center justify-center rounded-xl ">
                 <span className="font-bold text-gray-600">주문금액</span>
-                <span className="text-2xl font-bold text-blue-500">
+                <span className="md:text-2xl text-base  font-bold text-blue-500">
                   28,507,000원
                 </span>
               </div>
