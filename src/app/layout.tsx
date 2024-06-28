@@ -30,7 +30,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${noto_sans_kr.className}`}>
         <TopNav />
-        <div className="pt-32 sm:pt-20">{children}</div>
+        <div className="pt-36  sm:pt-20">{children}</div>
         <Footer />
       </body>
     </html>
