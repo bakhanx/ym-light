@@ -27,7 +27,7 @@ const Products = () => {
             </button>
 
             {/* Image */}
-            <div className="relative pl-8 sm:pl-0">
+            <div className="relative ml-8 sm:pl-0">
               <div className="h-20 w-20 bg-slate-500"></div>
             </div>
 
@@ -48,9 +48,9 @@ const Products = () => {
           {/* Option */}
           <ul className="mt-4 flex flex-col gap-y-4 bg-gray-50 p-2 text-sm text-gray-600 sm:text-base [&>li]:border-b-[1px] [&>li]:py-2">
             <li className="">
-              <div className="flex justify-between">
-                <span>01. 색상 : 화이트 / 1개</span>
-                <div className="flex items-center gap-x-2">
+              <div className="flex justify-between items-start">
+                <span>01. 색상 : 화이트 / 1개 </span>
+                <div className="flex gap-x-2">
                   <button className=" text-gray-400">
                     <XMarkIcon className="h-4 w-4 stroke-2" />
                   </button>
