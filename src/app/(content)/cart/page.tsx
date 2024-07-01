@@ -8,10 +8,10 @@ import { CheckIcon, TrashIcon } from "@heroicons/react/24/outline";
 
 const Cart = () => {
   const [totalQuantity, setTotalQuantity] = useState(3);
-  const [isSelectAllClick, setisSelectAllClick] = useState(true);
+  const [isSelectAllClick, setIsSelectAllClick] = useState(true);
 
   const handleSelectAllClick = () => {
-    setisSelectAllClick((prev) => !prev);
+    setIsSelectAllClick((prev) => !prev);
   };
 
   return (
