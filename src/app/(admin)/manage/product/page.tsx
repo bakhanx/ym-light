@@ -8,21 +8,29 @@ const revalidateProducts = async () => {
   revalidateTag("product");
 };
 
+const navLinks = [
+  { key: "upload", name: "업로드", href: "product/upload" },
+  { key: "edit", name: "상품수정", href: "product/edit" },
+];
+
 const Product = () => {
   return (
     <div className="mx-auto h-[60vh] max-w-screen-2xl pt-10">
       <div>상품관리페이지</div>
 
-      <div className="flex flex-col items-center gap-y-8 p-10  sm:gap-x-8 md:flex-row [&>button]:w-40 ">
-        <button className="boerder-sm border border-blue-500 p-4">
-          <Link href={`product/upload`}>업로드</Link>
-        </button>
-        <button className="boerder-sm border border-blue-500 p-4">
-          <Link href={`product/edit`}>상품수정</Link>
-        </button>
+      <div className="flex flex-col items-center gap-y-8 p-10 sm:gap-x-8 md:flex-row [&>button]:w-40 ">
+        {navLinks.map((navLink) => (
+          <Link
+            href={navLink.href}
+            key={navLink.key}
+            className="border-sm w-40 border border-blue-500 p-4 text-center hover:bg-blue-200"
+          >
+            {navLink.name}
+          </Link>
+        ))}
 
         <form action={revalidateProducts}>
-          <button className="boerder-sm w-40 border border-blue-500  p-4">
+          <button className="boerder-sm w-40 border border-blue-500 bg-amber-200 p-4 hover:bg-amber-300">
             상품 정보 갱신
           </button>
         </form>
