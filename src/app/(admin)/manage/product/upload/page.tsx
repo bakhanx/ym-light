@@ -124,9 +124,9 @@ export const Upload = ({
   const [state, action] = useFormState(interceptAction, null);
   return (
     <div className="">
-      <div className="my-container">
+      <div className="my-container py-10">
         <div className="my-content m-auto max-w-screen-xl px-4 md:px-10 ">
-          <p className="py-10 text-3xl font-bold">
+          <p className="pb-5 text-3xl font-bold">
             상품 {isEdit ? "수정하기" : "등록하기"}
           </p>
 
@@ -360,6 +360,7 @@ export const Upload = ({
 
             <div className="pt-10"></div>
           </div>
+
         </div>
       </div>
     </div>
