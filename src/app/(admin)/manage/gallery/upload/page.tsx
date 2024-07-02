@@ -126,8 +126,8 @@ export const Upload = ({
   // useForm으로 수정
 
   return (
-    <div className="my-container py-10">
-      <div className="my-content m-auto h-full max-w-screen-xl px-4 md:px-10">
+    <div className="my-container">
+      <div className="my-content m-auto h-full max-w-screen-xl px-4 py-5 md:px-10">
         <form action={action}>
           <p className="pb-5 text-3xl font-bold">
             갤러리 {isEdit ? "수정하기" : "등록하기"}
