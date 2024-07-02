@@ -7,19 +7,28 @@ const revalidateGallery = async () => {
   revalidateTag("gallery");
 };
 
+const navLinks = [
+  { key: "upload", name: "업로드", href: "gallery/upload" },
+  { key: "edit", name: "상품수정", href: "gallery/edit" },
+];
+
 const Gallery = () => {
   return (
-    <div className="pt-10 mx-auto h-[60vh] max-w-screen-2xl">
+    <div className="mx-auto h-[60vh] max-w-screen-2xl pt-10">
       <div>갤러리 관리</div>
-      <div className="flex sm:gap-x-8 gap-y-8 p-10 flex-col  md:flex-row items-center [&>button]:w-40 ">
-        <button className="boerder-sm border border-blue-500 p-4">
-          <Link href={`gallery/upload`}>업로드</Link>
-        </button>
-        <button className="boerder-sm border border-blue-500 p-4">
-          <Link href={`gallery/edit`}>수정</Link>
-        </button>
+      <div className="flex flex-col items-center gap-y-8 p-10  sm:gap-x-8 md:flex-row [&>button]:w-40 ">
+        {navLinks.map((navLink) => (
+          <Link
+            href={navLink.href}
+            key={navLink.key}
+            className="border-sm w-40 border border-blue-500 p-4 text-center hover:bg-blue-200"
+          >
+            {navLink.name}
+          </Link>
+        ))}
+
         <form action={revalidateGallery}>
-          <button className="boerder-sm border border-blue-500 p-4 w-40">
+          <button className="boerder-sm w-40 border border-blue-500 bg-amber-200 p-4 hover:bg-amber-300">
             갤러리 정보 갱신
           </button>
         </form>
