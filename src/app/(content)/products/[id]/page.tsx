@@ -127,22 +127,42 @@ const ProductDetail = async ({ params }: Props) => {
                   </div>
 
                   {/* Option */}
-                  <Options
-                    price={product.price}
-                    discount={product?.discount || undefined}
-                  />
-                  <div className="my-btn-wrap mt-20 flex flex-col gap-y-5 font-bold text-white sm:text-base text-sm">
-                    <button className="flex w-full items-center justify-center gap-x-1 rounded-md bg-amber-500 sm:p-5 p-4 hover:bg-amber-600">
-                      <TruckIcon className="sm:h-7 sm:w-7 w-5 h-5 " />
+
+                  {product.options.length > 0 ? (
+                    <Options
+                      options={product.options}
+                      price={product.price}
+                      discount={product.discount}
+                    />
+                  ) : (
+                    <div className="flex items-end justify-end py-5 pt-16 gap-x-5">
+                      <div className="text-gray-500">총 금액</div>
+                      <span className="w-36 text-right text-xl font-bold">
+                        <span className="text-lg sm:text-2xl">
+                          {product?.discount
+                            ? formatOfPrice(
+                                product?.price *
+                                  ((100 - product.discount) / 100),
+                              )
+                            : formatOfPrice(product?.price)}
+                          원
+                        </span>
+                      </span>
+                    </div>
+                  )}
+
+                  <div className="my-btn-wrap flex flex-col gap-y-5 text-sm font-bold text-white sm:text-base">
+                    <button className="flex w-full items-center justify-center gap-x-1 rounded-md bg-amber-500 p-4 hover:bg-amber-600 sm:p-5">
+                      <TruckIcon className="h-5 w-5 sm:h-7 sm:w-7 " />
                       구매하기
                     </button>
                     <div className="flex gap-x-4">
-                      <button className="flex w-full items-center justify-center gap-x-1 rounded-md bg-blue-500 sm:p-5 p-4 hover:bg-blue-600">
-                        <ShoppingBagIcon className="sm:h-5 sm:w-5 w-4 h-4 stroke-2" />
+                      <button className="flex w-full items-center justify-center gap-x-1 rounded-md bg-blue-500 p-4 hover:bg-blue-600 sm:p-5">
+                        <ShoppingBagIcon className="h-4 w-4 stroke-2 sm:h-5 sm:w-5" />
                         <span>장바구니</span>
                       </button>
-                      <button className="flex w-full items-center justify-center gap-x-1 rounded-md bg-red-600 sm:p-5 p-4 hover:bg-red-700">
-                        <HeartIcon className="sm:h-5 sm:w-5 w-4 h-4 stroke-2" />
+                      <button className="flex w-full items-center justify-center gap-x-1 rounded-md bg-red-600 p-4 hover:bg-red-700 sm:p-5">
+                        <HeartIcon className="h-4 w-4 stroke-2 sm:h-5 sm:w-5" />
                         찜하기
                       </button>
                     </div>
@@ -163,52 +183,52 @@ const ProductDetail = async ({ params }: Props) => {
 
               <div className="my-product-detail-item-wrap divide-y-[1px] ">
                 <div className="my-product-detail-item item-notice pt-6 ">
-                  <div className="my-item-title sm:text-lg text-base font-bold">
+                  <div className="my-item-title text-base font-bold sm:text-lg">
                     <p>판매자 공지사항</p>
                   </div>
-                  <div className="my-item-content p-10 text-sm sm:text-base text-center text-slate-500">
+                  <div className="my-item-content p-10 text-center text-sm text-slate-500 sm:text-base">
                     <p>표시할 게시물이 없습니다.</p>
                   </div>
                 </div>
                 <div className="my-product-detail-item item-detail pt-6">
-                  <div className="my-item-title sm:text-lg text-base font-bold">
+                  <div className="my-item-title text-base font-bold sm:text-lg">
                     <div>상품 상세정보</div>
                   </div>
-                  <div className="my-item-content p-10 text-sm sm:text-base text-center text-slate-500">
+                  <div className="my-item-content p-10 text-center text-sm text-slate-500 sm:text-base">
                     <p>표시할 게시물이 없습니다.</p>
                   </div>
                 </div>
 
                 <div className="my-product-detail-item item-recommend pt-6">
-                  <div className="my-item-title sm:text-lg text-base font-bold">
+                  <div className="my-item-title text-base font-bold sm:text-lg">
                     <div>상품평</div>
                   </div>
-                  <div className="my-item-content p-10 text-sm sm:text-base text-center text-slate-500">
+                  <div className="my-item-content p-10 text-center text-sm text-slate-500 sm:text-base">
                     <p>표시할 게시물이 없습니다.</p>
                   </div>
                 </div>
                 <div className="my-product-detail-item item-recommend pt-6">
-                  <div className="my-item-title sm:text-lg text-base font-bold">
+                  <div className="my-item-title text-base font-bold sm:text-lg">
                     <div>상품 문의</div>
                   </div>
-                  <div className="my-item-content p-10 text-sm sm:text-base text-center text-slate-500">
+                  <div className="my-item-content p-10 text-center text-sm text-slate-500 sm:text-base">
                     <p>교환 및 반품</p>
                   </div>
                 </div>
                 <div className="my-product-detail-item item-recommend pt-6">
-                  <div className="my-item-title sm:text-lg text-base font-bold">
+                  <div className="my-item-title text-base font-bold sm:text-lg">
                     <div>추천 상품</div>
                   </div>
-                  <div className="my-item-content p-10 text-sm sm:text-base text-center text-slate-500">
+                  <div className="my-item-content p-10 text-center text-sm text-slate-500 sm:text-base">
                     <p>표시할 게시물이 없습니다.</p>
                   </div>
                 </div>
 
                 <div className="my-product-detail-item item-relative pt-6">
-                  <div className="my-item-title sm:text-lg text-base font-bold">
+                  <div className="my-item-title text-base font-bold sm:text-lg">
                     <div>관련 상품</div>
                   </div>
-                  <div className="my-item-content p-10 text-sm sm:text-base text-center text-slate-500">
+                  <div className="my-item-content p-10 text-center text-sm text-slate-500 sm:text-base">
                     <p>표시할 게시물이 없습니다.</p>
                   </div>
                 </div>
