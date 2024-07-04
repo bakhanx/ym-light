@@ -111,7 +111,8 @@ const ProductDetail = async ({ params }: Props) => {
                         </span>
                       </div>
 
-                      <div className="flex flex-col gap-y-2 pt-8 text-sm sm:pt-20 sm:text-base">
+                      <div className="flex flex-col gap-y-2 pt-8 text-sm sm:pt-10 sm:text-base">
+                        <ProductInfo label="배송비" data={"무료배송"} />
                         <ProductInfo label="색상" data={product?.color} />
                         <ProductInfo label="재질" data={product?.material} />
                         <ProductInfo label="사이즈" data={product?.size} />
