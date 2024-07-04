@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { cls, formatOfPrice } from "@/libs/utils";
 import React, { useEffect, useState } from "react";
@@ -18,17 +18,24 @@ type ItemOptionType = {
 };
 
 type OptionsType = {
+  options: {
+    id: number;
+    name: string;
+    price: number | null;
+    stock: number;
+    productId: number | null;
+  }[];
   price: number;
-  discount?: number;
+  discount: number | null;
 };
 
-const data: ItemOptionType[] = [
-  { id: 0, name: "화이트", price: 0 },
-  { id: 1, name: "블랙", price: 200000 },
-  { id: 2, name: "골드", price: 250000 },
-];
+// const data: ItemOptionType[] = [
+//   { id: 0, name: "화이트", price: 0 },
+//   { id: 1, name: "블랙", price: 200000 },
+//   { id: 2, name: "골드", price: 250000 },
+// ];
 
-const Options = ({ price, discount }: OptionsType) => {
+const Options = ({ options, price, discount }: OptionsType) => {
   const calcPrice = (price: number) => {
     if (discount) {
       return price - (price * discount) / 100;
@@ -49,10 +56,10 @@ const Options = ({ price, discount }: OptionsType) => {
     [],
   );
 
-  const [itemOptions, setItemOptions] = useState(data);
+  const [itemOptions, setItemOptions] = useState(options);
   const [totalItemListPrice, setTotalItemListPrice] = useState(0);
   const [totalOriginalPrice, setTotalOriginalPrice] = useState(0);
-  const [quantity, setQuantity] = useState(Array(data.length).fill(0));
+  const [quantity, setQuantity] = useState(Array(options.length).fill(0));
 
   const [isOpenOption, setIsOpenOption] = useState(false);
 
@@ -65,7 +72,7 @@ const Options = ({ price, discount }: OptionsType) => {
     temp[id]++;
     setQuantity(temp);
 
-    const clickedItem = data.find((v) => v.id === id) as any;
+    const clickedItem = options.find((v) => v.id === id) as any;
     const isExistList = selectedItemList.find((v) => v.id === clickedItem.id);
 
     if (!isExistList) {
@@ -165,7 +172,6 @@ const Options = ({ price, discount }: OptionsType) => {
     setSelectedItemList(newClickItem);
   };
 
-
   useEffect(() => {
     console.log(selectedItemList);
 
@@ -178,7 +184,7 @@ const Options = ({ price, discount }: OptionsType) => {
     const totalQuantity = selectedItemList
       .map((item) => item.quantity)
       .reduce((acc, cur) => acc + cur, 0);
-    const regularPrice = totalQuantity * (price);
+    const regularPrice = totalQuantity * price;
     const OptionPrice = selectedItemList
       .map((item) => item.quantity * item.price)
       .reduce((acc, cur) => acc + cur, 0);
@@ -188,10 +194,10 @@ const Options = ({ price, discount }: OptionsType) => {
   return (
     <div className="option pt-10">
       <div>
-        <label className="font-semibold sm:text-base text-sm">상품옵션</label>
+        <label className="text-sm font-semibold sm:text-base">상품옵션</label>
         <div
           className={cls(
-            "dropbox-option mt-2 border sm:text-sm text-xs font-semibold text-slate-500",
+            "dropbox-option mt-2 border text-xs font-semibold text-slate-500 sm:text-sm",
             isOpenOption ? "border-orange-300" : "border-slate-300",
           )}
         >
@@ -212,14 +218,14 @@ const Options = ({ price, discount }: OptionsType) => {
               isOpenOption ? "" : "hidden",
             )}
           >
-            {itemOptions.map((item) => (
+            {itemOptions?.map((item) => (
               <li
                 key={item.id}
                 className="p-2 hover:cursor-pointer hover:bg-orange-50"
                 onClick={(e) => handleSelectOption(item.id, e)}
               >
                 {` ${item.id} : ${item.name}`}{" "}
-                {item.price > 0 && `(+${item.price})`}
+                {item.price && `(+${item.price})`}
               </li>
             ))}
           </ul>
@@ -286,7 +292,7 @@ const Options = ({ price, discount }: OptionsType) => {
             </div>
           )}
           <div className="flex items-end justify-end gap-x-10 ">
-            <span className="font-semibold text-slate-700">총 가격</span>
+            <span className="font-semibold text-slate-700">총 금액</span>
             <span className="w-36 text-right text-xl font-bold">
               {formatOfPrice(totalItemListPrice)}원
             </span>
