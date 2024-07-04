@@ -225,7 +225,8 @@ const Options = ({ options, price, discount }: OptionsType) => {
                 onClick={(e) => handleSelectOption(item.id, e)}
               >
                 {` ${item.id} : ${item.name}`}{" "}
-                {item.price && `(+${item.price})`}
+                {item.price && `(+${item.price})`} | 
+                {`${item.stock}개 남음`}
               </li>
             ))}
           </ul>
