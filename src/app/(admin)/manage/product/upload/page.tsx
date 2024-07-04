@@ -1,7 +1,12 @@
 "use client";
 
 import Input from "@/app/(admin)/_components/Input";
-import { PhotoIcon, XMarkIcon } from "@heroicons/react/16/solid";
+import {
+  MinusCircleIcon,
+  PhotoIcon,
+  PlusCircleIcon,
+  XMarkIcon,
+} from "@heroicons/react/16/solid";
 import React, { useState } from "react";
 import { uploadProduct } from "./actions";
 import { useFormState } from "react-dom";
@@ -38,6 +43,7 @@ export const Upload = ({
 
   const [uploadURL, setUploadURL] = useState("");
   const [photoId, setPhotoId] = useState("");
+  const [optionCnt, setOptionCnt] = useState(0);
 
   const handleChangeImage = async (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -120,6 +126,14 @@ export const Upload = ({
     formData.set("photo0", photoURL);
     return uploadProduct(formData, product?.id);
   };
+  const handleIncreaseOption = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    setOptionCnt((prev) => prev + 1);
+  };
+  const handleDecreaseOption = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    setOptionCnt((prev) => prev - 1);
+  };
 
   const [state, action] = useFormState(interceptAction, null);
   return (
@@ -131,7 +145,7 @@ export const Upload = ({
           </p>
 
           <form action={action}>
-            <div className="my-column_bind flex flex-col sm:divide-x-2 divide-slate-300 sm:flex-row">
+            <div className="my-column_bind flex flex-col divide-slate-300 sm:flex-row sm:divide-x-2">
               {/* Photo */}
               <div className="my-column-left sm:w-[50%] sm:pr-10">
                 <div className="my-column-box">
@@ -166,7 +180,7 @@ export const Upload = ({
                     />
                   </div>
 
-                  <div className="my-banner-func border-2 mt-4">
+                  <div className="my-banner-func mt-4 border-2">
                     <div className="flex w-full items-center justify-between gap-x-8">
                       {[...Array(3)].map((_, index) => (
                         <label
@@ -275,11 +289,42 @@ export const Upload = ({
                               textarea
                               defaultValue={product?.description}
                             />
-                            <Input
-                              label="옵션"
-                              name="options"
-                              defaultValue={product?.options}
-                            />
+
+                            <div className="border-t-2 pt-2">
+                              <div className="flex gap-x-2">
+                                <span>옵션 추가</span>
+                                <button onClick={handleIncreaseOption}>
+                                  <PlusCircleIcon className="h-6 w-6" />
+                                </button>
+                              </div>
+
+                              {Array(optionCnt)
+                                .fill(0)
+                                .map((e, i) => (
+                                  <div key={i} className="flex flex-col py-4">
+                                    <div>
+                                      <button onClick={handleDecreaseOption}>
+                                        <MinusCircleIcon className="h-6 w-6" />
+                                      </button>
+                                      <Input
+                                        label="옵션명"
+                                        name="options"
+                                        defaultValue={product?.options}
+                                      />
+                                      <Input
+                                        label="옵션가격"
+                                        name="options"
+                                        defaultValue={product?.options}
+                                      />
+                                      <Input
+                                        label="옵션재고"
+                                        name="options"
+                                        defaultValue={product?.options}
+                                      />
+                                    </div>
+                                  </div>
+                                ))}
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -297,7 +342,7 @@ export const Upload = ({
 
           <div className="my-product-detail-content mt-14 ">
             <div className="my-product-detail-tap-wrap">
-              <div className="my-product-detail-tab flex justify-between text-sm md:text-base border-b-2 border-t-2 border-b-orange-300 py-5 px-4 sm:px-8 md:px-16">
+              <div className="my-product-detail-tab flex justify-between border-b-2 border-t-2 border-b-orange-300 px-4 py-5 text-sm sm:px-8 md:px-16 md:text-base">
                 <div>관련 상품</div>
                 <div>상품평</div>
                 <div>상품 문의</div>
@@ -360,7 +405,6 @@ export const Upload = ({
 
             <div className="pt-10"></div>
           </div>
-
         </div>
       </div>
     </div>
