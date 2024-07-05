@@ -35,7 +35,7 @@ const Product = async () => {
             href={`products/${product.id}`}
             className="border-b-2 sm:border-b-0 sm:border-orange-600 sm:hover:border-2"
           >
-            <div className="flex flex-col p-2 ">
+            <div className="flex flex-col p-2 md:text-base text-sm">
               <div className="">
                 <div className="pb-2 text-xl font-bold text-amber-600">
                   {index + 1}
@@ -53,10 +53,10 @@ const Product = async () => {
                 <div className="mt-2">
                   <p className="mb-1">{product.title}</p>
 
-                  <div className="text-lg">
+                  <div className="">
                     {product.discount ? (
                       <>
-                        <div className="text-sm text-gray-500 line-through ">
+                        <div className="text-xs md:text-sm text-gray-500 line-through ">
                           {formatOfPrice(product.price)}원
                         </div>
 
