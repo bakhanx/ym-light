@@ -12,11 +12,13 @@ import { uploadProduct } from "./actions";
 import { useFormState } from "react-dom";
 import { getUploadURL } from "@/app/(admin)/_components/getUploadURL";
 import FormButton from "@/components/form-button";
+import { Option } from "@prisma/client";
 
 type ProductType = {
   id: number;
   title: string;
   price: number;
+  stock: number;
   discount: number | null;
   photo: string;
   color: string;
@@ -27,7 +29,7 @@ type ProductType = {
   description: string;
   created_at: Date;
   updated_at: Date;
-  options: string;
+  options: Option[];
 } | null;
 
 export const Upload = ({
@@ -43,7 +45,7 @@ export const Upload = ({
 
   const [uploadURL, setUploadURL] = useState("");
   const [photoId, setPhotoId] = useState("");
-  const [optionCnt, setOptionCnt] = useState(0);
+  const [optionCnt, setOptionCnt] = useState(product?.options.length || 0);
 
   const handleChangeImage = async (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -83,6 +85,7 @@ export const Upload = ({
 
   const handleDeleteImage = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+
     console.log(event.currentTarget.id);
     const {
       currentTarget: { id },
@@ -124,7 +127,7 @@ export const Upload = ({
 
     const photoURL = `https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${photoId}`;
     formData.set("photo0", photoURL);
-    return uploadProduct(formData, product?.id);
+    return uploadProduct(formData, product?.id, optionCnt);
   };
   const handleIncreaseOption = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -132,6 +135,7 @@ export const Upload = ({
   };
   const handleDecreaseOption = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+    if (optionCnt === 0) return;
     setOptionCnt((prev) => prev - 1);
   };
 
@@ -250,6 +254,13 @@ export const Upload = ({
                               defaultValue={product?.price}
                             />
                             <Input
+                              label="재고"
+                              name="stock"
+                              required
+                              error={state?.fieldErrors.stock}
+                              defaultValue={product?.stock}
+                            />
+                            <Input
                               label="할인율"
                               name="discount"
                               defaultValue={product?.discount || ""}
@@ -290,40 +301,72 @@ export const Upload = ({
                               defaultValue={product?.description}
                             />
 
-                            <div className="border-t-2 pt-2">
-                              <div className="flex gap-x-2">
-                                <span>옵션 추가</span>
-                                <button onClick={handleIncreaseOption}>
-                                  <PlusCircleIcon className="h-6 w-6" />
-                                </button>
+                            <div className="border-t-2 pt-4">
+                              <div className="flex  justify-between gap-x-2 border-b-2 border-dashed pb-4">
+                                <span>옵션</span>
+                                <div className="flex gap-x-2">
+                                  <button
+                                    className="flex h-6 w-6 items-center justify-center border-2 border-gray-500 font-bold hover:bg-gray-200"
+                                    onClick={handleIncreaseOption}
+                                  >
+                                    ＋
+                                  </button>
+                                  <button
+                                    className="flex h-6 w-6 items-center justify-center border-2 border-red-500 font-bold text-red-500 hover:bg-red-200"
+                                    onClick={handleDecreaseOption}
+                                  >
+                                    －
+                                  </button>
+                                </div>
                               </div>
 
-                              {Array(optionCnt)
-                                .fill(0)
-                                .map((e, i) => (
-                                  <div key={i} className="flex flex-col py-4">
-                                    <div>
-                                      <button onClick={handleDecreaseOption}>
-                                        <MinusCircleIcon className="h-6 w-6" />
-                                      </button>
-                                      <Input
-                                        label="옵션명"
-                                        name="options"
-                                        defaultValue={product?.options}
-                                      />
-                                      <Input
-                                        label="옵션가격"
-                                        name="options"
-                                        defaultValue={product?.options}
-                                      />
-                                      <Input
-                                        label="옵션재고"
-                                        name="options"
-                                        defaultValue={product?.options}
-                                      />
+                              <div className="divide-y-2">
+                                {Array(optionCnt)
+                                  .fill(0)
+                                  .map((e, index) => (
+                                    <div
+                                      key={index}
+                                      className="flex flex-col py-4"
+                                    >
+                                      <div className="flex flex-col gap-y-2">
+                                        <span className="w-full pl-2  text-right text-sm text-gray-500">
+                                          [옵션{" "}
+                                          <input
+                                            type="text"
+                                            name={`indexOfOption${index}`}
+                                            value={index}
+                                            className="w-2 outline-none"
+                                            readOnly
+                                          />
+                                          ]
+                                        </span>
+
+                                        <Input
+                                          label="옵션명"
+                                          name={`nameOfOption${index}`}
+                                          defaultValue={
+                                            product?.options[index].name || ""
+                                          }
+                                        />
+                                        <Input
+                                          label="옵션가격"
+                                          name={`priceOfOption${index}`}
+                                          defaultValue={
+                                            product?.options[index].price || ""
+                                          }
+                                        />
+                                        <Input
+                                          label="옵션재고"
+                                          name={`stockOfOption${index}`}
+                                          placeholder="99"
+                                          defaultValue={
+                                            product?.options[index].stock || ""
+                                          }
+                                        />
+                                      </div>
                                     </div>
-                                  </div>
-                                ))}
+                                  ))}
+                              </div>
                             </div>
                           </div>
                         </div>
