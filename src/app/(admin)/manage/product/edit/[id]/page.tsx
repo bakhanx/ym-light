@@ -6,6 +6,9 @@ const getProduct = async (id: string) => {
     where: {
       id: Number(id),
     },
+    include:{
+      options: true
+    }
   });
   return product;
 };
