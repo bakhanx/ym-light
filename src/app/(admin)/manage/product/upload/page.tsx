@@ -303,7 +303,7 @@ export const Upload = ({
 
                             <div className="border-t-2 pt-4">
                               <div className="flex  justify-between gap-x-2 border-b-2 border-dashed pb-4">
-                                <span>옵션</span>
+                                <span className="pl-2">옵션 관리</span>
                                 <div className="flex gap-x-2">
                                   <button
                                     className="flex h-6 w-6 items-center justify-center border-2 border-gray-500 font-bold hover:bg-gray-200"
@@ -345,14 +345,14 @@ export const Upload = ({
                                           label="옵션명"
                                           name={`nameOfOption${index}`}
                                           defaultValue={
-                                            product?.options[index].name || ""
+                                            product?.options[index]?.name || ""
                                           }
                                         />
                                         <Input
                                           label="옵션가격"
                                           name={`priceOfOption${index}`}
                                           defaultValue={
-                                            product?.options[index].price || ""
+                                            product?.options[index]?.price || ""
                                           }
                                         />
                                         <Input
@@ -360,7 +360,7 @@ export const Upload = ({
                                           name={`stockOfOption${index}`}
                                           placeholder="99"
                                           defaultValue={
-                                            product?.options[index].stock || ""
+                                            product?.options[index]?.stock || ""
                                           }
                                         />
                                       </div>
