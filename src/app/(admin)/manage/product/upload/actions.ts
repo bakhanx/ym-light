@@ -24,7 +24,7 @@ const productSchema = z.object({
   options: z
     .array(
       z.object({
-        index:z.coerce.string(),
+        index: z.coerce.string(),
         name: z.string({ required_error: "옵션명을 입력해주세요." }),
         price: z.coerce.string({ required_error: "가격을 입력해주세요." }),
         stock: z.coerce.string({ required_error: "재고량을 입력해주세요" }),
@@ -44,7 +44,7 @@ export const uploadProduct = async (
   // ];
 
   const optionList: {
-    index : FormDataEntryValue | null;
+    index: FormDataEntryValue | null;
     name: FormDataEntryValue | null;
     price: FormDataEntryValue | null;
     stock: FormDataEntryValue | null;
@@ -86,28 +86,6 @@ export const uploadProduct = async (
   if (!result.success) {
     return result.error.flatten();
   } else {
-    const options = result.data.options;
-    options?.map(async (option, index) => {
-      if (productId) {
-        // await db.option.update({
-        //   where: {
-        //     productId: productId,
-        //     index:index ,
-        //   },
-        //   data: {
-        //     name: option.name,
-        //     price: +option.price,
-        //     stock: +option.stock,
-        //     product: {
-        //       connect: {
-        //         id: productId,
-        //       },
-        //     },
-        //   },
-        // });
-      }
-    });
-
     const product = productId
       ? await db.product.update({
           where: {
@@ -143,10 +121,52 @@ export const uploadProduct = async (
             description: result.data.description || "",
             photo: result.data.photo0,
           },
+
           select: {
             id: true,
           },
         });
+
+
+    // Options
+    const options = result.data.options;
+
+    if (options) {
+      options.map(async (option) => {
+        const selectOption = await db.option.findFirst({
+          where: {
+            productId: product.id,
+            index: +option.index,
+          },
+          select: {
+            id: true,
+          },
+        });
+
+        await db.option.upsert({
+          create: {
+            index: +option.index,
+            name: option.name,
+            price: +option.price,
+            stock: +option.stock,
+            product: {
+              connect: {
+                id: product.id,
+              },
+            },
+          },
+          where: {
+            id: selectOption?.id,
+          },
+          update: {
+            index: +option.index,
+            name: option.name,
+            price: +option.price,
+            stock: +option.stock,
+          },
+        });
+      });
+    }
 
     console.log("Create success");
     revalidateTag("products");
