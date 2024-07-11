@@ -301,6 +301,7 @@ export const Upload = ({
                               defaultValue={product?.description}
                             />
 
+                            {/* Options */}
                             <div className="border-t-2 pt-4">
                               <div className="flex  justify-between gap-x-2 border-b-2 border-dashed pb-4">
                                 <span className="pl-2">옵션 관리</span>
@@ -321,51 +322,49 @@ export const Upload = ({
                               </div>
 
                               <div className="divide-y-2">
-                                {Array(optionCnt)
-                                  .fill(0)
-                                  .map((e, index) => (
-                                    <div
-                                      key={index}
-                                      className="flex flex-col py-4"
-                                    >
-                                      <div className="flex flex-col gap-y-2">
-                                        <span className="w-full pl-2  text-right text-sm text-gray-500">
-                                          [옵션{" "}
-                                          <input
-                                            type="text"
-                                            name={`indexOfOption${index}`}
-                                            value={index}
-                                            className="w-2 outline-none"
-                                            readOnly
-                                          />
-                                          ]
-                                        </span>
+                                {[...Array(optionCnt)].map((_, index) => (
+                                  <div
+                                    key={index}
+                                    className="flex flex-col py-4"
+                                  >
+                                    <div className="flex flex-col gap-y-2">
+                                      <span className="w-full pl-2  text-right text-sm text-gray-500">
+                                        [옵션{" "}
+                                        <input
+                                          type="text"
+                                          name={`indexOfOption${index}`}
+                                          value={index}
+                                          className="w-2 outline-none"
+                                          readOnly
+                                        />
+                                        ]
+                                      </span>
 
-                                        <Input
-                                          label="옵션명"
-                                          name={`nameOfOption${index}`}
-                                          defaultValue={
-                                            product?.options[index]?.name || ""
-                                          }
-                                        />
-                                        <Input
-                                          label="옵션가격"
-                                          name={`priceOfOption${index}`}
-                                          defaultValue={
-                                            product?.options[index]?.price || ""
-                                          }
-                                        />
-                                        <Input
-                                          label="옵션재고"
-                                          name={`stockOfOption${index}`}
-                                          placeholder="99"
-                                          defaultValue={
-                                            product?.options[index]?.stock || ""
-                                          }
-                                        />
-                                      </div>
+                                      <Input
+                                        label="옵션명"
+                                        name={`nameOfOption${index}`}
+                                        defaultValue={
+                                          product?.options[index]?.name || ""
+                                        }
+                                      />
+                                      <Input
+                                        label="옵션가격"
+                                        name={`priceOfOption${index}`}
+                                        defaultValue={
+                                          product?.options[index]?.price || ""
+                                        }
+                                      />
+                                      <Input
+                                        label="옵션재고"
+                                        name={`stockOfOption${index}`}
+                                        placeholder="99"
+                                        defaultValue={
+                                          product?.options[index]?.stock || ""
+                                        }
+                                      />
                                     </div>
-                                  ))}
+                                  </div>
+                                ))}
                               </div>
                             </div>
                           </div>
