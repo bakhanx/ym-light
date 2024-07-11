@@ -33,25 +33,22 @@ const productSchema = z.object({
     .optional(),
 });
 
+type OptionListType = {
+  index: FormDataEntryValue | null;
+  name: FormDataEntryValue | null;
+  price: FormDataEntryValue | null;
+  stock: FormDataEntryValue | null;
+}[];
+
 export const uploadProduct = async (
   formData: FormData,
   productId?: number,
   optionLength?: number,
 ) => {
-  // const optionss = [
-  //   { name: "asd", price: 1000, stock: 99 },
-  //   { name: "zzz", price: 2000, stock: 79 },
-  // ];
+  const optionList: OptionListType = [];
 
-  const optionList: {
-    index: FormDataEntryValue | null;
-    name: FormDataEntryValue | null;
-    price: FormDataEntryValue | null;
-    stock: FormDataEntryValue | null;
-  }[] = [];
-  Array(optionLength)
-    .fill(0)
-    .map((_, index) => {
+  optionLength !== undefined &&
+    [...Array(optionLength)].map((_, index) => {
       optionList.push({
         index: formData.get(`indexOfOption${index}`),
         name: formData.get(`nameOfOption${index}`),
@@ -72,16 +69,12 @@ export const uploadProduct = async (
     manufacturer: formData.get("manufacturer"),
     description: formData.get("description"),
     photo0: formData.get("photo0"),
-    options: optionList,
+    options: optionList.length > 0 ? optionList : null,
 
-    // nameOfOption: formData.get("nameOfOption"),
-    // priceOfOption: formData.get("nameOfOption"),
-    // stockOfOption: formData.get("nameOfOption"),
     // photo1: formData.get("photo1"),
     // photo2: formData.get("photo2"),
     // photo3: formData.get("photo3"),
   };
-
   const result = productSchema.safeParse(data);
   if (!result.success) {
     return result.error.flatten();
@@ -112,6 +105,7 @@ export const uploadProduct = async (
           data: {
             title: result.data.name,
             price: result.data.price,
+            stock: result.data.stock,
             discount: result.data.discount || null,
             color: result.data.color || "",
             material: result.data.material || "",
@@ -126,7 +120,6 @@ export const uploadProduct = async (
             id: true,
           },
         });
-
 
     // Options
     const options = result.data.options;
@@ -143,28 +136,33 @@ export const uploadProduct = async (
           },
         });
 
-        await db.option.upsert({
-          create: {
-            index: +option.index,
-            name: option.name,
-            price: +option.price,
-            stock: +option.stock,
-            product: {
-              connect: {
-                id: product.id,
+        if (selectOption?.id) {
+          await db.option.update({
+            data: {
+              index: +option.index,
+              name: option.name,
+              price: +option.price,
+              stock: +option.stock,
+            },
+            where: {
+              id: selectOption.id,
+            },
+          });
+        } else {
+          await db.option.create({
+            data: {
+              index: +option.index,
+              name: option.name,
+              price: +option.price,
+              stock: +option.stock,
+              product: {
+                connect: {
+                  id: product.id,
+                },
               },
             },
-          },
-          where: {
-            id: selectOption?.id,
-          },
-          update: {
-            index: +option.index,
-            name: option.name,
-            price: +option.price,
-            stock: +option.stock,
-          },
-        });
+          });
+        }
       });
     }
 
