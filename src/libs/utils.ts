@@ -5,5 +5,5 @@ export function cls(...classnames: string[]) {
 type localeType = "ko-KR" | "en-US" | "ja-JP" | "zh-CN";
 
 export const formatOfPrice = (price: number, locale: localeType ="ko-KR") => {
-  return price.toLocaleString(locale);
+  return price.toLocaleString(locale, {maximumFractionDigits: 0});
 };
