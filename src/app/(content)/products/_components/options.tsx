@@ -5,58 +5,47 @@ import React, { useEffect, useState } from "react";
 
 type selectedItemType = {
   id: number;
+  index: number;
   name: string;
-  price: number;
+  price: number | null;
+  productId: number;
   quantity: number;
+  stock: number;
   totalPrice: number;
 };
 
-type ItemOptionType = {
+type OptionType = {
   id: number;
+  index: number;
   name: string;
-  price: number;
+  price: number | null;
+  stock: number;
+  productId: number;
+  quantity?: number;
+};
+
+type ItemType = {
+  index: number;
+  quantity: number;
 };
 
 type OptionsType = {
-  options: {
-    id: number;
-    name: string;
-    price: number | null;
-    stock: number;
-    productId: number | null;
-  }[];
+  options: OptionType[];
   price: number;
   discount: number | null;
 };
-
-// const data: ItemOptionType[] = [
-//   { id: 0, name: "화이트", price: 0 },
-//   { id: 1, name: "블랙", price: 200000 },
-//   { id: 2, name: "골드", price: 250000 },
-// ];
 
 const Options = ({ options, price, discount }: OptionsType) => {
   const calcPrice = (price: number) => {
     if (discount) {
       return price - (price * discount) / 100;
     }
-
     return price;
-
-    // 복수 할인
-    // if (product?.discount) {
-    //   const totalRate = discount
-    //     .map((item) => item)
-    //     .reduce((acc, cur) => acc + cur, 0);
-    //   return (price - (price * totalRate) / 100).toLocaleString("ko-KR");
-    // }
   };
 
   const [selectedItemList, setSelectedItemList] = useState<selectedItemType[]>(
     [],
   );
-
-  const [itemOptions, setItemOptions] = useState(options);
   const [totalItemListPrice, setTotalItemListPrice] = useState(0);
   const [totalOriginalPrice, setTotalOriginalPrice] = useState(0);
   const [quantity, setQuantity] = useState(Array(options.length).fill(0));
@@ -67,109 +56,111 @@ const Options = ({ options, price, discount }: OptionsType) => {
     setIsOpenOption((prev) => !prev);
   };
 
-  const handleSelectOption = (id: number, e: any) => {
+  const handleSelectOption = (index: number, e: any) => {
     const temp = [...quantity];
-    temp[id]++;
+    temp[index]++;
     setQuantity(temp);
 
-    const clickedItem = options.find((v) => v.id === id) as any;
-    const isExistList = selectedItemList.find((v) => v.id === clickedItem.id);
+    const clickedItem = options.find((option) => option.index === index)!;
+    const isExistItemInList = selectedItemList.find(
+      (selectedItem) => selectedItem.index === clickedItem.index,
+    );
 
-    if (!isExistList) {
+    if (!isExistItemInList) {
       const newClickedItem = {
         ...clickedItem,
-        quantity: clickedItem.quantity ? clickedItem?.quantity + 1 : 1,
-        totalPrice:
-          calcPrice(price as number) +
-          (clickedItem.quantity
-            ? clickedItem.price * (clickedItem.quantity + 1)
-            : clickedItem.price),
+        quantity: 1,
+        totalPrice: calcPrice(price as number) + (clickedItem.price || 0),
       };
       setSelectedItemList((prev) => [...prev, newClickedItem]);
     } else {
-      const newClickItem = [...selectedItemList];
-      const foundItem = newClickItem.find((v) => v.id === id);
+      const newSelectedItemList = [...selectedItemList];
+      const foundItem = newSelectedItemList.find(
+        (selectedItem) => selectedItem.index === clickedItem.index,
+      );
       if (foundItem) {
         foundItem.quantity++;
-        foundItem.totalPrice += calcPrice(price) + foundItem.price;
+        foundItem.totalPrice +=
+          calcPrice(price) + (foundItem.price || 0) * foundItem.quantity;
       }
-      setSelectedItemList(newClickItem);
+      setSelectedItemList(newSelectedItemList);
     }
     setIsOpenOption(false);
+
   };
 
   const handleDeleteOption = (
-    id: number,
+    index: number,
     event: React.MouseEvent<HTMLButtonElement>,
   ) => {
-    const index = selectedItemList.findIndex((item) => id === item.id);
-    console.log(index);
+    const selectedItemIndex = selectedItemList.findIndex((item) => index === item.id);
+    console.log(selectedItemIndex);
     setSelectedItemList((prev) => {
       const temp = [...prev];
-      temp.splice(index, 1);
+      temp.splice(selectedItemIndex, 1);
       return temp;
     });
 
     setQuantity((prev) => {
       const temp = [...prev];
-      temp[id] = 0;
+      temp[index] = 0;
       return temp;
     });
   };
 
-  const handleButtonClick = (id: number, buttonType: "add" | "substract") => {
-    const newClickItem = [...selectedItemList];
-    const foundItem = newClickItem.find((v) => v.id === id);
+  const handleButtonClick = (index: number, buttonType: "add" | "substract") => {
+    const newSelectedItemList = [...selectedItemList];
+    const foundItem = newSelectedItemList.find((newSelectedItem) => newSelectedItem.index === index);
 
     if (foundItem) {
       if (buttonType === "add") {
         foundItem.quantity++;
-        foundItem.totalPrice += calcPrice(price) + foundItem.price;
+        foundItem.totalPrice += calcPrice(price) + (foundItem.price || 0);
         setQuantity((prev) => {
           const temp = [...prev];
-          temp[id]++;
+          temp[index]++;
           return temp;
         });
       } else if (buttonType === "substract") {
-        if (quantity[id] === 1) return;
+        if (quantity[index] === 1) return;
         foundItem.quantity--;
-        foundItem.totalPrice -= calcPrice(price) + foundItem.price;
+        foundItem.totalPrice -= calcPrice(price) + (foundItem.price || 0);
         setQuantity((prev) => {
           const temp = [...prev];
-          temp[id]--;
+          temp[index]--;
           return temp;
         });
       }
     }
-    setSelectedItemList(newClickItem);
+    setSelectedItemList(newSelectedItemList);
   };
 
-  const handleChange = (id: number, e: any) => {
+  const handleChange = (index: number, e: any) => {
     const temp = [...quantity];
-    temp[id] = e.target.value;
+    temp[index] = e.target.value;
     setQuantity(temp);
   };
 
-  const handleBlur = (id: number, e: any) => {
+  const handleBlur = (index: number, e: any) => {
     let _quantity = 0;
-    if (quantity[id] < 1) {
+    if (quantity[index] < 1) {
       setQuantity((prev) => {
         const temp = [...prev];
-        temp[id] = 1;
+        temp[index] = 1;
         return temp;
       });
       _quantity = 1;
     } else {
       _quantity = e.target.value;
     }
-    const newClickItem = [...selectedItemList];
-    const foundItem = newClickItem.find((v) => v.id === id);
+    const newSelectedItemList = [...selectedItemList];
+    const foundItem = newSelectedItemList.find((newSelectedItem) => newSelectedItem.index === index);
     if (foundItem) {
       foundItem.quantity = _quantity;
       foundItem.totalPrice =
-        (calcPrice(price) + foundItem.price) * foundItem.quantity;
+        (calcPrice(price) + (foundItem.price || 0)) * foundItem.quantity;
     }
-    setSelectedItemList(newClickItem);
+    setSelectedItemList(newSelectedItemList);
   };
 
   useEffect(() => {
@@ -186,7 +177,7 @@ const Options = ({ options, price, discount }: OptionsType) => {
       .reduce((acc, cur) => acc + cur, 0);
     const regularPrice = totalQuantity * price;
     const OptionPrice = selectedItemList
-      .map((item) => item.quantity * item.price)
+      .map((item) => item.quantity * (item.price || 0))
       .reduce((acc, cur) => acc + cur, 0);
     setTotalOriginalPrice(regularPrice + OptionPrice);
   }, [selectedItemList, price]);
@@ -218,15 +209,15 @@ const Options = ({ options, price, discount }: OptionsType) => {
               isOpenOption ? "" : "hidden",
             )}
           >
-            {itemOptions?.map((item) => (
+            {options?.map((option) => (
               <li
-                key={item.id}
+                key={option.index}
                 className="p-2 hover:cursor-pointer hover:bg-orange-50"
-                onClick={(e) => handleSelectOption(item.id, e)}
+                onClick={(e) => handleSelectOption(option.index, e)}
               >
-                {` ${item.id} : ${item.name}`}{" "}
-                {item.price && `(+${item.price})`} | 
-                {`${item.stock}개 남음`}
+                {` ${option.id} : ${option.name}`}{" "}
+                {option.price && `(+${option.price})`} {` | `}
+                {`${option.stock}개 남음`}
               </li>
             ))}
           </ul>
@@ -243,7 +234,7 @@ const Options = ({ options, price, discount }: OptionsType) => {
             >
               <div className="flex justify-between">
                 <span>{item.name}</span>
-                <button onClick={(e) => handleDeleteOption(item.id, e)}>
+                <button onClick={(e) => handleDeleteOption(item.index, e)}>
                   ❌
                 </button>
               </div>
@@ -252,7 +243,7 @@ const Options = ({ options, price, discount }: OptionsType) => {
                 <div className="count-btn flex text-black">
                   <button
                     className="flex h-6 w-6 items-center justify-center border p-2 hover:bg-orange-50"
-                    onClick={(e) => handleButtonClick(item.id, "substract")}
+                    onClick={(e) => handleButtonClick(item.index, "substract")}
                   >
                     -
                   </button>
@@ -260,15 +251,15 @@ const Options = ({ options, price, discount }: OptionsType) => {
                   <input
                     className="flex h-6 w-10 items-center justify-center border text-center"
                     type="number"
-                    value={quantity[item.id]}
-                    onChange={(e) => handleChange(item.id, e)}
+                    value={quantity[item.index]}
+                    onChange={(e) => handleChange(item.index, e)}
                     onBlur={(e) => {
-                      handleBlur(item.id, e);
+                      handleBlur(item.index, e);
                     }}
                   />
                   <button
                     className="flex h-6 w-6 items-center justify-center border p-2 hover:bg-orange-50"
-                    onClick={(e) => handleButtonClick(item.id, "add")}
+                    onClick={(e) => handleButtonClick(item.index, "add")}
                   >
                     +
                   </button>
