@@ -135,7 +135,7 @@ const ProductDetail = async ({ params }: Props) => {
                       discount={product.discount}
                     />
                   ) : (
-                    <div className="flex items-end justify-end py-5 pt-16 gap-x-5">
+                    <div className="flex items-end justify-end gap-x-5 py-5 pt-16">
                       <div className="text-gray-500">총 금액</div>
                       <span className="w-36 text-right text-xl font-bold">
                         <span className="text-lg sm:text-2xl">
@@ -151,7 +151,8 @@ const ProductDetail = async ({ params }: Props) => {
                     </div>
                   )}
 
-                  <div className="my-btn-wrap flex flex-col gap-y-5 text-sm font-bold text-white sm:text-base">
+                  {/* 구매 장바구니 찜 버튼 */}
+                  <div className="my-btn-wrap flex flex-col gap-y-5 text-sm font-bold text-white sm:text-base pt-5">
                     <button className="flex w-full items-center justify-center gap-x-1 rounded-md bg-amber-500 p-4 hover:bg-amber-600 sm:p-5">
                       <TruckIcon className="h-5 w-5 sm:h-7 sm:w-7 " />
                       구매하기
@@ -171,6 +172,7 @@ const ProductDetail = async ({ params }: Props) => {
               </div>
             </div>
 
+            {/* 상품 정보 디테일 */}
             <div className="my-product-detail-content mt-14 ">
               <div className="my-product-detail-tap-wrap">
                 <div className="my-product-detail-tab flex justify-between gap-x-4 border-b-2 border-t-2 border-b-orange-300 px-8 py-5 text-sm sm:gap-x-36 sm:px-16 sm:text-base">
