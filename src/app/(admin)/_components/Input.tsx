@@ -19,28 +19,30 @@ const Input = ({
   TextareaHTMLAttributes<HTMLTextAreaElement>) => {
   return (
     <div>
-      <label className="flex">
-        <div className="flex gap-x-1 p-2 w-32">
-          {label}
-          {required && <span className="text-red-500">*</span>}
-        </div>
+      <label className="flex flex-col">
+        <div className="flex">
+          <div className="flex w-32 gap-x-1 p-2">
+            {label}
+            {required && <span className="text-red-500">*</span>}
+          </div>
 
-        {textarea ? (
-          <textarea
-            name={name}
-            required={required}
-            className="h-16 resize-none rounded-sm p-2 text-black transition focus:outline-none focus:ring-2 focus:ring-amber-500  w-full border-2 border-gray-400"
-            {...rest}
-          />
-        ) : (
-          <input
-            name={name}
-            required={required}
-            className="rounded-sm p-2 text-black transition focus:outline-none focus:ring-2 focus:ring-amber-500 w-full border-2 border-gray-400 "
-            {...rest}
-          />
-        )}
-        {/* <span className="w-full text-blue-500">{error}</span> */}
+          {textarea ? (
+            <textarea
+              name={name}
+              required={required}
+              className="h-16 w-full resize-none rounded-sm border-2 border-gray-400 p-2 text-black transition  focus:outline-none focus:ring-2 focus:ring-amber-500"
+              {...rest}
+            />
+          ) : (
+            <input
+              name={name}
+              required={required}
+              className="w-full rounded-sm border-2 border-gray-400 p-2 text-black transition focus:outline-none focus:ring-2 focus:ring-amber-500 "
+              {...rest}
+            />
+          )}
+        </div>
+        <span className="pl-2 text-red-500">{error}</span>
       </label>
     </div>
   );
