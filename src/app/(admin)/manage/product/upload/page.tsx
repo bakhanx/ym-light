@@ -1,12 +1,7 @@
 "use client";
 
 import Input from "@/app/(admin)/_components/Input";
-import {
-  MinusCircleIcon,
-  PhotoIcon,
-  PlusCircleIcon,
-  XMarkIcon,
-} from "@heroicons/react/16/solid";
+import { PhotoIcon, XMarkIcon } from "@heroicons/react/16/solid";
 import React, { useState } from "react";
 import { uploadProduct } from "./actions";
 import { useFormState } from "react-dom";
@@ -46,7 +41,6 @@ export const Upload = ({
   const [uploadURL, setUploadURL] = useState("");
   const [photoId, setPhotoId] = useState("");
   const [optionCnt, setOptionCnt] = useState(product?.options.length || 0);
-
   const handleChangeImage = async (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -104,7 +98,7 @@ export const Upload = ({
     if (preview[0] && !isExistsFile) {
       console.log("preview exists!");
       formData.set("photo0", product?.photo || "");
-      return uploadProduct(formData, product?.id);
+      return uploadProduct(formData, product?.id, optionCnt);
     }
 
     if (!isExistsFile && !preview[0]) {
@@ -127,6 +121,7 @@ export const Upload = ({
 
     const photoURL = `https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${photoId}`;
     formData.set("photo0", photoURL);
+
     return uploadProduct(formData, product?.id, optionCnt);
   };
   const handleIncreaseOption = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -361,6 +356,7 @@ export const Upload = ({
                                         defaultValue={
                                           product?.options[index]?.stock || ""
                                         }
+                                        error={state?.fieldErrors.options}
                                       />
                                     </div>
                                   </div>
