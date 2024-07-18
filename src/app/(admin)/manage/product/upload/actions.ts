@@ -28,7 +28,7 @@ const productSchema = z.object({
         name: z.string({ required_error: "옵션명을 입력해주세요." }),
         price: z.coerce.string({ required_error: "가격을 입력해주세요." }),
         stock: z.coerce.string({ required_error: "재고량을 입력해주세요" }),
-      }),
+      })
     )
     .optional(),
 });
@@ -69,7 +69,7 @@ export const uploadProduct = async (
     manufacturer: formData.get("manufacturer"),
     description: formData.get("description"),
     photo0: formData.get("photo0"),
-    options: optionList.length > 0 ? optionList : null,
+    options: optionList.length > 0 ? optionList : undefined,
 
     // photo1: formData.get("photo1"),
     // photo2: formData.get("photo2"),
@@ -120,7 +120,7 @@ export const uploadProduct = async (
             id: true,
           },
         });
-
+    console.log("product result : ", product);
     // Options
     const options = result.data.options;
 
@@ -168,6 +168,7 @@ export const uploadProduct = async (
 
     console.log("Create success");
     revalidateTag("products");
+    // revalidateTag("product");
     revalidatePath(`/products/${product.id}`);
     redirect(`/products/${product.id}`);
   }
