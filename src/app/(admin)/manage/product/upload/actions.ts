@@ -28,7 +28,7 @@ const productSchema = z.object({
         name: z.string({ required_error: "옵션명을 입력해주세요." }),
         price: z.coerce.string({ required_error: "가격을 입력해주세요." }),
         stock: z.coerce.string({ required_error: "재고량을 입력해주세요" }),
-      })
+      }),
     )
     .optional(),
 });
@@ -124,8 +124,38 @@ export const uploadProduct = async (
     // Options
     const options = result.data.options;
 
+    console.log("options : ", options);
+
+    // 옵션 모두 삭제
+    if (!options && product) {
+      const selectOptions = await db.option.findMany({
+        where: {
+          productId: product?.id,
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      if (selectOptions) {
+        await db.option.deleteMany({
+          where: {
+            productId: product?.id,
+          },
+        });
+        console.log("All options deleted");
+      }
+    }
+
     if (options) {
-      options.map(async (option) => {
+      for (const option of options) {
+        const optionData = {
+          index: +option.index,
+          name: option.name,
+          price: +option.price,
+          stock: +option.stock,
+        };
+
         const selectOption = await db.option.findFirst({
           where: {
             productId: product.id,
@@ -135,26 +165,19 @@ export const uploadProduct = async (
             id: true,
           },
         });
-
-        if (selectOption?.id) {
+        console.log("selectOption : ", selectOption);
+        if (selectOption) {
           await db.option.update({
-            data: {
-              index: +option.index,
-              name: option.name,
-              price: +option.price,
-              stock: +option.stock,
-            },
+            data: optionData,
             where: {
-              id: selectOption.id,
+              id: +selectOption.id,
             },
           });
+          console.log("option update");
         } else {
           await db.option.create({
             data: {
-              index: +option.index,
-              name: option.name,
-              price: +option.price,
-              stock: +option.stock,
+              ...optionData,
               product: {
                 connect: {
                   id: product.id,
@@ -162,14 +185,16 @@ export const uploadProduct = async (
               },
             },
           });
+          console.log("option create");
         }
-      });
+      }
     }
-
     console.log("Create success");
     revalidateTag("products");
-    // revalidateTag("product");
+    // 1.옵션 connect 끝나기전에 revalidate 되는 버그 수정
+
     revalidatePath(`/products/${product.id}`);
+    // revalidateTag("product");
     redirect(`/products/${product.id}`);
   }
 };
