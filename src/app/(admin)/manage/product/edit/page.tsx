@@ -15,6 +15,9 @@ const getProducts = async () => {
       created_at: true,
       updated_at: true,
     },
+    orderBy:{
+      id:"desc"
+    }
   });
 
   return products;
