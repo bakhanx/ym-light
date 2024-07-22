@@ -5,6 +5,8 @@ import { useState } from "react";
 import Products from "./_components.tsx/products";
 import Link from "next/link";
 import { CheckIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { useRouter } from "next/navigation";
+
 
 const Cart = () => {
   const [totalQuantity, setTotalQuantity] = useState(3);
@@ -13,6 +15,11 @@ const Cart = () => {
   const handleSelectAllClick = () => {
     setIsSelectAllClick((prev) => !prev);
   };
+
+  const router = useRouter();
+  const handleBackButton= ()=>{
+    router.back();
+  }
 
   return (
     <>
@@ -107,7 +114,7 @@ const Cart = () => {
                   key={index}
                   className="my-4 rounded-md border-b-[1px] border-gray-300 bg-white"
                 >
-                  <Products />
+                  <Products isSelectAllClick={isSelectAllClick}/>
                 </div>
               ))}
 
@@ -146,7 +153,7 @@ const Cart = () => {
             </div>
 
             <div className="flex justify-center gap-x-10 py-5">
-              <button className="rounded-md border border-amber-500 p-5 font-bold text-amber-500 shadow-md  sm:p-5 sm:px-16 px-8 sm:text-xl w-1/2 sm:w-auto">
+              <button onClick={handleBackButton} className="rounded-md border border-amber-500 p-5 font-bold text-amber-500 shadow-md  sm:p-5 sm:px-16 px-8 sm:text-xl w-1/2 sm:w-auto">
                 돌아가기
               </button>
               <button className="rounded-md bg-amber-500 p-5 font-bold text-white shadow-md sm:p-5 sm:px-16 px-8 sm:text-xl w-1/2 sm:w-auto">
