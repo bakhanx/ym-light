@@ -1,13 +1,21 @@
 import { cls } from "@/libs/utils";
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const Products = () => {
-  const [isSelectAllClick, setisSelectAllClick] = useState(true);
+const Products = ({ isSelectAllClick }: { isSelectAllClick: boolean }) => {
+  const [isSelectClick, setIsSelectClick] = useState(true);
 
-  const handleSelectAllClick = () => {
-    setisSelectAllClick((prev) => !prev);
+  const handleSelectClick = () => {
+    setIsSelectClick((prev) => !prev);
   };
+
+  useEffect(() => {
+    if (isSelectAllClick) {
+      setIsSelectClick(true);
+    } else {
+      setIsSelectClick(false);
+    }
+  }, [isSelectAllClick]);
 
   return (
     <div className="flex flex-col px-2 py-4 sm:px-4">
@@ -16,12 +24,12 @@ const Products = () => {
           <div className="flex">
             <button
               className={cls(
-                isSelectAllClick
+                isSelectClick
                   ? "border-amber-400 bg-amber-400 text-white"
                   : " border-amber-400 text-gray-400 ",
                 "absolute left-0 flex items-center gap-x-1 rounded-md border-2 p-1",
               )}
-              onClick={handleSelectAllClick}
+              onClick={handleSelectClick}
             >
               <CheckIcon className="h-3 w-3 stroke-2" />
             </button>
@@ -48,7 +56,7 @@ const Products = () => {
           {/* Option */}
           <ul className="mt-4 flex flex-col gap-y-4 bg-gray-50 p-2 text-sm text-gray-600 sm:text-base [&>li]:border-b-[1px] [&>li]:py-2">
             <li className="">
-              <div className="flex justify-between items-start">
+              <div className="flex items-start justify-between">
                 <span>01. 색상 : 화이트 / 1개 </span>
                 <div className="flex gap-x-2">
                   <button className=" text-gray-400">
@@ -91,7 +99,7 @@ const Products = () => {
       </div>
 
       {/* Total Price */}
-      <div className="w-full items-center justify-center lg:border-t lg:py-5 lg:flex">
+      <div className="w-full items-center justify-center lg:flex lg:border-t lg:py-5">
         <div className="hidden items-center gap-x-20 lg:flex">
           <div className="flex flex-col">
             <span>선택상품금액</span>
@@ -105,9 +113,9 @@ const Products = () => {
           <div className="font-bold">-</div>
         </div>
 
-        <div className="flex items-center justify-between gap-x-5 px-4 sm:px-20 lg:flex-col  lg:justify-center text-sm sm:text-base">
+        <div className="flex items-center justify-between gap-x-5 px-4 text-sm sm:px-20  sm:text-base lg:flex-col lg:justify-center">
           <span className="text-red-500 lg:text-black">할인금액</span>
-          <span className="text-red-500 font-bold">- 2,560,000원</span>
+          <span className="font-bold text-red-500">- 2,560,000원</span>
         </div>
 
         <div className="hidden lg:block">=</div>
