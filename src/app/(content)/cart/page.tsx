@@ -1,25 +1,31 @@
 "use client";
 
 import { cls } from "@/libs/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Products from "./_components.tsx/products";
 import Link from "next/link";
 import { CheckIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
-
+import { useCartStore } from "@/store/useCartStore";
 
 const Cart = () => {
-  const [totalQuantity, setTotalQuantity] = useState(3);
   const [isSelectAllClick, setIsSelectAllClick] = useState(true);
 
+  const { quantity:totalQuantity, totalPrice, productInfoList } = useCartStore((state) => state);
+
+
+  console.log(productInfoList);
   const handleSelectAllClick = () => {
     setIsSelectAllClick((prev) => !prev);
   };
 
   const router = useRouter();
-  const handleBackButton= ()=>{
+  const handleBackButton = () => {
     router.back();
-  }
+  };
+  useEffect(() => {
+    useCartStore.persist.rehydrate();
+  }, []);
 
   return (
     <>
@@ -107,20 +113,18 @@ const Cart = () => {
               </div>
             </div>
             {/* products */}
-            {Array(totalQuantity)
-              .fill(0)
-              .map((e, index) => (
-                <div
-                  key={index}
-                  className="my-4 rounded-md border-b-[1px] border-gray-300 bg-white"
-                >
-                  <Products isSelectAllClick={isSelectAllClick}/>
-                </div>
-              ))}
+            {productInfoList.map((productInfo, index) => (
+              <div
+                key={index}
+                className="my-4 rounded-md border-b-[1px] border-gray-300 bg-white"
+              >
+                <Products productInfo={productInfo} isSelectAllClick={isSelectAllClick} />
+              </div>
+            ))}
 
             {/* Total */}
-            <div className="flex rounded-md border-4 border-amber-300 bg-white sm:px-4 px-2 py-6 shadow-md sm:flex-row flex-col justify-center items-center">
-              <div className="flex sm:w-[70%] items-center justify-between lg:justify-center sm:gap-x-4 gap-x-1 sm:border-r md:gap-x-8 lg:gap-x-16 w-full px-4">
+            <div className="flex flex-col items-center justify-center rounded-md border-4 border-amber-300 bg-white px-2 py-6 shadow-md sm:flex-row sm:px-4">
+              <div className="flex w-full items-center justify-between gap-x-1 px-4 sm:w-[70%] sm:gap-x-4 sm:border-r md:gap-x-8 lg:justify-center lg:gap-x-16">
                 <div className="flex flex-col text-sm md:text-base">
                   <span className="text-center text-gray-400">상품금액</span>
                   <span className="font-bold">33,000,000원</span>
@@ -143,8 +147,7 @@ const Cart = () => {
                 </div>
               </div>
 
-
-              <div className="flex sm:pt-0 mt-4 sm:w-[30%] w-full flex-col lg:items-center items-end justify-end pr-4 lg:pr-0 sm:mt-0">
+              <div className="mt-4 flex w-full flex-col items-end justify-end pr-4 sm:mt-0 sm:w-[30%] sm:pt-0 lg:items-center lg:pr-0">
                 <span className="font-bold text-gray-600">총 금액</span>
                 <span className="text-xl font-bold  text-blue-500 md:text-2xl">
                   28,507,000원
@@ -153,10 +156,13 @@ const Cart = () => {
             </div>
 
             <div className="flex justify-center gap-x-10 py-5">
-              <button onClick={handleBackButton} className="rounded-md border border-amber-500 p-5 font-bold text-amber-500 shadow-md  sm:p-5 sm:px-16 px-8 sm:text-xl w-1/2 sm:w-auto">
+              <button
+                onClick={handleBackButton}
+                className="w-1/2 rounded-md border border-amber-500 p-5 px-8 font-bold  text-amber-500 shadow-md sm:w-auto sm:p-5 sm:px-16 sm:text-xl"
+              >
                 돌아가기
               </button>
-              <button className="rounded-md bg-amber-500 p-5 font-bold text-white shadow-md sm:p-5 sm:px-16 px-8 sm:text-xl w-1/2 sm:w-auto">
+              <button className="w-1/2 rounded-md bg-amber-500 p-5 px-8 font-bold text-white shadow-md sm:w-auto sm:p-5 sm:px-16 sm:text-xl">
                 주문하기
               </button>
             </div>
