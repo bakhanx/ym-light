@@ -2,16 +2,23 @@ import { create } from "zustand";
 
 type Product = {
   id: number;
-  name: string;
+  title: string;
+  color: string;
   price: number;
-  stock: number;
-  quantity: number;
-  options: {};
+  options: {
+    id: number;
+    index: number;
+    name: string;
+    price: number | null;
+    stock: number;
+    productId: number;
+  }[];
+  discount: number | null;
 };
 
 type State = {
-  cart: Product[];
-  totalItems: number;
+  productInfoList: { product: Product; quantity: number }[];
+  quantity: number;
   totalPrice: number;
 };
 
@@ -21,43 +28,52 @@ type Actions = {
 };
 
 const INITIAL_STATE: State = {
-  cart: [],
-  totalItems: 0,
+  productInfoList: [],
+  quantity: 0,
   totalPrice: 0,
 };
 
 export const useCartStore = create<State & Actions>((set, get) => ({
-  cart: INITIAL_STATE.cart,
-  totalItems: INITIAL_STATE.totalItems,
+  productInfoList: INITIAL_STATE.productInfoList,
+  quantity: INITIAL_STATE.quantity,
   totalPrice: INITIAL_STATE.totalPrice,
 
   addToCart: (product: Product) => {
-    const cart = get().cart;
-    const cartItem = cart.find((item) => item.id === product.id);
-    if (cartItem) {
-      const updatedCart = cart.map((item) =>
-        item.id === product.id
-          ? { ...item, quantity: item.quantity + 1 }
-          : item,
+    const productInfoList = get().productInfoList;
+    const isExistProduct = Boolean(
+      productInfoList.find(
+        (productInfo) => productInfo.product.id === product.id,
+      ),
+    );
+    if (isExistProduct) {
+      const updatedProductInfoList = productInfoList.map((productInfo) =>
+        productInfo.product.id === product.id
+          ? { ...productInfo, quantity: productInfo.quantity + 1 }
+          : productInfo,
       );
       set((state) => ({
-        cart: updatedCart,
-        totalItems: state.totalItems + 1,
+        productInfoList: updatedProductInfoList,
+        quantity: state.quantity + 1,
         totalPrice: state.totalPrice + product.price,
       }));
     } else {
-      const updatedCart = [...cart, { ...product, quantity: 1 }];
+      const updatedProductInfoList = [
+        ...productInfoList,
+        { product, quantity: 1 },
+      ];
       set((state) => ({
-        cart: updatedCart,
-        totalItems: state.totalItems + 1,
+        productInfoList: updatedProductInfoList,
+        quantity: state.quantity + 1,
         totalPrice: state.totalPrice + product.price,
       }));
     }
   },
   removeFromCart: (product: Product) => {
     set((state) => ({
-      cart: state.cart.filter((item) => item.id !== product.id),
-      totalItems: state.totalItems - 1,
+      productInfoList: state.productInfoList.filter(
+        (productInfo) => productInfo.product.id !== product.id,
+      ),
+      quantity: state.quantity - 1,
       totalPrice: state.totalPrice - product.price,
     }));
   },
