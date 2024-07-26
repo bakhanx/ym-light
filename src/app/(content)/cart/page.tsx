@@ -8,11 +8,17 @@ import { CheckIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import { useCartStore } from "@/store/useCartStore";
 
+// Issue
+// 0. 선택하지 않은 옵션이 장바구니에 모두 담김
+
 const Cart = () => {
   const [isSelectAllClick, setIsSelectAllClick] = useState(true);
 
-  const { quantity:totalQuantity, totalPrice, productInfoList } = useCartStore((state) => state);
-
+  const {
+    quantity: totalQuantity,
+    totalPrice,
+    productInfoList,
+  } = useCartStore((state) => state);
 
   console.log(productInfoList);
   const handleSelectAllClick = () => {
@@ -113,14 +119,21 @@ const Cart = () => {
               </div>
             </div>
             {/* products */}
-            {productInfoList.map((productInfo, index) => (
-              <div
-                key={index}
-                className="my-4 rounded-md border-b-[1px] border-gray-300 bg-white"
-              >
-                <Products productInfo={productInfo} isSelectAllClick={isSelectAllClick} />
-              </div>
-            ))}
+            {productInfoList.length > 0 ? (
+              productInfoList.map((productInfo, index) => (
+                <div
+                  key={index}
+                  className="my-4 rounded-md border-b-[1px] border-gray-300 bg-white"
+                >
+                  <Products
+                    productInfo={productInfo}
+                    isSelectAllClick={isSelectAllClick}
+                  />
+                </div>
+              ))
+            ) : (
+              <div className="w-full text-center p-10 bg-white">장바구니에 담긴 상품이 없습니다.</div>
+            )}
 
             {/* Total */}
             <div className="flex flex-col items-center justify-center rounded-md border-4 border-amber-300 bg-white px-2 py-6 shadow-md sm:flex-row sm:px-4">
