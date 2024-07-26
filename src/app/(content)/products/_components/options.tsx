@@ -33,9 +33,10 @@ type OptionsType = {
   options: OptionType[];
   price: number;
   discount: number | null;
+  parentFunc: Function;
 };
 
-const Options = ({ options, price, discount }: OptionsType) => {
+const Options = ({ options, price, discount, parentFunc }: OptionsType) => {
   const calcPrice = (price: number) => {
     if (discount) {
       return price - (price * discount) / 100;
@@ -86,14 +87,15 @@ const Options = ({ options, price, discount }: OptionsType) => {
       setSelectedItemList(newSelectedItemList);
     }
     setIsOpenOption(false);
-
   };
 
   const handleDeleteOption = (
     index: number,
     event: React.MouseEvent<HTMLButtonElement>,
   ) => {
-    const selectedItemIndex = selectedItemList.findIndex((item) => index === item.id);
+    const selectedItemIndex = selectedItemList.findIndex(
+      (item) => index === item.id,
+    );
     console.log(selectedItemIndex);
     setSelectedItemList((prev) => {
       const temp = [...prev];
@@ -108,9 +110,14 @@ const Options = ({ options, price, discount }: OptionsType) => {
     });
   };
 
-  const handleButtonClick = (index: number, buttonType: "add" | "substract") => {
+  const handleButtonClick = (
+    index: number,
+    buttonType: "add" | "substract",
+  ) => {
     const newSelectedItemList = [...selectedItemList];
-    const foundItem = newSelectedItemList.find((newSelectedItem) => newSelectedItem.index === index);
+    const foundItem = newSelectedItemList.find(
+      (newSelectedItem) => newSelectedItem.index === index,
+    );
 
     if (foundItem) {
       if (buttonType === "add") {
@@ -154,7 +161,9 @@ const Options = ({ options, price, discount }: OptionsType) => {
       _quantity = e.target.value;
     }
     const newSelectedItemList = [...selectedItemList];
-    const foundItem = newSelectedItemList.find((newSelectedItem) => newSelectedItem.index === index);
+    const foundItem = newSelectedItemList.find(
+      (newSelectedItem) => newSelectedItem.index === index,
+    );
     if (foundItem) {
       foundItem.quantity = _quantity;
       foundItem.totalPrice =
@@ -164,8 +173,6 @@ const Options = ({ options, price, discount }: OptionsType) => {
   };
 
   useEffect(() => {
-    console.log(selectedItemList);
-
     setTotalItemListPrice(
       selectedItemList
         .map((item) => item.totalPrice)
@@ -181,6 +188,10 @@ const Options = ({ options, price, discount }: OptionsType) => {
       .reduce((acc, cur) => acc + cur, 0);
     setTotalOriginalPrice(regularPrice + OptionPrice);
   }, [selectedItemList, price]);
+
+  useEffect(() => {
+    parentFunc(selectedItemList);
+  }, [selectedItemList, parentFunc]);
 
   return (
     <div className="option pt-10">

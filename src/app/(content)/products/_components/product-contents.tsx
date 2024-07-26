@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { formatOfPrice } from "@/libs/utils";
 import {
@@ -6,16 +6,21 @@ import {
   ShoppingBagIcon,
   TruckIcon,
 } from "@heroicons/react/16/solid";
-import React from "react";
+import React, { useState } from "react";
 import Options from "./options";
 import ProductInfo from "./productInfo";
 import Image from "next/image";
 import { ProductWithOptions, useCartStore } from "@/store/useCartStore";
+import { Option } from "@prisma/client";
 
-
-const ProductContents = ({ product } : ProductWithOptions ) => {
+const ProductContents = ({ product }: ProductWithOptions) => {
   const { addToCart, quantity } = useCartStore((state) => state);
-    console.log(quantity)
+  const [selectedOptionList, setSelectedOptionList] = useState<Option[]>([]);
+  const parentFunc = (item: Option[]) => {
+    setSelectedOptionList(item);
+  };
+
+  const handleAddToCart = () => {};
 
   return (
     <div className="my-column_bind flex flex-col divide-y-2 divide-slate-300 sm:flex-row sm:divide-x-2 sm:divide-y-0">
@@ -90,6 +95,7 @@ const ProductContents = ({ product } : ProductWithOptions ) => {
               options={product.options}
               price={product.price}
               discount={product.discount}
+              parentFunc={parentFunc}
             />
           ) : (
             <div className="flex items-end justify-end gap-x-5 py-5 pt-16">
@@ -115,7 +121,7 @@ const ProductContents = ({ product } : ProductWithOptions ) => {
             </button>
             <div className="flex gap-x-4">
               <button
-                onClick={() => addToCart({product})}
+                onClick={() => addToCart({ product, selectedOptionList })}
                 className="flex w-full items-center justify-center gap-x-1 rounded-md bg-blue-500 p-4 hover:bg-blue-600 sm:p-5"
               >
                 <ShoppingBagIcon className="h-4 w-4 stroke-2 sm:h-5 sm:w-5" />
