@@ -10,6 +10,10 @@ type OptionType = {
   options: Option[];
 };
 
+type OptionList = {
+  selectedOptionList: Option[];
+};
+
 type State = {
   productInfoList: {
     product: Product & OptionType;
@@ -20,8 +24,11 @@ type State = {
 };
 
 type Actions = {
-  addToCart: ({product}: ProductWithOptions) => void;
-  removeFromCart: ({product}: ProductWithOptions) => void;
+  addToCart: ({
+    product,
+    selectedOptionList,
+  }: ProductWithOptions & OptionList) => void;
+  removeFromCart: ({ product }: ProductWithOptions) => void;
 };
 
 const INITIAL_STATE: State = {
@@ -37,13 +44,12 @@ export const useCartStore = create<State & Actions>()(
       quantity: INITIAL_STATE.quantity,
       totalPrice: INITIAL_STATE.totalPrice,
 
-      addToCart: ({product}) => {
+      addToCart: ({ product }) => {
         const productInfoList = get().productInfoList;
-        const isExistProduct = Boolean(
-          productInfoList.find(
-            (productInfo) => productInfo.product.id === product.id,
-          ),
+        const isExistProduct = productInfoList.some(
+          (productInfo) => productInfo.product.id === product.id,
         );
+
         if (isExistProduct) {
           const updatedProductInfoList = productInfoList.map((productInfo) =>
             productInfo.product.id === product.id
@@ -67,7 +73,7 @@ export const useCartStore = create<State & Actions>()(
           }));
         }
       },
-      removeFromCart: ({product}) => {
+      removeFromCart: ({ product }) => {
         set((state) => ({
           productInfoList: state.productInfoList.filter(
             (productInfo) => productInfo.product.id !== product.id,
