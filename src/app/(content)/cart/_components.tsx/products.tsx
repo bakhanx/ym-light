@@ -1,8 +1,6 @@
 import { cls, formatOfPrice } from "@/libs/utils";
 import { ProductWithOptions } from "@/store/useCartStore";
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { Product } from "@prisma/client";
-import { format } from "path";
 import React, { useEffect, useState } from "react";
 
 type ProductsProps = {
