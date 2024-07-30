@@ -3,7 +3,6 @@
 import { cls } from "@/libs/utils";
 import { useEffect, useState } from "react";
 import Products from "./_components.tsx/products";
-import Link from "next/link";
 import { CheckIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import { useCartStore } from "@/store/useCartStore";
@@ -15,12 +14,9 @@ const Cart = () => {
   const [isSelectAllClick, setIsSelectAllClick] = useState(true);
 
   const {
-    quantity: totalQuantity,
-    totalPrice,
-    productInfoList,
+    cart
   } = useCartStore((state) => state);
 
-  console.log(productInfoList);
   const handleSelectAllClick = () => {
     setIsSelectAllClick((prev) => !prev);
   };
@@ -54,7 +50,7 @@ const Cart = () => {
                 <div className="flex gap-x-1 font-bold">
                   <span className="text-base sm:text-lg md:text-xl">전체</span>
                   <div className="flex h-5 w-5 items-center justify-center rounded-md bg-amber-200 p-3 text-lg">
-                    <span> {totalQuantity}</span>
+                    <span> {cart.length}</span>
                   </div>
                 </div>
               </div>
@@ -119,8 +115,8 @@ const Cart = () => {
               </div>
             </div>
             {/* products */}
-            {productInfoList.length > 0 ? (
-              productInfoList.map((productInfo, index) => (
+            {cart.length > 0 ? (
+              cart.map((productInfo, index) => (
                 <div
                   key={index}
                   className="my-4 rounded-md border-b-[1px] border-gray-300 bg-white"
