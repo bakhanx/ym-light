@@ -1,36 +1,17 @@
 "use client";
 
 import { cls, formatOfPrice } from "@/libs/utils";
+import { Option } from "@prisma/client";
 import React, { useEffect, useState } from "react";
 
-type selectedItemType = {
-  id: number;
-  index: number;
-  name: string;
-  price: number | null;
-  productId: number;
+export type selectedItemType = {
+  option:Option
   quantity: number;
-  stock: number;
   totalPrice: number;
 };
 
-type OptionType = {
-  id: number;
-  index: number;
-  name: string;
-  price: number | null;
-  stock: number;
-  productId: number;
-  quantity?: number;
-};
-
-type ItemType = {
-  index: number;
-  quantity: number;
-};
-
 type OptionsType = {
-  options: OptionType[];
+  options: Option[];
   price: number;
   discount: number | null;
   parentFunc: Function;
@@ -64,12 +45,12 @@ const Options = ({ options, price, discount, parentFunc }: OptionsType) => {
 
     const clickedItem = options.find((option) => option.index === index)!;
     const isExistItemInList = selectedItemList.find(
-      (selectedItem) => selectedItem.index === clickedItem.index,
+      (selectedItem) => selectedItem.option.index === clickedItem.index,
     );
 
     if (!isExistItemInList) {
       const newClickedItem = {
-        ...clickedItem,
+        option: clickedItem,
         quantity: 1,
         totalPrice: calcPrice(price as number) + (clickedItem.price || 0),
       };
@@ -77,12 +58,12 @@ const Options = ({ options, price, discount, parentFunc }: OptionsType) => {
     } else {
       const newSelectedItemList = [...selectedItemList];
       const foundItem = newSelectedItemList.find(
-        (selectedItem) => selectedItem.index === clickedItem.index,
+        (selectedItem) => selectedItem.option.index === clickedItem.index,
       );
       if (foundItem) {
         foundItem.quantity++;
         foundItem.totalPrice +=
-          calcPrice(price) + (foundItem.price || 0) * foundItem.quantity;
+          calcPrice(price) + (foundItem.option.price || 0) * foundItem.quantity;
       }
       setSelectedItemList(newSelectedItemList);
     }
@@ -94,7 +75,7 @@ const Options = ({ options, price, discount, parentFunc }: OptionsType) => {
     event: React.MouseEvent<HTMLButtonElement>,
   ) => {
     const selectedItemIndex = selectedItemList.findIndex(
-      (item) => index === item.id,
+      (item) => index === item.option.id,
     );
     console.log(selectedItemIndex);
     setSelectedItemList((prev) => {
@@ -116,13 +97,13 @@ const Options = ({ options, price, discount, parentFunc }: OptionsType) => {
   ) => {
     const newSelectedItemList = [...selectedItemList];
     const foundItem = newSelectedItemList.find(
-      (newSelectedItem) => newSelectedItem.index === index,
+      (newSelectedItem) => newSelectedItem.option.index === index,
     );
 
     if (foundItem) {
       if (buttonType === "add") {
         foundItem.quantity++;
-        foundItem.totalPrice += calcPrice(price) + (foundItem.price || 0);
+        foundItem.totalPrice += calcPrice(price) + (foundItem.option.price || 0);
         setQuantity((prev) => {
           const temp = [...prev];
           temp[index]++;
@@ -131,7 +112,7 @@ const Options = ({ options, price, discount, parentFunc }: OptionsType) => {
       } else if (buttonType === "substract") {
         if (quantity[index] === 1) return;
         foundItem.quantity--;
-        foundItem.totalPrice -= calcPrice(price) + (foundItem.price || 0);
+        foundItem.totalPrice -= calcPrice(price) + (foundItem.option.price || 0);
         setQuantity((prev) => {
           const temp = [...prev];
           temp[index]--;
@@ -162,12 +143,12 @@ const Options = ({ options, price, discount, parentFunc }: OptionsType) => {
     }
     const newSelectedItemList = [...selectedItemList];
     const foundItem = newSelectedItemList.find(
-      (newSelectedItem) => newSelectedItem.index === index,
+      (newSelectedItem) => newSelectedItem.option.index === index,
     );
     if (foundItem) {
       foundItem.quantity = _quantity;
       foundItem.totalPrice =
-        (calcPrice(price) + (foundItem.price || 0)) * foundItem.quantity;
+        (calcPrice(price) + (foundItem.option.price || 0)) * foundItem.quantity;
     }
     setSelectedItemList(newSelectedItemList);
   };
@@ -184,7 +165,7 @@ const Options = ({ options, price, discount, parentFunc }: OptionsType) => {
       .reduce((acc, cur) => acc + cur, 0);
     const regularPrice = totalQuantity * price;
     const OptionPrice = selectedItemList
-      .map((item) => item.quantity * (item.price || 0))
+      .map((item) => item.quantity * (item.option.price || 0))
       .reduce((acc, cur) => acc + cur, 0);
     setTotalOriginalPrice(regularPrice + OptionPrice);
   }, [selectedItemList, price]);
@@ -240,12 +221,12 @@ const Options = ({ options, price, discount, parentFunc }: OptionsType) => {
         <div className="flex  flex-col gap-y-5">
           {selectedItemList?.map((item) => (
             <div
-              key={item.id}
+              key={item.option.id}
               className="flex flex-col  gap-y-5 border-b-2 bg-slate-50 p-3"
             >
               <div className="flex justify-between">
-                <span>{item.name}</span>
-                <button onClick={(e) => handleDeleteOption(item.index, e)}>
+                <span>{item.option.name}</span>
+                <button onClick={(e) => handleDeleteOption(item.option.index, e)}>
                   ❌
                 </button>
               </div>
@@ -254,7 +235,7 @@ const Options = ({ options, price, discount, parentFunc }: OptionsType) => {
                 <div className="count-btn flex text-black">
                   <button
                     className="flex h-6 w-6 items-center justify-center border p-2 hover:bg-orange-50"
-                    onClick={(e) => handleButtonClick(item.index, "substract")}
+                    onClick={(e) => handleButtonClick(item.option.index, "substract")}
                   >
                     -
                   </button>
@@ -262,15 +243,15 @@ const Options = ({ options, price, discount, parentFunc }: OptionsType) => {
                   <input
                     className="flex h-6 w-10 items-center justify-center border text-center"
                     type="number"
-                    value={quantity[item.index]}
-                    onChange={(e) => handleChange(item.index, e)}
+                    value={quantity[item.option.index]}
+                    onChange={(e) => handleChange(item.option.index, e)}
                     onBlur={(e) => {
-                      handleBlur(item.index, e);
+                      handleBlur(item.option.index, e);
                     }}
                   />
                   <button
                     className="flex h-6 w-6 items-center justify-center border p-2 hover:bg-orange-50"
-                    onClick={(e) => handleButtonClick(item.index, "add")}
+                    onClick={(e) => handleButtonClick(item.option.index, "add")}
                   >
                     +
                   </button>
