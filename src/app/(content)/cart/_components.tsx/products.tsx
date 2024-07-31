@@ -1,10 +1,10 @@
 import { cls, formatOfPrice } from "@/libs/utils";
-import { ProductWithOptions } from "@/store/useCartStore";
+import { CartItem } from "@/store/useCartStore";
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import React, { useEffect, useState } from "react";
 
 type ProductsProps = {
-  productInfo: ProductWithQuantity;
+  cartItem: CartItem;
   isSelectAllClick: boolean;
 };
 
@@ -12,30 +12,42 @@ type Quantity = {
   quantity: number;
 };
 
-type ProductWithQuantity = ProductWithOptions & Quantity;
+const Products = ({
+  cartItem: { productInfo, optionInfoList },
+  isSelectAllClick,
+}: ProductsProps) => {
+  const initOptionTotalPrice = optionInfoList
+    .map((optionInfo) => optionInfo.option.price || 0)
+    .reduce((acc, cur) => acc + cur, 0);
 
-const Products = ({ productInfo, isSelectAllClick }: ProductsProps) => {
-  console.log(productInfo);
+  const initOriginTotalPrice =
+    productInfo.product.price *
+      (productInfo.quantity +
+        optionInfoList
+          .map((optionInfo) => optionInfo.quantity)
+          .reduce((acc, cur) => acc + cur, 0)) +
+    initOptionTotalPrice;
+
+  const initDiscountTotalPrice =
+    ((productInfo.product.price * (productInfo.product.discount || 0)) / 100) *
+    (productInfo.quantity +
+      optionInfoList
+        .map((optionInfo) => optionInfo.quantity)
+        .reduce((acc, cur) => acc + cur, 0));
+
   const [isSelectClick, setIsSelectClick] = useState(true);
 
   const handleSelectClick = () => {
     setIsSelectClick((prev) => !prev);
   };
-  const [optionTotalPrice, setOptionTotalPrice] = useState(
-    productInfo.product.options
-      .map((option) => option.price || 0)
-      .reduce((acc, cur) => acc + cur, 0),
-  );
+  const [optionTotalPrice, setOptionTotalPrice] =
+    useState(initOptionTotalPrice);
 
-  const [originTotalPrice, setOriginTotalPrice] = useState(
-    productInfo.product.price *
-      (productInfo.quantity + productInfo.product.options.length) +
-      optionTotalPrice,
-  );
+  const [originTotalPrice, setOriginTotalPrice] =
+    useState(initOriginTotalPrice);
   const [deliveryPrice, setDeliveryPrice] = useState(7000);
   const [discountTotalPrice, setDiscountTotalPrice] = useState(
-    ((productInfo.product.price * (productInfo.product.discount || 0)) / 100) *
-      (productInfo.quantity + productInfo.product.options.length),
+    initDiscountTotalPrice,
   );
 
   useEffect(() => {
@@ -104,16 +116,20 @@ const Products = ({ productInfo, isSelectAllClick }: ProductsProps) => {
           </div>
 
           {/* Option */}
-          {productInfo.product.options.length > 0 && (
+          {optionInfoList.length > 0 && (
             <ul className="mt-4 flex flex-col gap-y-4 bg-gray-50 p-2 text-sm text-gray-600 sm:text-base [&>li]:border-b-[1px] [&>li]:py-2">
-              {productInfo.product.options.map((option) => (
-                <li key={option.index}>
+              {optionInfoList.map((optionInfo) => (
+                <li key={optionInfo.option.index}>
                   <div className="flex items-start justify-between">
                     <span>
-                      {option.index}. {option.name}
+                      {optionInfo.option.index}. {optionInfo.option.name} |{" "}
+                      {optionInfo.quantity}개
                     </span>
                     <div className="flex gap-x-2">
-                      <span> ( +{option.price}원 )</span>
+                      <span>
+                        {" "}
+                        ( +{formatOfPrice(optionInfo.option.price!)}원 )
+                      </span>
                       <button className=" text-gray-400">
                         <XMarkIcon className="h-4 w-4 stroke-2" />
                       </button>
