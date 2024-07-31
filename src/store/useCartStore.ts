@@ -12,18 +12,19 @@ type OptionInfoList = {
   optionInfoList: {
     option: Option;
     quantity: number;
+    totalPrice: number;
   }[];
 };
 
+export type CartItem = ProductInfo & OptionInfoList;
+
 type State = {
-  cart: (ProductInfo & OptionInfoList)[];
+  cart: CartItem[];
 };
-
 type RemoveFromCart = {
-  productId : number;
-  optionId? : number;
+  productId: number;
+  optionId?: number;
 };
-
 type Actions = {
   addToCart: ({
     productInfo,
@@ -31,7 +32,6 @@ type Actions = {
   }: ProductInfo & OptionInfoList) => void;
   removeFromCart: ({ productId, optionId }: RemoveFromCart) => void;
 };
-
 const INITIAL_STATE: State = {
   cart: [],
 };
@@ -48,25 +48,29 @@ export const useCartStore = create<State & Actions>()(
           (item) => item.productInfo.product.id === productInfo.product.id,
         );
 
-        if (indexExistedProduct) {
+        if (indexExistedProduct >= 0) {
           cart[indexExistedProduct].productInfo.quantity++;
         } else {
           cart.push({ productInfo: productInfo, optionInfoList: [] });
         }
 
         // Option
+        const currentCartIndex = cart.findIndex(
+          (item) => item.productInfo.product.id === productInfo.product.id,
+        );
+
         if (optionInfoList.length > 0) {
           optionInfoList.map((optionInfo) => {
             const indexExistedOption = cart[
-              indexExistedProduct
+              currentCartIndex
             ].optionInfoList.findIndex(
               (_optionInfo) => _optionInfo.option.id === optionInfo.option.id,
             );
-            if (indexExistedOption) {
-              cart[indexExistedProduct].optionInfoList[indexExistedOption]
+            if (indexExistedOption >= 0) {
+              cart[currentCartIndex].optionInfoList[indexExistedOption]
                 .quantity++;
             } else {
-              cart[indexExistedProduct].optionInfoList.push(optionInfo);
+              cart[currentCartIndex].optionInfoList.push(optionInfo);
             }
           });
         }
@@ -74,7 +78,7 @@ export const useCartStore = create<State & Actions>()(
         set((state) => ({ cart: state.cart }));
       },
 
-      removeFromCart: ({ productId, optionId}) => {
+      removeFromCart: ({ productId, optionId }) => {
         const cart = get().cart;
 
         // 상품 제거
@@ -92,9 +96,8 @@ export const useCartStore = create<State & Actions>()(
           const newOptionList = cart[productIndex].optionInfoList.filter(
             (optionInfo) => optionInfo.option.id !== optionId,
           );
-          
-          cart[productIndex].optionInfoList = newOptionList
 
+          cart[productIndex].optionInfoList = newOptionList;
         }
         set((state) => ({ cart: state.cart }));
       },
@@ -103,7 +106,7 @@ export const useCartStore = create<State & Actions>()(
       name: "cart",
       storage: createJSONStorage(() => sessionStorage),
       partialize: (state) => ({
-        cart: state.cart
+        cart: state.cart,
       }),
       skipHydration: true,
     },
