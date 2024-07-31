@@ -13,10 +13,7 @@ import { useCartStore } from "@/store/useCartStore";
 const Cart = () => {
   const [isSelectAllClick, setIsSelectAllClick] = useState(true);
 
-  const {
-    cart
-  } = useCartStore((state) => state);
-
+  const { cart } = useCartStore((state) => state);
   const handleSelectAllClick = () => {
     setIsSelectAllClick((prev) => !prev);
   };
@@ -116,19 +113,21 @@ const Cart = () => {
             </div>
             {/* products */}
             {cart.length > 0 ? (
-              cart.map((productInfo, index) => (
+              cart.map((cartItem, index) => (
                 <div
                   key={index}
                   className="my-4 rounded-md border-b-[1px] border-gray-300 bg-white"
                 >
                   <Products
-                    productInfo={productInfo}
+                    cartItem={cartItem}
                     isSelectAllClick={isSelectAllClick}
                   />
                 </div>
               ))
             ) : (
-              <div className="w-full text-center p-10 bg-white">장바구니에 담긴 상품이 없습니다.</div>
+              <div className="w-full bg-white p-10 text-center">
+                장바구니에 담긴 상품이 없습니다.
+              </div>
             )}
 
             {/* Total */}
