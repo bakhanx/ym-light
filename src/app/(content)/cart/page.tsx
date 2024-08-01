@@ -187,8 +187,8 @@ const Cart = () => {
                 <div>
                   <span className="text-2xl lg:text-4xl ">-</span>
                 </div>
-                <div className="flex flex-col text-sm md:text-base">
-                  <span className="text-center text-gray-400">할인금액</span>
+                <div className="flex flex-col text-center text-sm md:text-base">
+                  <span className="text-gray-400">할인금액</span>
                   <span className="font-bold text-red-500">
                     {formatOfPrice(totalDiscountPrice)}원
                   </span>
