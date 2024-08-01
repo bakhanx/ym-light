@@ -12,6 +12,7 @@ import ProductInfo from "./productInfo";
 import Image from "next/image";
 import { useCartStore } from "@/store/useCartStore";
 import { Option, Product } from "@prisma/client";
+import { useRouter } from "next/navigation";
 
 type Options = {
   options: Option[];
@@ -26,11 +27,27 @@ const ProductContents = ({ product }: ProductWithOptions) => {
   const [selectedOptionList, setSelectedOptionList] = useState<
     selectedItemType[]
   >([]);
-  const [quantity, setQuantity] = useState(
-    product.options.length > 0 ? 0 : 1,
-  );
-  console.log(selectedOptionList.length)
-  console.log(quantity)
+  const [quantity, setQuantity] = useState(product.options.length > 0 ? 0 : 1);
+  const router = useRouter();
+  const handleAddtoCart = () => {
+    // local State
+    if (product.options.length > 0 && selectedOptionList.length === 0) {
+      alert("상품옵션을 선택해주세요.");
+      return;
+    }
+
+    addToCart({
+      productInfo: { product, quantity },
+      optionInfoList: selectedOptionList,
+    });
+    if (
+      window.confirm(
+        "상품을 장바구니에 담았습니다. 장바구니로 이동하시겠습니까?",
+      )
+    ) {
+      router.push("/cart");
+    }
+  };
 
   // Option Props
   const parentFunc = (item: selectedItemType[]) => {
@@ -189,12 +206,7 @@ const ProductContents = ({ product }: ProductWithOptions) => {
             </button>
             <div className="flex gap-x-4">
               <button
-                onClick={() =>
-                  addToCart({
-                    productInfo: { product, quantity },
-                    optionInfoList: selectedOptionList,
-                  })
-                }
+                onClick={handleAddtoCart}
                 className="flex w-full items-center justify-center gap-x-1 rounded-md bg-blue-500 p-4 hover:bg-blue-600 sm:p-5"
               >
                 <ShoppingBagIcon className="h-4 w-4 stroke-2 sm:h-5 sm:w-5" />
