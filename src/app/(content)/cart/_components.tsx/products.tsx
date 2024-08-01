@@ -1,6 +1,7 @@
 import { cls, formatOfPrice } from "@/libs/utils";
 import { CartItem, useCartStore } from "@/store/useCartStore";
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
 type ProductsProps = {
@@ -29,8 +30,8 @@ const Products = ({
           )
           .reduce((acc, cur) => acc + cur, 0)
       : 0;
-      
-  const initOriginTotalPrice = productPrice + optionPrice
+
+  const initOriginTotalPrice = productPrice + optionPrice;
 
   const initDiscountTotalPrice =
     ((productInfo.product.price * (productInfo.product.discount || 0)) / 100) *
@@ -95,8 +96,14 @@ const Products = ({
             </button>
 
             {/* Image */}
-            <div className="relative ml-8 sm:pl-0">
-              <div className="h-20 w-20 bg-slate-500"></div>
+            <div className="relative pl-6 sm:pl-0">
+              <div className="relative h-20 w-20 bg-slate-500">
+                <Image
+                  alt={`${productInfo.product.title}`}
+                  src={`${productInfo.product.photo}/thumbnail`}
+                  fill
+                />
+              </div>
             </div>
 
             {/* Content */}
@@ -141,7 +148,7 @@ const Products = ({
 
           {/* Option */}
           {optionInfoList.length > 0 && (
-            <ul className="mt-4 flex flex-col gap-y-4 bg-gray-50 p-2 text-sm text-gray-600 sm:text-base [&>li]:border-b-[1px] [&>li]:py-2">
+            <ul className="mt-4 flex flex-col gap-y-4 bg-gray-50  p-2 text-sm text-gray-600 sm:text-base [&>li]:border-b-[1px] [&>li]:py-2">
               {optionInfoList.map((optionInfo) => (
                 <li key={optionInfo.option.index}>
                   <div className="flex items-start justify-between">
@@ -174,8 +181,14 @@ const Products = ({
         <div className="text-sm sm:text-base lg:flex lg:w-[30%] lg:justify-center lg:divide-x-[1px]">
           <div className="flex items-center justify-between gap-x-5 px-4 sm:px-20 lg:w-1/2 lg:justify-center lg:p-5  ">
             <span className="text-gray-500 lg:hidden">선택상품금액</span>
-            <span>
-              {formatOfPrice(originTotalPrice - discountTotalPrice)}원
+            <span>{formatOfPrice(originTotalPrice)}원</span>
+          </div>
+          <div className="flex items-center justify-between gap-x-5 px-4 sm:hidden sm:px-20 lg:w-1/2 lg:justify-center lg:p-5">
+            <span className="text-gray-500 lg:hidden lg:text-black ">
+              할인금액
+            </span>
+            <span className="text-red-500 lg:text-black">
+              {formatOfPrice(discountTotalPrice)}원
             </span>
           </div>
 
@@ -195,22 +208,25 @@ const Products = ({
               {formatOfPrice(originTotalPrice)}원
             </span>
           </div>
-          <div className="">+</div>
+
+          <div className="">-</div>
+
+          <div className="flex flex-col text-center">
+            <span className="text-red-500 lg:text-black">할인금액</span>
+            <span className="font-bold text-red-500">
+              {formatOfPrice(discountTotalPrice)}원
+            </span>
+          </div>
+
+          <div className="font-bold">+</div>
+
           <div className="flex flex-col">
             <span>총 배송비</span>
             <span className="font-bold">{formatOfPrice(deliveryPrice)}원</span>
           </div>
-          <div className="font-bold">-</div>
+          <div className="hidden lg:block">=</div>
         </div>
 
-        <div className="flex items-center justify-between gap-x-5 px-4 text-sm sm:px-20  sm:text-base lg:flex-col lg:justify-center">
-          <span className="text-red-500 lg:text-black">할인금액</span>
-          <span className="font-bold text-red-500">
-            {formatOfPrice(discountTotalPrice)}원
-          </span>
-        </div>
-
-        <div className="hidden lg:block">=</div>
         <div className="flex items-center justify-between gap-x-5 px-4 sm:px-20   lg:flex-col lg:justify-center ">
           <span className="font-bold">주문금액</span>
           <span className="font-bold text-amber-500">
