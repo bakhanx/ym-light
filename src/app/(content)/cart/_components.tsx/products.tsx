@@ -1,32 +1,36 @@
 import { cls, formatOfPrice } from "@/libs/utils";
-import { CartItem } from "@/store/useCartStore";
+import { CartItem, useCartStore } from "@/store/useCartStore";
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import React, { useEffect, useState } from "react";
 
 type ProductsProps = {
   cartItem: CartItem;
+  index: number;
   isSelectAllClick: boolean;
-};
-
-type Quantity = {
-  quantity: number;
 };
 
 const Products = ({
   cartItem: { productInfo, optionInfoList },
+  index,
   isSelectAllClick,
 }: ProductsProps) => {
   const initOptionTotalPrice = optionInfoList
     .map((optionInfo) => optionInfo.option.price || 0)
     .reduce((acc, cur) => acc + cur, 0);
 
-  const initOriginTotalPrice =
-    productInfo.product.price *
-      (productInfo.quantity +
-        optionInfoList
-          .map((optionInfo) => optionInfo.quantity)
-          .reduce((acc, cur) => acc + cur, 0)) +
-    initOptionTotalPrice;
+  const productPrice = productInfo.product.price * productInfo.quantity;
+  const optionPrice =
+    optionInfoList.length > 0
+      ? optionInfoList
+          .map(
+            (optionInfo) =>
+              (productInfo.product.price + (optionInfo.option.price || 0)) *
+              optionInfo.quantity,
+          )
+          .reduce((acc, cur) => acc + cur, 0)
+      : 0;
+      
+  const initOriginTotalPrice = productPrice + optionPrice
 
   const initDiscountTotalPrice =
     ((productInfo.product.price * (productInfo.product.discount || 0)) / 100) *
@@ -35,11 +39,34 @@ const Products = ({
         .map((optionInfo) => optionInfo.quantity)
         .reduce((acc, cur) => acc + cur, 0));
 
-  const [isSelectClick, setIsSelectClick] = useState(true);
+  const { cart } = useCartStore((state) => state);
 
-  const handleSelectClick = () => {
-    setIsSelectClick((prev) => !prev);
+  useEffect(() => {
+    useCartStore.setState((state) => ({
+      cart: state.cart.map((cartItem) => ({ ...cartItem, checked: true })),
+    }));
+    console.log("set all true");
+  }, []);
+
+  const updatedCheckedStatus = (index: number, checked: boolean) => {
+    useCartStore.setState((state) => ({
+      cart: state.cart.map((cartItem, _index) =>
+        _index === index ? { ...cartItem, checked } : cartItem,
+      ),
+    }));
   };
+  const handleSelectClick = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    index: number,
+  ) => {
+    event.preventDefault();
+    updatedCheckedStatus(index, !cart[index].checked);
+  };
+
+  useEffect(() => {
+    console.log("index ", index, cart[index].checked);
+  }, [cart, index]);
+
   const [optionTotalPrice, setOptionTotalPrice] =
     useState(initOptionTotalPrice);
 
@@ -50,14 +77,6 @@ const Products = ({
     initDiscountTotalPrice,
   );
 
-  useEffect(() => {
-    if (isSelectAllClick) {
-      setIsSelectClick(true);
-    } else {
-      setIsSelectClick(false);
-    }
-  }, [isSelectAllClick]);
-
   return (
     <div className="flex flex-col px-2 py-4 sm:px-4">
       <div className="flex w-full flex-col justify-center lg:flex-row lg:divide-x-[1px]">
@@ -65,12 +84,12 @@ const Products = ({
           <div className="flex">
             <button
               className={cls(
-                isSelectClick
+                cart[index].checked
                   ? "border-amber-400 bg-amber-400 text-white"
                   : " border-amber-400 text-gray-400 ",
                 "absolute left-0 flex items-center gap-x-1 rounded-md border-2 p-1",
               )}
-              onClick={handleSelectClick}
+              onClick={(e) => handleSelectClick(e, index)}
             >
               <CheckIcon className="h-3 w-3 stroke-2" />
             </button>
@@ -111,6 +130,11 @@ const Products = ({
                     </div>
                   )}
                 </div>
+                {optionInfoList.length === 0 && (
+                  <div className="pt-2 text-sm text-gray-500">
+                    상품개수 : {productInfo.quantity}개
+                  </div>
+                )}
               </div>
             </div>
           </div>
