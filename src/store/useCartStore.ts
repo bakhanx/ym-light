@@ -16,7 +16,10 @@ type OptionInfoList = {
   }[];
 };
 
-export type CartItem = ProductInfo & OptionInfoList;
+export type CartItem = ProductInfo &
+  OptionInfoList & {
+    checked: boolean;
+  };
 
 type State = {
   cart: CartItem[];
@@ -43,15 +46,15 @@ export const useCartStore = create<State & Actions>()(
 
       addToCart: ({ productInfo, optionInfoList }) => {
         const cart = get().cart;
-
         const indexExistedProduct = cart.findIndex(
           (item) => item.productInfo.product.id === productInfo.product.id,
         );
 
-        if (indexExistedProduct >= 0) {
-          cart[indexExistedProduct].productInfo.quantity++;
+        if (indexExistedProduct !== -1) {
+          cart[indexExistedProduct].productInfo.quantity +=
+            productInfo.quantity;
         } else {
-          cart.push({ productInfo: productInfo, optionInfoList: [] });
+          cart.push({ productInfo: productInfo, optionInfoList: [], checked:true });
         }
 
         // Option
