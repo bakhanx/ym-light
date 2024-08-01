@@ -1,6 +1,6 @@
 "use client";
 
-import { cls } from "@/libs/utils";
+import { cls, formatOfPrice } from "@/libs/utils";
 import { useEffect, useState } from "react";
 import Products from "./_components.tsx/products";
 import { CheckIcon, TrashIcon } from "@heroicons/react/24/outline";
@@ -14,8 +14,52 @@ const Cart = () => {
   const [isSelectAllClick, setIsSelectAllClick] = useState(true);
 
   const { cart } = useCartStore((state) => state);
+  const DELIVERY_PRICE = 7000;
+  const checkedCart = cart.filter((cartItem) => cartItem.checked);
+
+  const totalOriginalPrice = checkedCart
+    .map(({ productInfo, optionInfoList }) => {
+      const productTotalPrice =
+        productInfo.product.price * productInfo.quantity;
+      const optionTotalPrice =
+        optionInfoList.length > 0
+          ? optionInfoList
+              .map(
+                (optionInfo) =>
+                  (productInfo.product.price + (optionInfo.option.price || 0)) *
+                  optionInfo.quantity,
+              )
+              .reduce((acc, cur) => acc + cur, 0)
+          : 0;
+      return productTotalPrice + optionTotalPrice;
+    })
+    .reduce((acc, cur) => acc + cur, 0);
+
+  const totalDiscountPrice = checkedCart
+    .map(({ productInfo, optionInfoList }) => {
+      return (
+        ((productInfo.product.price * (productInfo.product.discount || 0)) /
+          100) *
+        (productInfo.quantity +
+          optionInfoList
+            .map((optionInfo) => optionInfo.quantity)
+            .reduce((acc, cur) => acc + cur, 0))
+      );
+    })
+    .reduce((acc, cur) => acc + cur, 0);
+
+  const totalDeliveryPrice = checkedCart.length * DELIVERY_PRICE;
+  const totalAllPrice =
+    totalOriginalPrice - totalDiscountPrice + totalDeliveryPrice;
+
   const handleSelectAllClick = () => {
     setIsSelectAllClick((prev) => !prev);
+    useCartStore.setState((state) => ({
+      cart: state.cart.map((cartItem) => ({
+        ...cartItem,
+        checked: !isSelectAllClick,
+      })),
+    }));
   };
 
   const router = useRouter();
@@ -121,6 +165,7 @@ const Cart = () => {
                   <Products
                     cartItem={cartItem}
                     isSelectAllClick={isSelectAllClick}
+                    index={index}
                   />
                 </div>
               ))
@@ -135,14 +180,18 @@ const Cart = () => {
               <div className="flex w-full items-center justify-between gap-x-1 px-4 sm:w-[70%] sm:gap-x-4 sm:border-r md:gap-x-8 lg:justify-center lg:gap-x-16">
                 <div className="flex flex-col text-sm md:text-base">
                   <span className="text-center text-gray-400">상품금액</span>
-                  <span className="font-bold">33,000,000원</span>
+                  <span className="font-bold">
+                    {formatOfPrice(totalOriginalPrice)}원
+                  </span>
                 </div>
                 <div>
                   <span className="text-2xl lg:text-4xl ">-</span>
                 </div>
                 <div className="flex flex-col text-sm md:text-base">
                   <span className="text-center text-gray-400">할인금액</span>
-                  <span className="font-bold text-red-500">3,200,000원</span>
+                  <span className="font-bold text-red-500">
+                    {formatOfPrice(totalDiscountPrice)}원
+                  </span>
                 </div>
 
                 <div>
@@ -151,14 +200,16 @@ const Cart = () => {
 
                 <div className="flex flex-col text-sm md:text-base">
                   <span className="text-center text-gray-400">배송비</span>
-                  <span className="font-bold text-green-500">7,000원</span>
+                  <span className="font-bold text-green-500">
+                    {formatOfPrice(totalDeliveryPrice)}원
+                  </span>
                 </div>
               </div>
 
               <div className="mt-4 flex w-full flex-col items-end justify-end pr-4 sm:mt-0 sm:w-[30%] sm:pt-0 lg:items-center lg:pr-0">
                 <span className="font-bold text-gray-600">총 금액</span>
                 <span className="text-xl font-bold  text-blue-500 md:text-2xl">
-                  28,507,000원
+                  {formatOfPrice(totalAllPrice)}원
                 </span>
               </div>
             </div>
