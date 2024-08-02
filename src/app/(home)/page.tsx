@@ -1,5 +1,5 @@
 import Image from "next/image";
-import bannerImage from "@/../public/images/main-banner-1920.jpg";
+import bannerImage from "/public/images/main-banner.jpg";
 import Card from "./_components/card";
 import Link from "next/link";
 import db from "@/libs/db";

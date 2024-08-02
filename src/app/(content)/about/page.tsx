@@ -1,8 +1,8 @@
-import Image01 from "@/../public/images/worker-02-lg.jpg";
-import Image02 from "@/../public/images/worker-01-lg.jpg";
-import Image03 from "@/../public/images/worker-07.jpg";
-import Image04 from "@/../public/images/tools-lg.jpg";
-import Image05 from "@/../public/images/worker-lg.jpg";
+import Image01 from "/public/images/worker-02.jpg";
+import Image02 from "/public/images/worker-01.jpg";
+import Image03 from "/public/images/worker-07.jpg";
+import Image04 from "/public/images/tools.jpg";
+import Image05 from "/public/images/worker-00.jpg";
 import Image from "next/image";
 
 const About = () => {

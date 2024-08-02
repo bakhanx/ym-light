@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import Image01 from "@/../public/images/contact01-lg.jpg";
+import Image01 from "/public/images/contact.jpg";
 import Image from "next/image";
 import FormInput from "@/components/form-input";
 import FormButton from "@/components/form-button";
