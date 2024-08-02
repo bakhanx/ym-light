@@ -9,9 +9,6 @@ type Props = {
   };
 };
 
-// 쿠폰시스템
-// const coupon = [{ id: 1, name: "신규할인쿠폰", rate: 10 }];
-
 const getProduct = async (id: number) => {
   const product = await db.product.findUnique({
     where: {
