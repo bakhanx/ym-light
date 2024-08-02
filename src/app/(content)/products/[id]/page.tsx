@@ -39,6 +39,8 @@ const getCahcedProduct = nextCache(getProduct, ["product"], {
   tags: ["light", "product"],
 });
 
+export const dynamic = 'force-dynamic';
+
 const ProductDetail = async ({ params }: Props) => {
   const product = await getCahcedProduct(params.id);
 
