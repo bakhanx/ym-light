@@ -2,6 +2,7 @@ import NotFound from "@/app/not-found";
 import db from "@/libs/db";
 import { unstable_cache as nextCache } from "next/cache";
 import ProductContents from "../_components/product-contents";
+import ScrollTop from "@/components/scrollTop";
 
 type Props = {
   params: {
@@ -46,6 +47,7 @@ const ProductDetail = async ({ params }: Props) => {
 
   return (
     <>
+      <ScrollTop/>
       {product ? (
         <div className="my-container">
           <div className="my-content m-auto max-w-screen-xl px-4 pb-28 pt-8 sm:px-10 ">
