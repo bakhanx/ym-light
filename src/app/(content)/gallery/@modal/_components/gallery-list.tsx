@@ -9,7 +9,6 @@ import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import { InitialGalleryListType } from "../../page";
 import getMoreGalleryList from "../../action";
-import Spinner from "@/../public/loaders/Spin-1s-200px.svg";
 import Loader from "@/components/loader";
 
 type GalleryListProps = {
@@ -97,9 +96,8 @@ const GalleryList = ({ initialGalleryList }: GalleryListProps) => {
         ref={trigger}
         className="mx-auto mt-10 flex items-center justify-center"
       >
-        {isLoading && <Loader/>}
+        {isLoading && <Loader />}
       </span>
-      
     </>
   );
 };
