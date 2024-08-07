@@ -6,6 +6,7 @@ import React from "react";
 const revalidateProducts = async () => {
   "use server";
   revalidateTag("product");
+  alert('갱신 완료')
 };
 
 const navLinks = [
