@@ -10,15 +10,17 @@ datasource db {
 
 model User {
   id         Int        @id @default(autoincrement())
-  username   String     @unique
+  username   String     
   loginId    String     @unique
   password   String
   email      String?    @unique
   phone      String?    @unique
   created_at DateTime   @default(now())
   updated_at DateTime   @updatedAt
-  SMSToken   SMSToken[]
-  Products   Product[]
+  smsToken   SMSToken[]
+  products   Product[]
+  chatRooms  ChatRoom[]
+  messages    Message[]
 }
 
 model SMSToken {
@@ -77,4 +79,28 @@ model Tag {
   updated_at DateTime @updatedAt
   gallery    Gallery? @relation(fields: [galleryId], references: [id])
   galleryId  Int?
+}
+
+model ChatRoom {
+  id String @id @default(cuid())
+
+  users User[]
+
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  messages    Message[]
+}
+
+model Message {
+  id      Int    @id @default(autoincrement())
+  payload String
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+
+  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id])
+  chatRoomId String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }
