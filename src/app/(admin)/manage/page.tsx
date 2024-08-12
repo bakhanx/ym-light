@@ -8,7 +8,8 @@ const navLinks = [
   { key: "gallery", name: "갤러리관리", href: "/manage/gallery" },
   { key: "about", name: "소개관리", href: "/manage/about" },
   { key: "contact", name: "연락관리", href: "/manage/contact" },
-  { key: "faq", name: "FAQ관리", href: "/manage/faq" },
+  // { key: "faq", name: "FAQ관리", href: "/manage/faq" },
+  { key: "chats", name: "채팅관리", href: "/manage/chats" },
 ];
 
 const Manage = () => {
