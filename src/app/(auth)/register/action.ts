@@ -83,7 +83,6 @@ const registerSchema = z
       .trim()
       .refine(
         async (phone) => {
-          console.log(phone);
           if (phone === "") {
             return true;
           }
