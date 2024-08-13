@@ -57,7 +57,7 @@ const getUser = async (id: number) => {
 
 export type initialMessages = Prisma.PromiseReturnType<typeof getChatMessages>;
 
-export const ChatDetail = async ({ params: { id } }: Props) => {
+const ChatDetail = async ({ params: { id } }: Props) => {
   const chatRoom = await getChatRoom(id);
   const session = await getSession();
   const user = await getUser(session.id);
