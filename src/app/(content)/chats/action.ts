@@ -54,3 +54,20 @@ export const createChatRoom = async () => {
     redirect(`/chats/${newChaRroom.id}`);
   }
 };
+
+export const saveChatMessages = async (
+  payload: string,
+  chatRoomId: string,
+  userId: number,
+) => {
+  const message = await db.message.create({
+    data: {
+      payload,
+      chatRoomId,
+      userId,
+    },
+    select: {
+      id: true,
+    },
+  });
+};
