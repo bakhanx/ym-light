@@ -6,6 +6,11 @@ type DateTimeProps = {
   date?: Date;
 };
 
+/**
+ * @param {Date} date 날짜 
+ * @param {boolean} time OO:OO, 표시 여부
+ * @param {boolean} timeAgo OO전, 표시 여부
+ */
 export default function DateTime({ date, time, timeAgo }: DateTimeProps) {
   const dateTime = dayjs(date);
   const nowTime = dayjs();
