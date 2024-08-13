@@ -40,7 +40,7 @@ const Register = () => {
             <FormInput
               label="비밀번호"
               name="password"
-              type="text"
+              type="password"
               placeholder="****"
               error={state?.error?.fieldErrors.password}
               required
@@ -49,7 +49,7 @@ const Register = () => {
             <FormInput
               label="비밀번호 재확인"
               name="password_confirm"
-              type="text"
+              type="password"
               placeholder="****"
               error={state?.error?.fieldErrors.password_confirm}
               required
