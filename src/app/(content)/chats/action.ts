@@ -7,35 +7,50 @@ import { redirect } from "next/navigation";
 const ADMIN_ID = 1;
 
 export const createChatRoom = async () => {
-  // 게스트
-  const guest = await db.user.create({
-    data: {
-      username: `guest_${Date.now()}`,
-      loginId: `guest_${Date.now()}`,
-      password: "0000",
-    },
-    select: { id: true, username: true },
-  });
-
-  // 회원
   const session = await getSession();
 
-  const chatroom = await db.chatRoom.create({
-    data: {
+  if (!session.id) {
+    // 게스트 생성
+    const guest = await db.user.create({
+      data: {
+        username: `guest_${Date.now()}`,
+        loginId: `guest_${Date.now()}`,
+        password: "0000",
+      },
+      select: { id: true, username: true },
+    });
+    session.id = guest.id;
+    session.save();
+  }
+
+  const existedChatRoom = await db.chatRoom.findFirst({
+    where: {
       users: {
-        connect: [
-          {
-            id: ADMIN_ID,
-          },
-          {
-            id: guest.id,
-            // id: session.id
-          },
-        ],
+        some: {
+          id: session.id,
+        },
       },
     },
+    select: { id: true },
   });
 
-  //   채팅창 모달
-  redirect(`/chats/${chatroom.id}`);
+  if (existedChatRoom) {
+    redirect(`/chats/${existedChatRoom.id}`);
+  } else {
+    const newChaRroom = await db.chatRoom.create({
+      data: {
+        users: {
+          connect: [
+            {
+              id: ADMIN_ID,
+            },
+            {
+              id: session.id,
+            },
+          ],
+        },
+      },
+    });
+    redirect(`/chats/${newChaRroom.id}`);
+  }
 };
