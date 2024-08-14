@@ -3,6 +3,7 @@ import { Noto_Sans_KR } from "next/font/google";
 import "../styles/globals.css";
 import TopNav from "@/components/top-navigation";
 import Footer from "@/components/footer";
+import FloatingButton from "@/components/floating-chat-button";
 
 // const inter = Inter({ subsets: ["latin"] });
 
@@ -23,14 +24,21 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   return (
     <html lang="en">
       <body className={`${noto_sans_kr.className}`}>
         <TopNav />
-        <div className="pt-36  sm:pt-20">{children}</div>
+        <div className="pt-36  sm:pt-20">
+          {children} {modal}
+        </div>
+
+        <FloatingButton />
+
         <Footer />
       </body>
     </html>
