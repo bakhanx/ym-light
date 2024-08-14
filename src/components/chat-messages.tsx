@@ -88,7 +88,7 @@ const ChatMessages = ({
             key={message.id}
             className={cls(
               message.userId === userId ? "justify-end" : "justify-start",
-              "flex w-1/2 items-center gap-x-2",
+              "flex  items-center gap-x-2",
             )}
           >
             {message.userId === userId ? (
@@ -103,7 +103,7 @@ const ChatMessages = ({
         ))}
       </ul>
 
-      <div className="w-1/2 pt-20">
+      <div className=" pt-20">
         <form onSubmit={onSubmit} className="flex">
           <input
             onChange={onChange}
