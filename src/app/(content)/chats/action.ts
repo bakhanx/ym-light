@@ -2,13 +2,12 @@
 
 import db from "@/libs/db";
 import getSession from "@/libs/session";
-import { redirect } from "next/navigation";
+import { redirect, RedirectType, useRouter } from "next/navigation";
 
 const ADMIN_ID = 1;
 
 export const createChatRoom = async () => {
   const session = await getSession();
-
   if (!session.id) {
     // 게스트 생성
     const guest = await db.user.create({
@@ -35,9 +34,10 @@ export const createChatRoom = async () => {
   });
 
   if (existedChatRoom) {
-    redirect(`/chats/${existedChatRoom.id}`);
+    // redirect(`/chats/${existedChatRoom.id}`);
+    return {roomId : existedChatRoom.id}
   } else {
-    const newChaRroom = await db.chatRoom.create({
+    const newChatRoom = await db.chatRoom.create({
       data: {
         users: {
           connect: [
@@ -51,7 +51,8 @@ export const createChatRoom = async () => {
         },
       },
     });
-    redirect(`/chats/${newChaRroom.id}`);
+    // redirect(`/chats/${newChatRoom.id}`);
+    return {roomId : newChatRoom.id}
   }
 };
 
