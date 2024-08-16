@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    --primary-bulb-color: rgba(255, 235, 0, 1);
+    --primary-shadow-color: rgba(245, 223, 77, 1);
+}
+
 html {
     background-color: white;
     color: black;
