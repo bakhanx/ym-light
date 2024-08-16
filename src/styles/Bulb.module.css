@@ -1,0 +1,213 @@
+.bulb_container {
+    width: 300px;
+    height: 500px;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1;
+    transform-origin: top;
+    animation: swing 3s ease-in-out infinite;
+}
+
+.wire {
+    width: 4px;
+    height: 250px;
+    background: black;
+    position: relative;
+    z-index: 1;
+
+}
+
+.connector {
+    background: #292929;
+    width: 30px;
+    aspect-ratio: 4/5;
+    border-radius: 1px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    z-index: 2;
+}
+
+.grove {
+    background: #424242;
+    width: 34px;
+    height: 3px;
+    z-index: 3;
+}
+
+.bulb {
+    margin-top: -2px;
+    width: 92px;
+    height: 92px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #ffeb00;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0px 0px 150px 75px var(--primary-shadow-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: -1px;
+    z-index: 1;
+    animation: flash 10s linear infinite;
+}
+
+.metal_wire {
+    position: relative;
+    border: 1px solid black;
+    width: 22px;
+    height: 11px;
+    border-radius: 50%;
+    z-index: 2;
+}
+
+.metal_wire:nth-child(1) {
+    top: -1px
+}
+
+.metal_wire:nth-child(2) {
+    top: -7px
+}
+
+.metal_wire:nth-child(3) {
+    top: -13px
+}
+
+@keyframes swing {
+    0% {
+        transform: rotate(15deg);
+    }
+
+    50% {
+        transform: rotate(-15deg);
+    }
+
+    100% {
+        transform: rotate(15deg);
+    }
+}
+
+@keyframes flash {
+    0% {
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0px 0px 0px 0px transparent;
+    }
+
+    1% {
+        background: var(--primary-bulb-color);
+        box-shadow: 0px 0px 150px 75px var(--primary-shadow-color)
+    }
+
+    1.001% {
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0px 0px 0px 0px transparent;
+    }
+
+    10% {
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0px 0px 0px 0px transparent;
+    }
+
+    11.00.1% {
+        background: var(--primary-bulb-color);
+        box-shadow: 0px 0px 150px 75px var(--primary-shadow-color)
+    }
+
+    11.002% {
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0px 0px 0px 0px transparent;
+    }
+
+    12% {
+        background: var(--primary-bulb-color);
+        box-shadow: 0px 0px 150px 75px var(--primary-shadow-color)
+    }
+
+    39.999% {
+        background: var(--primary-bulb-color);
+        box-shadow: 0px 0px 150px 75px var(--primary-shadow-color)
+    }
+
+    40% {
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0px 0px 0px 0px transparent;
+    }
+
+    41% {
+        background: var(--primary-bulb-color);
+        box-shadow: 0px 0px 150px 75px var(--primary-shadow-color)
+    }
+
+    41.001% {
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0px 0px 0px 0px transparent;
+    }
+
+    75% {
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0px 0px 0px 0px transparent;
+    }
+
+    75.5% {
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0px 0px 0px 0px var(--primary-shadow-color)
+    }
+
+    75.501% {
+        background: var(--primary-bulb-color);
+        box-shadow: 0px 0px 0px 0px transparent;
+    }
+
+    80% {
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0px 0px 0px 0px transparent;
+    }
+
+    81.001% {
+        background: var(--primary-bulb-color);
+        box-shadow: 0px 0px 150px 75px var(--primary-shadow-color)
+    }
+
+    82% {
+        background: var(--primary-bulb-color);
+        box-shadow: 0px 0px 150px 75px var(--primary-shadow-color)
+    }
+
+    82.001% {
+        background: var(--primary-bulb-color);
+        box-shadow: 0px 0px 150px 75px var(--primary-shadow-color)
+    }
+
+    82.002% {
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0px 0px 0px 0px transparent;
+    }
+
+    83% {
+        background: var(--primary-bulb-color);
+        box-shadow: 0px 0px 150px 75px var(--primary-shadow-color)
+    }
+
+    83.001% {
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0px 0px 0px 0px transparent;
+    }
+
+    83.002% {
+        background: var(--primary-bulb-color);
+        box-shadow: 0px 0px 150px 75px var(--primary-shadow-color)
+    }
+
+    83.003% {
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0px 0px 0px 0px transparent;
+    }
+
+    88% {
+        background: var(--primary-bulb-color);
+        box-shadow: 0px 0px 150px 75px var(--primary-shadow-color)
+    }
+}
