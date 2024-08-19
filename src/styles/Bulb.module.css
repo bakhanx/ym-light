@@ -7,7 +7,7 @@
     align-items: center;
     z-index: 1;
     transform-origin: top;
-    animation: swing 3s ease-in-out infinite;
+    /* animation: swing 3s ease-in-out infinite; */
 }
 
 .wire {
@@ -44,15 +44,20 @@
     height: 92px;
     aspect-ratio: 1;
     border-radius: 50%;
-    background: #ffeb00;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0px 0px 0px 0px transparent;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0px 0px 150px 75px var(--primary-shadow-color);
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: -1px;
     z-index: 1;
-    animation: flash 10s linear infinite;
+}
+
+.bulb_on {
+    animation: flash 10s linear;
+    background: #ffeb00;
+    box-shadow: 0px 0px 150px 75px var(--primary-shadow-color);
 }
 
 .metal_wire {
@@ -91,7 +96,7 @@
 }
 
 @keyframes flash {
-    0% {
+    /* 0% {
         background: rgba(255, 255, 255, 0.1);
         box-shadow: 0px 0px 0px 0px transparent;
     }
@@ -144,69 +149,69 @@
     41.001% {
         background: rgba(255, 255, 255, 0.1);
         box-shadow: 0px 0px 0px 0px transparent;
-    }
+    } */
 
-    75% {
+    0% {
         background: rgba(255, 255, 255, 0.1);
         box-shadow: 0px 0px 0px 0px transparent;
     }
 
-    75.5% {
+    0.5% {
         background: rgba(255, 255, 255, 0.1);
         box-shadow: 0px 0px 0px 0px var(--primary-shadow-color)
     }
 
-    75.501% {
+    0.501% {
         background: var(--primary-bulb-color);
         box-shadow: 0px 0px 0px 0px transparent;
     }
 
-    80% {
+    5% {
         background: rgba(255, 255, 255, 0.1);
         box-shadow: 0px 0px 0px 0px transparent;
     }
 
-    81.001% {
+    6.001% {
         background: var(--primary-bulb-color);
         box-shadow: 0px 0px 150px 75px var(--primary-shadow-color)
     }
 
-    82% {
+    7% {
         background: var(--primary-bulb-color);
         box-shadow: 0px 0px 150px 75px var(--primary-shadow-color)
     }
 
-    82.001% {
+    7.001% {
         background: var(--primary-bulb-color);
         box-shadow: 0px 0px 150px 75px var(--primary-shadow-color)
     }
 
-    82.002% {
+    7.002% {
         background: rgba(255, 255, 255, 0.1);
         box-shadow: 0px 0px 0px 0px transparent;
     }
 
-    83% {
+    8% {
         background: var(--primary-bulb-color);
         box-shadow: 0px 0px 150px 75px var(--primary-shadow-color)
     }
 
-    83.001% {
+    8.001% {
         background: rgba(255, 255, 255, 0.1);
         box-shadow: 0px 0px 0px 0px transparent;
     }
 
-    83.002% {
+    8.002% {
         background: var(--primary-bulb-color);
         box-shadow: 0px 0px 150px 75px var(--primary-shadow-color)
     }
 
-    83.003% {
+    8.003% {
         background: rgba(255, 255, 255, 0.1);
         box-shadow: 0px 0px 0px 0px transparent;
     }
 
-    88% {
+    13% {
         background: var(--primary-bulb-color);
         box-shadow: 0px 0px 150px 75px var(--primary-shadow-color)
     }
