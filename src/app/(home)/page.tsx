@@ -1,5 +1,10 @@
 import Image from "next/image";
 import bannerImage from "/public/images/main-banner.jpg";
+import banner01 from "/public/images/light/light-01-off.jpg";
+import banner02 from "/public/images/light/light-01-on.jpg";
+
+import styles from "@/styles/Bulb.module.css";
+
 import Card from "./_components/card";
 import Link from "next/link";
 import db from "@/libs/db";
@@ -72,21 +77,23 @@ export default async function Home() {
   return (
     <>
       <div className="h-[576px] sm:h-[768px]">
-        <div className="relative h-full w-full flex justify-center">
-          <Image
-            src={bannerImage}
+        <div className="relative flex h-full w-full justify-center">
+        
+          {/* <Image
+            src={banner01}
             fill
             style={{ objectFit: "cover", objectPosition: "top" }}
             quality={100}
             sizes="1"
             alt="bannerImage"
-          />
+          /> */}
+          <div className={styles.light_container}/>
 
-          <div className="absolute h-full w-full bg-black opacity-50" />
+          {/* <div className="absolute h-full w-full bg-black opacity-10" /> */}
 
-          <div className="absolute z-10 flex h-full flex-col max-w-screen-2xl md:px-20 px-4 w-full justify-center text-white ">
+          <div className="absolute z-10 flex h-full w-full max-w-screen-2xl flex-col justify-center px-4 text-white md:px-20 ">
             <div>
-              <span className="gradient-text animate-gradient text-3xl font-bold sm:text-5xl">
+              <span className="gradient-text animate-pulse text-3xl font-bold sm:text-5xl ">
                 YM Light
               </span>
             </div>
@@ -140,8 +147,6 @@ export default async function Home() {
           </div>
         </div>
       </Suspense>
-
-
     </>
   );
 }
