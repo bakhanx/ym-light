@@ -29,11 +29,13 @@ export default function RootLayout({
   children: React.ReactNode;
   modal: React.ReactNode;
 }>) {
+
   return (
     <html lang="en">
       <body className={`${noto_sans_kr.className}`}>
         <TopNav />
-        <div className="pt-36  sm:pt-20">
+        <div className="">
+        {/* <div className="pt-36  sm:pt-20"> */}
           {children} {modal}
         </div>
 
