@@ -1,7 +1,9 @@
 .light_container {
     background-image: url("../../public/images/light/light-01-on.jpg");
-    background-size: cover;
-    height: 768px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100%;
     width: 100%;
     /* height: 480px; */
     /* z-index: 50; */
@@ -15,7 +17,9 @@
     background-image: url("../../public/images/light/light-01-off.jpg");
     width: 100%;
     height: 100%;
-    background-size: cover;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
     opacity: 1;
     transition: opacity 1s;
     animation: flashlight 5s linear infinite;
