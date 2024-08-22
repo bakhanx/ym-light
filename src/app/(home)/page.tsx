@@ -4,6 +4,10 @@ import banner01 from "/public/images/light/light-01-off.jpg";
 import banner02 from "/public/images/light/light-01-on.jpg";
 
 import styles from "@/styles/Bulb.module.css";
+import neons from "@/styles/NeonSign.module.css";
+import flickers from "@/styles/NeonFlicker.module.css";
+import signs from "@/styles/NeonSquare.module.css";
+import noFlickers from "@/styles/NeonNoFlicker.module.css";
 
 import Card from "./_components/card";
 import Link from "next/link";
@@ -76,38 +80,51 @@ export default async function Home() {
   const discountedProducts = await getCachedDiscountProducts();
   return (
     <>
-      <div className="h-[576px] sm:h-[768px]">
+      <div className="h-screen bg-black">
         <div className="relative flex h-full w-full justify-center">
-        
-          {/* <Image
-            src={banner01}
-            fill
-            style={{ objectFit: "cover", objectPosition: "top" }}
-            quality={100}
-            sizes="1"
-            alt="bannerImage"
-          /> */}
-          <div className={styles.light_container}/>
+          {/* Background */}
+          <div className={styles.light_container} />
 
-          {/* <div className="absolute h-full w-full bg-black opacity-10" /> */}
+          {/* Open Neon */}
+          <div className="absolute right-6 md:top-24 top-56">
+            <div className={flickers.container}>
+              <span className={flickers.text}>OPEN</span>
+            </div>
+          </div>
 
-          <div className="absolute z-10 flex h-full w-full max-w-screen-2xl flex-col justify-center px-4 text-white md:px-20 ">
+          {/* Text */}
+          <div className="absolute z-10 flex h-full w-full max-w-screen-2xl flex-col justify-center px-4 pt-24 text-white md:px-20">
             <div>
-              <span className="gradient-text animate-pulse text-3xl font-bold sm:text-5xl ">
+              {/* <span className="gradient-text  text-3xl font-bold sm:text-5xl ">
                 YM Light
-              </span>
+              </span> */}
+              <span className={neons.text}>YM Light</span>
+              {/* 
+              <div className={signs.container}>
+                <span className={signs.text}>
+                  YM Lights are always made by experts with over 30 years of
+                  experience
+                </span>
+              </div> */}
+
+              <div className={noFlickers.container}>
+                <span className={noFlickers.neon}>
+                  YM Lights are always made by experts with over 30 years of
+                  experience
+                </span>
+              </div>
             </div>
 
-            <div className="w-[80%] text-balance pt-2 text-lg sm:text-2xl">
+            {/* <div className="w-[80%] text-balance pt-2 text-lg sm:text-2xl">
               YM Lights are always made by experts with over 30 years of
               experience.
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
 
       <Suspense fallback="Loading...">
-        <div className="mx-auto max-w-screen-2xl px-4 py-5 sm:px-10 sm:py-10">
+        <div className="mx-auto max-w-screen-2xl px-4 my-5 sm:px-10 sm:py-10">
           <div className="flex flex-col gap-y-10 divide-y-2">
             <div className="my-product-wrap">
               <div className=" text-lg font-semibold sm:text-2xl">
