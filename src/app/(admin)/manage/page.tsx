@@ -10,6 +10,8 @@ const navLinks = [
   { key: "contact", name: "연락관리", href: "/manage/contact" },
   // { key: "faq", name: "FAQ관리", href: "/manage/faq" },
   { key: "chats", name: "채팅관리", href: "/manage/chats" },
+  { key: "test", name: "테스트", href: "/manage/test" },
+
 ];
 
 const Manage = () => {
