@@ -16,7 +16,7 @@ const navLinks = [
 
 const Manage = () => {
   return (
-    <div className="mx-auto max-w-screen-2xl sm:h-[60vh]">
+    <div className="mx-auto max-w-screen-2xl sm:h-[60vh] py-32">
       <div className="flex flex-col items-center gap-y-8 p-10  sm:gap-x-8 md:flex-row [&>button]:w-40 ">
         {navLinks.map((navLink) => (
           <Link
