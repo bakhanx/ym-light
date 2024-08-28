@@ -3,6 +3,7 @@
 import { logOut } from "@/app/action";
 import { cls } from "@/libs/utils";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 type TopNavProps = {
@@ -15,8 +16,11 @@ type TopNavProps = {
     | undefined;
 };
 
+const bgWhitePath = ["/products", "/gallery", "/manage", "/cart"];
+
 const TopNavigationLayout = ({ user }: TopNavProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,13 +28,14 @@ const TopNavigationLayout = ({ user }: TopNavProps) => {
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-
   }, []);
 
   return (
     <div
       className={cls(
-        isScrolled ? "bg-black" : "bg-transparent",
+        isScrolled || bgWhitePath.includes(pathname)
+          ? "bg-black"
+          : "bg-transparent",
         "transion-color fixed z-50 h-36 w-full items-center justify-between text-white duration-500 sm:flex sm:h-14 sm:py-10",
       )}
     >
