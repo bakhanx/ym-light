@@ -5,6 +5,7 @@ import { cls } from "@/libs/utils";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createClient, RealtimeChannel } from "@supabase/supabase-js";
 import { saveChatMessages } from "@/app/(content)/chats/action";
+import { PaperAirplaneIcon } from "@heroicons/react/16/solid";
 
 const SUPABASE_URL = "https://qtxacjywgtbrwupngvuh.supabase.co";
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_KEY!;
@@ -25,6 +26,8 @@ const ChatMessages = ({
   const [messages, setMessages] = useState(initialMessages);
   const [message, setMessage] = useState("");
 
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+
   const channelA = useRef<RealtimeChannel>();
   useEffect(() => {
     const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -39,6 +42,14 @@ const ChatMessages = ({
       channelA.current?.unsubscribe();
     };
   }, [chatRoomId]);
+
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ inline: "end" });
+  }, []);
+
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ inline: "end", behavior: "smooth" });
+  }, [messages]);
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(event.currentTarget.value);
@@ -61,6 +72,9 @@ const ChatMessages = ({
         },
       },
     ]);
+
+    // scrollRef.current?.scrollIntoView({ inline: "end", behavior: "smooth" });
+
     channelA.current?.send({
       type: "broadcast",
       event: "message",
@@ -75,20 +89,20 @@ const ChatMessages = ({
         },
       },
     });
-    saveChatMessages(message, chatRoomId, userId)
+    saveChatMessages(message, chatRoomId, userId);
     setMessage("");
   };
 
   return (
     <div>
-      <ul className="flex flex-col gap-y-2">
-        {userId === 1 && <div>{messages[0]?.user?.username}님과의 대화</div>}
+      <ul className="flex flex-col py-12 px-4">
+      
         {messages.map((message) => (
           <li
             key={message.id}
             className={cls(
               message.userId === userId ? "justify-end" : "justify-start",
-              "flex  items-center gap-x-2",
+              "flex  items-center gap-x-2 py-1",
             )}
           >
             {message.userId === userId ? (
@@ -103,15 +117,19 @@ const ChatMessages = ({
         ))}
       </ul>
 
-      <div className=" pt-20">
-        <form onSubmit={onSubmit} className="flex">
+      <div className="inline" ref={scrollRef}></div>
+
+      <div className="fixed bottom-8 right-12 w-96 rounded-md p-3">
+        <form onSubmit={onSubmit} className="flex shadow-md">
           <input
             onChange={onChange}
-            className="w-full border-2 p-2"
+            className="w-full rounded-bl-md border-2  p-2 focus:border-amber-500 focus:outline-none focus:ring-amber-500"
             type="text"
             value={message}
           />
-          <button className="w-20 border-2 p-2">입력</button>
+          <button className="w-20 border-2 border-yellow-500 bg-yellow-500 p-2 font-bold text-white flex justify-center items-center">
+            <PaperAirplaneIcon className="w-6 h-6"/>
+          </button>
         </form>
       </div>
     </div>
