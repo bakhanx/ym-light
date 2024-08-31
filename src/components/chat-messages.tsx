@@ -95,7 +95,7 @@ const ChatMessages = ({
 
   return (
     <div>
-      <ul className="flex flex-col py-12 px-4">
+      <ul className="flex flex-col pt-12  pb-4 px-4 overflow-y-scroll h-80">
       
         {messages.map((message) => (
           <li
@@ -115,19 +115,20 @@ const ChatMessages = ({
             </span>
           </li>
         ))}
+        <div className="inline" ref={scrollRef}></div>
       </ul>
 
-      <div className="inline" ref={scrollRef}></div>
+      
 
-      <div className="fixed bottom-8 right-12 w-96 rounded-md p-3">
+      <div className="absolute pt-2 w-96 px-1 -translate-x-1 rounded-md">
         <form onSubmit={onSubmit} className="flex shadow-md">
           <input
             onChange={onChange}
-            className="w-full rounded-bl-md border-2  p-2 focus:border-amber-500 focus:outline-none focus:ring-amber-500"
+            className="w-full rounded-bl-md border-2 p-2  focus:border-amber-500 focus:outline-none focus:ring-amber-500"
             type="text"
             value={message}
           />
-          <button className="w-20 border-2 border-yellow-500 bg-yellow-500 p-2 font-bold text-white flex justify-center items-center">
+          <button className="w-20 border-4 border-yellow-500 bg-yellow-500 p-2 font-bold text-white flex justify-center items-center ">
             <PaperAirplaneIcon className="w-6 h-6"/>
           </button>
         </form>
