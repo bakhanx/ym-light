@@ -10,7 +10,7 @@ datasource db {
 
 model User {
   id         Int        @id @default(autoincrement())
-  username   String     
+  username   String
   loginId    String     @unique
   password   String
   email      String?    @unique
@@ -20,7 +20,8 @@ model User {
   smsToken   SMSToken[]
   products   Product[]
   chatRooms  ChatRoom[]
-  messages    Message[]
+  messages   Message[]
+  likes      Like[]
 }
 
 model SMSToken {
@@ -70,6 +71,20 @@ model Gallery {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   tags       Tag[]
+  likes      Like[]
+}
+
+model Like {
+  user       User     @relation(fields: [userId], references: [id])
+  gallery    Gallery  @relation(fields: [galleryId], references: [id])
+
+  userId     Int
+  galleryId  Int
+  
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@id(name: "id", [userId, galleryId])
 }
 
 model Tag {
@@ -88,7 +103,7 @@ model ChatRoom {
 
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
-  messages    Message[]
+  messages   Message[]
 }
 
 model Message {
