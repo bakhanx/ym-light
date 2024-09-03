@@ -14,8 +14,7 @@ export const likeGallery = async (galleryId: number) => {
         galleryId,
       },
     });
-    revalidateTag("gallery");
-    revalidateTag(`gallery-${galleryId}`);
+    revalidateTag(`like-status-${galleryId}`);
   } catch (e) {}
 };
 
@@ -31,7 +30,6 @@ export const dislikeGallery = async (galleryId: number) => {
         },
       },
     });
-    revalidateTag("gallery");
-    revalidateTag(`gallery-${galleryId}`);
+    revalidateTag(`like-status-${galleryId}`);
   } catch (e) {}
 };
