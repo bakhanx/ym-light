@@ -5,6 +5,7 @@ import Image from "next/image";
 import profile from "@/../public/images/ym-light-001.jpg";
 import GalleryList from "./@modal/_components/gallery-list";
 import { Prisma } from "@prisma/client";
+import { unstable_cache as nextCache } from "next/cache";
 
 const getGallery = async () => {
   const gallery = await db.gallery.findMany({
@@ -20,6 +21,12 @@ const getInitialGalleryList = async () => {
     select: {
       id: true,
       photo: true,
+      views: true,
+      _count: {
+        select: {
+          likes: true,
+        },
+      },
     },
     orderBy: {
       created_at: "desc",
@@ -29,11 +36,18 @@ const getInitialGalleryList = async () => {
   return gallery;
 };
 
-export type InitialGalleryListType = Prisma.PromiseReturnType<typeof getInitialGalleryList>;
+const getCachedGalleryList = nextCache(getInitialGalleryList, ["gallery-list"], {
+  tags: ["gallery"],
+  revalidate:60
+});
+
+export type InitialGalleryListType = Prisma.PromiseReturnType<
+  typeof getInitialGalleryList
+>;
 
 const Gallery = async () => {
   const gallery = await getGallery();
-  const initialGalleryList = await getInitialGalleryList();
+  const initialGalleryList = await getCachedGalleryList();
 
   return (
     <div className="m-auto w-[100%-40px] max-w-screen-lg border-t-2 px-4 py-8 sm:px-10 md:px-20">
