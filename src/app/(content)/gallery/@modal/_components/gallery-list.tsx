@@ -10,6 +10,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { InitialGalleryListType } from "../../page";
 import getMoreGalleryList from "../../action";
 import Loader from "@/components/loader";
+import { EyeIcon } from "@heroicons/react/16/solid";
 
 type GalleryListProps = {
   initialGalleryList: InitialGalleryListType;
@@ -75,14 +76,13 @@ const GalleryList = ({ initialGalleryList }: GalleryListProps) => {
                     }}
                   >
                     <div className="flex items-center gap-x-2">
-                      <ChatBubbleLeftEllipsisIcon className="h-5 w-5" />
-                      {/* count of comments */}
-                      <span>{10}</span>
+                      <EyeIcon className="h-5 w-5" />
+                      <span>{gallery.views}</span>
                     </div>
                     <div className="flex items-center gap-x-2">
                       <HandThumbUpIcon className="h-5 w-5" />
                       {/* count of hearts */}
-                      <span>5</span>
+                      <span>{gallery._count.likes}</span>
                     </div>
                   </div>
                 </div>
