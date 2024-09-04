@@ -20,6 +20,11 @@ export const createChatRoom = async () => {
     });
     session.id = guest.id;
     session.save();
+    await db.log.create({
+      data: {
+        userId: session.id,
+      },
+    });
   }
 
   const existedChatRoom = await db.chatRoom.findFirst({
@@ -35,7 +40,7 @@ export const createChatRoom = async () => {
 
   if (existedChatRoom) {
     // redirect(`/chats/${existedChatRoom.id}`);
-    return {roomId : existedChatRoom.id}
+    return { roomId: existedChatRoom.id };
   } else {
     const newChatRoom = await db.chatRoom.create({
       data: {
@@ -52,7 +57,7 @@ export const createChatRoom = async () => {
       },
     });
     // redirect(`/chats/${newChatRoom.id}`);
-    return {roomId : newChatRoom.id}
+    return { roomId: newChatRoom.id };
   }
 };
 
