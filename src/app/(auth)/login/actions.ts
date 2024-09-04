@@ -63,8 +63,15 @@ export const loginActions = async (prevState: any, formData: FormData) => {
       const session = await getSession();
       session.id = user!.id;
       session.save();
+
+      await db.log.create({
+        data: {
+          userId: session.id,
+        },
+      });
+
       revalidatePath("/");
-      redirect("/", );
+      redirect("/");
     } else {
       return {
         fieldErrors: {
