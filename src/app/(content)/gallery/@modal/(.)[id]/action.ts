@@ -15,7 +15,11 @@ export const likeGallery = async (galleryId: number) => {
       },
     });
     revalidateTag(`like-status-${galleryId}`);
-  } catch (e) {}
+    revalidateTag("gallery");
+    
+  } catch (e) {
+    console.log("error : ", e);
+  }
 };
 
 export const dislikeGallery = async (galleryId: number) => {
@@ -31,5 +35,8 @@ export const dislikeGallery = async (galleryId: number) => {
       },
     });
     revalidateTag(`like-status-${galleryId}`);
-  } catch (e) {}
+    revalidateTag("gallery");
+  } catch (e) {
+    console.log("error : ", e);
+  }
 };
