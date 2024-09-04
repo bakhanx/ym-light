@@ -70,17 +70,18 @@ model Gallery {
   photo      String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+  views      Int      @default(0)
   tags       Tag[]
   likes      Like[]
 }
 
 model Like {
-  user       User     @relation(fields: [userId], references: [id])
-  gallery    Gallery  @relation(fields: [galleryId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+  gallery Gallery @relation(fields: [galleryId], references: [id])
 
-  userId     Int
-  galleryId  Int
-  
+  userId    Int
+  galleryId Int
+
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
