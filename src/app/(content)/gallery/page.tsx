@@ -6,6 +6,8 @@ import profile from "@/../public/images/ym-light-001.jpg";
 import GalleryList from "./@modal/_components/gallery-list";
 import { Prisma } from "@prisma/client";
 import { unstable_cache as nextCache } from "next/cache";
+import getSession from "@/libs/session";
+import { useEffect } from "react";
 
 const getGallery = async () => {
   const gallery = await db.gallery.findMany({
@@ -36,10 +38,48 @@ const getInitialGalleryList = async () => {
   return gallery;
 };
 
-const getCachedGalleryList = nextCache(getInitialGalleryList, ["gallery-list"], {
-  tags: ["gallery"],
-  revalidate:60
-});
+const getCachedGalleryList = nextCache(
+  getInitialGalleryList,
+  ["gallery-list"],
+  {
+    tags: ["gallery"],
+    revalidate: 60,
+  },
+);
+
+const addLog = async () => {
+  const session = await getSession();
+  try {
+    const lastLogTime = await db.log.findFirst({
+      where: {
+        userId: session.id,
+      },
+      orderBy: {
+        created_at: "desc",
+      },
+      select: {
+        created_at: true,
+      },
+    });
+
+    if (
+      Number(new Date()) - Number(lastLogTime?.created_at) > 3600000 ||
+      lastLogTime === null
+    ) {
+      await db.log.create({
+        data: {
+          userId: session.id,
+        },
+      });
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const logCount = async () => {
+  return await db.log.count();
+};
 
 export type InitialGalleryListType = Prisma.PromiseReturnType<
   typeof getInitialGalleryList
@@ -48,6 +88,8 @@ export type InitialGalleryListType = Prisma.PromiseReturnType<
 const Gallery = async () => {
   const gallery = await getGallery();
   const initialGalleryList = await getCachedGalleryList();
+  addLog();
+  const visitorCount = await logCount();
 
   return (
     <div className="m-auto w-[100%-40px] max-w-screen-lg border-t-2 px-4 py-8 sm:px-10 md:px-20">
@@ -76,9 +118,7 @@ const Gallery = async () => {
               </div>
               <div>
                 방문자
-                <span className="font-semibold">
-                  {gallery.length * 3 + 200}
-                </span>
+                <span className="font-semibold">{visitorCount + 300}</span>
               </div>
             </div>
           </div>
