@@ -9,6 +9,10 @@ const getMoreGalleryList = async (page: number) => {
     select: {
       id: true,
       photo: true,
+      views: true,
+      _count: {
+        select: { likes: true },
+      },
     },
     skip: NUMBER_OF_GALLERY * page,
     take: NUMBER_OF_GALLERY,
