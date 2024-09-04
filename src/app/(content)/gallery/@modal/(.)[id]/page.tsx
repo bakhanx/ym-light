@@ -14,7 +14,7 @@ import {
 } from "@heroicons/react/24/outline";
 import PreventScroll from "@/components/preventScroll";
 import getSession from "@/libs/session";
-import { unstable_cache as nextCache} from "next/cache";
+import { unstable_cache as nextCache } from "next/cache";
 import LikeButton from "../_components/likeButton";
 
 type Props = {
@@ -53,18 +53,18 @@ const getGallery = async (id: number) => {
 const getCachedGallery = (galleryId: number) => {
   const cachedOperator = nextCache(getGallery, [`gallery-detail`], {
     tags: [`gallery-detail-${galleryId}`],
+    revalidate: 60,
   });
 
   return cachedOperator(galleryId);
 };
 
-const getLikeStatus = async (galleryId: number) => {
-  const session = await getSession();
+const getLikeStatus = async (galleryId: number, userId: number) => {
   const isLiked = Boolean(
     await db.like.findFirst({
       where: {
         galleryId,
-        userId: session.id,
+        userId,
       },
     }),
   );
@@ -79,11 +79,13 @@ const getLikeStatus = async (galleryId: number) => {
   };
 };
 
-const getCachedLikeStatus = (galleryId: number) => {
+const getCachedLikeStatus = async (galleryId: number) => {
+  const session = await getSession();
+  const userId = session.id;
   const cachedOperator = nextCache(getLikeStatus, ["gallery-like-status"], {
     tags: [`like-status-${galleryId}`],
   });
-  return cachedOperator(galleryId);
+  return cachedOperator(galleryId, userId);
 };
 
 const Modal = async ({ params }: Props) => {
@@ -131,16 +133,18 @@ const Modal = async ({ params }: Props) => {
                   {/* button - Like, Comment*/}
                   <div className="flex justify-between">
                     <div className="flex gap-x-2">
-                     <LikeButton isLiked={isLiked} galleryId={id} likeCount={likeCount} />
-                      <ChatBubbleLeftEllipsisIcon className="h-5 w-5" />
-                    </div>
-
-                    <div className="flex gap-x-1">
-                      <EyeIcon className="h-5 w-5" />
-                      <span>조회 {gallery.views}</span>
+                      <LikeButton
+                        isLiked={isLiked}
+                        galleryId={id}
+                        likeCount={likeCount}
+                      />
+                      <div className="flex gap-x-1">
+                        <EyeIcon className="h-5 w-5" />
+                        <span>{gallery.views}</span>
+                      </div>
                     </div>
                   </div>
-                 
+
                   <div className="flex h-full flex-col justify-between ">
                     {/* Contents */}
                     <div className="items flex gap-x-1">
