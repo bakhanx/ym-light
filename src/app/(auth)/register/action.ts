@@ -178,6 +178,12 @@ export const registerAction = async (
       session.id = user.id;
       await session.save();
 
+      await db.log.create({
+        data: {
+          userId: session.id,
+        },
+      });
+
       redirect("/login");
     }
   }
