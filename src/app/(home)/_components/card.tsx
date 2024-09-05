@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import React, { useRef, useState } from "react";
+import neoncard from '@/styles/NeonCard.module.css'
 
 type CardProps = {
   name: string;
@@ -54,8 +55,8 @@ const Card = ({ name, discount, photoURL }: CardProps) => {
       style={cardStyle}
     >
       {/* 카드 황금비율 1:1.58 */}
-      <div className="h-[237px] w-[150px] rounded-xl border-2 bg-gray-800 min-[480px]:h-[316px] min-[480px]:w-[200px] sm:border-4 xl:h-[474px] xl:w-[300px]">
-        <div className="relative h-full rounded-xl border-4 bg-slate-200">
+      <div className={`h-[237px] w-[150px] rounded-xl  border-gray-300 bg-gray-800 min-[480px]:h-[316px] min-[480px]:w-[200px]  xl:h-[474px] xl:w-[300px] ${neoncard.container}`}>
+        <div className={`relative h-full rounded-xl border-orange-50 bg-slate-200 ${neoncard.card}`}>
           <Image
             src={`${photoURL}/fit=scale-down,w=480,sharpen=1`}
             fill
