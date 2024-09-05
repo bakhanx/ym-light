@@ -1,4 +1,4 @@
-import { BoltIcon, PhotoIcon } from "@heroicons/react/16/solid";
+import { BoltIcon, EyeIcon, PhotoIcon } from "@heroicons/react/16/solid";
 import { notFound } from "next/navigation";
 
 import React from "react";
@@ -8,10 +8,7 @@ import Image from "next/image";
 
 import BackButton from "../_components/backButton";
 import DateTime from "@/components/datetime";
-import {
-  ChatBubbleLeftEllipsisIcon,
-  EyeIcon,
-} from "@heroicons/react/24/outline";
+
 import PreventScroll from "@/components/preventScroll";
 import getSession from "@/libs/session";
 import { unstable_cache as nextCache } from "next/cache";
@@ -139,7 +136,7 @@ const Modal = async ({ params }: Props) => {
                         likeCount={likeCount}
                       />
                       <div className="flex gap-x-1">
-                        <EyeIcon className="h-5 w-5" />
+                        <EyeIcon  className="h-5 w-5 text-slate-600" />
                         <span>{gallery.views}</span>
                       </div>
                     </div>
