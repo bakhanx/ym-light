@@ -1,20 +1,18 @@
-import Image from "next/image";
-import bannerImage from "/public/images/main-banner.jpg";
-import banner01 from "/public/images/light/light-01-off.jpg";
-import banner02 from "/public/images/light/light-01-on.jpg";
-
 import styles from "@/styles/Bulb.module.css";
-import neons from "@/styles/NeonSign.module.css";
 import flickers from "@/styles/NeonFlicker.module.css";
 import signs from "@/styles/NeonSquare.module.css";
-import noFlickers from "@/styles/NeonNoFlicker.module.css";
-
 import Card from "./_components/card";
 import Link from "next/link";
 import db from "@/libs/db";
 import { Metadata } from "next";
 import { unstable_cache as nextCache } from "next/cache";
 import { Suspense } from "react";
+
+import dynamic from "next/dynamic";
+
+const NeonText = dynamic(() => import("./_components/neon-text"), {
+  ssr: false
+});
 
 export const metadata: Metadata = {
   title: "Home",
@@ -86,45 +84,21 @@ export default async function Home() {
           <div className={styles.light_container} />
 
           {/* Open Neon */}
-          <div className="absolute right-6 md:top-24 top-56">
+          {/* <div className="absolute right-6 md:top-24 top-56">
             <div className={flickers.container}>
               <span className={flickers.text}>OPEN</span>
             </div>
-          </div>
+          </div> */}
 
           {/* Text */}
           <div className="absolute z-10 flex h-full w-full max-w-screen-2xl flex-col justify-center px-4 pt-24 text-white md:px-20">
-            <div>
-              {/* <span className="gradient-text  text-3xl font-bold sm:text-5xl ">
-                YM Light
-              </span> */}
-              <span className={neons.text}>YM Light</span>
-              {/* 
-              <div className={signs.container}>
-                <span className={signs.text}>
-                  YM Lights are always made by experts with over 30 years of
-                  experience
-                </span>
-              </div> */}
-
-              <div className={noFlickers.container}>
-                <span className={noFlickers.neon}>
-                  YM Lights are always made by experts with over 30 years of
-                  experience
-                </span>
-              </div>
-            </div>
-
-            {/* <div className="w-[80%] text-balance pt-2 text-lg sm:text-2xl">
-              YM Lights are always made by experts with over 30 years of
-              experience.
-            </div> */}
+            <NeonText />
           </div>
         </div>
       </div>
 
       <Suspense fallback="Loading...">
-        <div className="mx-auto max-w-screen-2xl px-4 my-5 sm:px-10 sm:py-10">
+        <div className="mx-auto my-5 max-w-screen-2xl px-4 sm:px-10 sm:py-10">
           <div className="flex flex-col gap-y-10 divide-y-2">
             <div className="my-product-wrap">
               <div className=" text-lg font-semibold sm:text-2xl">
