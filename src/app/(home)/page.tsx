@@ -98,13 +98,13 @@ export default async function Home() {
       </div>
 
       <Suspense fallback="Loading...">
-        <div className="mx-auto my-5 max-w-screen-2xl px-4 sm:px-10 sm:py-10">
+        <div className="mx-auto py-5 max-w-screen-2xl px-4 sm:px-10 sm:py-10 bg-black text-white">
           <div className="flex flex-col gap-y-10 divide-y-2">
             <div className="my-product-wrap">
               <div className=" text-lg font-semibold sm:text-2xl">
                 새로 등록된 상품
               </div>
-              <div className="grid gap-1 pt-4 min-[320px]:grid-cols-2 sm:gap-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 xl:gap-2">
+              <div className="grid gap-1 pt-4 min-[320px]:grid-cols-2 sm:gap-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 xl:gap-2 gap-y-8">
                 {products.map((product) => (
                   <Link key={product.id} href={`/products/${product.id}`}>
                     <Card
@@ -122,7 +122,7 @@ export default async function Home() {
               <div className="pt-6 text-lg font-semibold sm:text-2xl">
                 할인 상품
               </div>
-              <div className="grid gap-2 pt-4 min-[320px]:grid-cols-2 sm:gap-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 xl:gap-2">
+              <div className="grid gap-2 pt-4 min-[320px]:grid-cols-2 sm:gap-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 xl:gap-2 gap-y-8">
                 {discountedProducts.map((product) => (
                   <Link key={product.id} href={`/products/${product.id}`}>
                     <Card
