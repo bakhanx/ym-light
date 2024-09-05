@@ -1,8 +1,8 @@
 
 const Loading = () => {
   return (
-    <div>
-      Loading...
+    <div className="w-full h-screen bg-black">
+      
     </div>
   )
 }
