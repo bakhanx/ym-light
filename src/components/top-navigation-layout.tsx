@@ -16,12 +16,14 @@ type TopNavProps = {
     | undefined;
 };
 
-const bgWhitePath = ["/products", "/gallery", "/manage", "/cart"];
+const whitePaths = ["/products", "/gallery", "/manage", "/cart"];
 
 const TopNavigationLayout = ({ user }: TopNavProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
-
+  const isBgWhitePaths = whitePaths.some((whitePath) =>
+    pathname.startsWith(whitePath),
+  );
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
@@ -33,7 +35,7 @@ const TopNavigationLayout = ({ user }: TopNavProps) => {
   return (
     <div
       className={cls(
-        isScrolled || bgWhitePath.includes(pathname)
+        isScrolled || isBgWhitePaths
           ? "bg-[#010315] bg-opacity-90"
           : "bg-transparent",
         "transion-color fixed z-50 h-36 w-full items-center justify-between text-white duration-500 sm:flex sm:h-14 sm:py-10",
