@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useEffect } from "react";
-import Image01 from "/public/images/contact.jpg";
+import contactImg from "/public/images/contact.jpg";
 import Image from "next/image";
 import FormInput from "@/components/form-input";
 import FormButton from "@/components/form-button";
 import { useFormState } from "react-dom";
 import { handleForm } from "./actions";
+import { BLUR_DATA_CONTACT } from "../../../../public/images/base64/blur_contact";
 
 type formType = {
   username: string;
@@ -35,16 +36,17 @@ const Contact = () => {
   return (
     <>
       {/* Issue: items-center와 screen-h에 따른 pt 충돌 */}
-      <div className="">
-        <div className="Image-Wrap h-screen w-full">
-          <div className="absolute h-screen w-full">
-            <div className="relative h-screen w-full">
-              <Image src={Image01} alt="contact" fill objectFit="cover" />
+      <div className="bg-black">
+        <div className="Image-Wrap sm:h-screen h-full w-full">
+          <div className="absolute h-full w-full">
+            <div className="relative h-full w-full">
+              <Image src={contactImg} alt="contact" fill 
+              placeholder="blur" blurDataURL={BLUR_DATA_CONTACT} objectFit="cover" />
               <div className="h-full w-full bg-black opacity-80" />
             </div>
           </div>
 
-          <div className="Content-Wrap flex h-full max-w-screen-xl mx-auto items-center ">
+          <div className="Content-Wrap flex h-f max-w-screen-xl mx-auto items-center pt-32 pb-12">
             <div className="z-20 flex w-full px-5 sm:px-20 pt-8 text-white">
               <div className="left flex w-[50%] flex-col items-center">
                 <div className="flex flex-col gap-y-10">
