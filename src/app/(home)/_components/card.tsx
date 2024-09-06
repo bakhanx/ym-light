@@ -3,6 +3,8 @@
 import Image from "next/image";
 import React, { useRef, useState } from "react";
 import neoncard from '@/styles/NeonCard.module.css'
+import { BLUR_DATA_URL_GRAY } from "../../../../public/images/base64/blur-gray-skeleton";
+
 
 type CardProps = {
   name: string;
@@ -65,6 +67,8 @@ const Card = ({ name, discount, photoURL }: CardProps) => {
             alt="product2"
             sizes="1"
             className="rounded-md"
+            placeholder="blur"
+            blurDataURL={BLUR_DATA_URL_GRAY}
           />
 
           {/* Light overlay */}
