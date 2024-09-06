@@ -66,8 +66,8 @@ const Modal = async ({ params: { id } }: Props) => {
     return notFound();
   }
   return (
-    <div className="fixed bottom-10 right-10 z-50 h-96 w-96  rounded-lg border-4 border-yellow-500  bg-white">
-      <div className="fixed flex h-12 w-96 -translate-x-1 -translate-y-1 items-center justify-between rounded-t-md border-4 border-yellow-500 border-b-0 bg-gradient-to-tr from-yellow-500 to-yellow-200 px-2">
+    <div className="fixed bottom-10 right-10 z-50 h-96 w-96  rounded-lg border-4 border-blue-950  bg-white">
+      <div className="fixed flex h-12 w-96 -translate-x-1 -translate-y-1 items-center justify-between rounded-t-md border-4 border-blue-950 border-b-0 bg-gradient-to-tr from-blue-950 to-black px-2 text-white">
         <span>{user?.username}님과의 대화</span>
         <span className="text-sm">
           <span className="text-green-500">●</span> Online
