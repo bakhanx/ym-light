@@ -72,9 +72,9 @@ const Cart = () => {
 
   return (
     <>
-      <div className="wrapper">
+      <div className="wrapper pt-24">
         {/* Header */}
-        <div className="divide-y-[1px] shadow-xl">
+        <div className="divide-y-[1px] shadow-xl ">
           {/* title  */}
           <div className="flex items-center divide-x-[1px] py-5 sm:flex-col sm:items-stretch sm:divide-y-[1px] sm:py-0">
             <div className="sm:py-5">
@@ -227,6 +227,9 @@ const Cart = () => {
             </div>
           </div>
         </div>
+
+        {/* Relate product */}
+        <div className="sm:h-96 h-32"></div>
       </div>
     </>
   );
