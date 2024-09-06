@@ -2,6 +2,8 @@ import Image from "next/image";
 import getProducts from "./getProducts";
 import { formatOfPrice } from "@/libs/utils";
 import Link from "next/link";
+import { BLUR_DATA_URL_GRAY } from "../../../../public/images/base64/blur-gray-skeleton";
+
 
 type ProductType = {
   id: number;
@@ -25,7 +27,7 @@ const Product = async () => {
   const products = await getProducts();
 
   return (
-    <div className="mx-auto max-w-screen-2xl px-4 py-32 md:px-20 h-screen">
+    <div className="mx-auto h-screen max-w-screen-2xl px-4 py-32 md:px-20">
       <div>등록된 상품</div>
 
       <div className="grid grid-cols-2 gap-5 sm:grid-cols-4">
@@ -35,7 +37,7 @@ const Product = async () => {
             href={`products/${product.id}`}
             className="border-b-2 sm:border-b-0 sm:border-orange-600 sm:hover:border-2"
           >
-            <div className="flex flex-col p-2 md:text-base text-sm">
+            <div className="flex flex-col p-2 text-sm md:text-base">
               <div className="">
                 <div className="pb-2 text-xl font-bold text-amber-600">
                   {index + 1}
@@ -47,6 +49,8 @@ const Product = async () => {
                     src={`${product.photo}/sharpen=1,fit=scale-down,w=640`}
                     fill
                     objectFit="cover"
+                    placeholder="blur"
+                    blurDataURL={BLUR_DATA_URL_GRAY}
                   />
                 </div>
 
@@ -56,7 +60,7 @@ const Product = async () => {
                   <div className="">
                     {product.discount ? (
                       <>
-                        <div className="text-xs md:text-sm text-gray-500 line-through ">
+                        <div className="text-xs text-gray-500 line-through md:text-sm ">
                           {formatOfPrice(product.price)}원
                         </div>
 
