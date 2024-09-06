@@ -1,9 +1,11 @@
-import Image01 from "/public/images/worker-02.jpg";
-import Image02 from "/public/images/worker-01.jpg";
+import workerImg02 from "/public/images/worker-02.jpg";
+import workerImg01 from "/public/images/worker-01.jpg";
 import Image03 from "/public/images/worker-07.jpg";
 import Image04 from "/public/images/tools.jpg";
 import Image05 from "/public/images/worker-00.jpg";
 import Image from "next/image";
+import { BLUR_DATA_WORKER_01 } from "../../../../public/images/base64/blur-worker-01";
+import { BLUR_DATA_WORKER_02 } from "../../../../public/images/base64/blur-worker-02";
 
 const About = () => {
   return (
@@ -11,7 +13,8 @@ const About = () => {
       <div className="bg-black">
         <div className="Image-wrap relative h-screen w-full">
           <div className="absolute z-10 h-full w-full bg-black opacity-50" />
-          <Image src={Image01} alt="worker01" fill objectFit="cover" />
+          <Image src={workerImg02} alt="worker02" fill 
+          placeholder="blur" objectFit="cover" blurDataURL={BLUR_DATA_WORKER_02} />
 
           <div className="Paragraph-wrap absolute z-20 flex h-full w-full items-center justify-center">
             <p className="animate-pulse pt-20 text-2xl font-bold text-white">
@@ -37,7 +40,7 @@ const About = () => {
       </div>
 
       <div>
-        <Image src={Image02} alt="worker02" />
+        <Image src={workerImg01} alt="worker01" placeholder="blur" blurDataURL={BLUR_DATA_WORKER_01} />
       </div>
     </>
   );
