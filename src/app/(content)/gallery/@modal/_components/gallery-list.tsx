@@ -11,6 +11,7 @@ import { InitialGalleryListType } from "../../page";
 import getMoreGalleryList from "../../action";
 import Loader from "@/components/loader";
 import { EyeIcon } from "@heroicons/react/16/solid";
+import { BLUR_DATA_URL_GRAY } from "../../../../../../public/images/base64/blur-gray-skeleton";
 
 type GalleryListProps = {
   initialGalleryList: InitialGalleryListType;
@@ -66,6 +67,8 @@ const GalleryList = ({ initialGalleryList }: GalleryListProps) => {
                 fill
                 quality={90}
                 className="object-cover"
+                placeholder="blur"
+                blurDataURL={BLUR_DATA_URL_GRAY}
               />
               <div className="group absolute  h-full w-full">
                 <div className="invisible h-full w-full group-hover:visible">
