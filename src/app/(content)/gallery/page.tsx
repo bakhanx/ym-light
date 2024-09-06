@@ -8,6 +8,7 @@ import { Prisma } from "@prisma/client";
 import { unstable_cache as nextCache } from "next/cache";
 import getSession from "@/libs/session";
 import { useEffect } from "react";
+import { BLUR_DATA_PROFILE } from "../../../../public/images/base64/blur-profile";
 
 const getGallery = async () => {
   const gallery = await db.gallery.findMany({
@@ -96,7 +97,10 @@ const Gallery = async () => {
       <div className=" flex flex-col px-4 py-4 sm:px-8 sm:py-20">
         <div className="flex items-center gap-x-10 ">
           <div className="fill relative h-24 w-24 shrink-0 sm:h-32 sm:w-32">
-            <Image alt="profile" src={profile} className="rounded-full" />
+            <Image alt="profile" src={profile} 
+            placeholder="blur"
+            blurDataURL={BLUR_DATA_PROFILE}
+            className="rounded-full" />
           </div>
           <div className="flex flex-col">
             <div className="flex items-center gap-x-2">
