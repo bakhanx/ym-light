@@ -60,9 +60,6 @@ const TopNavigationLayout = ({ user }: TopNavProps) => {
             <Link href="/contact">문의</Link>
           </li>
           <li>
-            <Link href="/faq">FAQ</Link>
-          </li>
-          <li>
             <Link href="/manage">관리자</Link>
           </li>
 
