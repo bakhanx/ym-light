@@ -38,15 +38,38 @@ const TopNavigationLayout = ({ user }: TopNavProps) => {
         isScrolled || isBgWhitePaths
           ? "bg-[#010315] bg-opacity-90"
           : "bg-transparent",
-        "transion-color fixed z-50 h-36 w-full items-center justify-between text-white duration-500 sm:flex sm:h-14 sm:py-10",
+        "transion-color fixed z-50  w-full items-center justify-between text-white duration-500 sm:flex sm:py-6 py-4 ",
       )}
     >
-      <div className="mx-auto flex w-full max-w-screen-2xl flex-col justify-between px-4 sm:flex-row md:px-20">
-        <div className="flex h-16 shrink-0 items-center bg-gradient-to-tr from-yellow-500 to-yellow-200 bg-clip-text text-xl font-bold text-transparent md:text-2xl">
-          <Link href="/">YM Light</Link>
+      <div className="mx-auto flex w-full max-w-screen-2xl flex-col sm:flex-row  px-4  md:px-20">
+        <div className="flex justify-between w-full">
+          <div className="flex  shrink-0 items-center bg-gradient-to-tr from-yellow-500 to-yellow-200 bg-clip-text text-xl font-bold text-transparent md:text-2xl">
+            <Link href="/">YM Light</Link>
+          </div>
+
+          <div className="flex items-center gap-x-1 sm:pr-2 text-gray-300">
+            {user ? (
+              <>
+                <span>{user?.username}님</span>
+                <span>
+                  <form action={logOut}>
+                    <button className="text-sm  underline">
+                      로그아웃
+                    </button>
+                  </form>
+                </span>
+              </>
+            ) : (
+              <span>
+                <Link href="/login" className="text-sm underline">
+                  로그인
+                </Link>
+              </span>
+            )}
+          </div>
         </div>
 
-        <ul className="grid h-16 w-full grid-cols-4 items-center  text-sm sm:flex  sm:w-auto md:divide-x-2 md:text-base [&>li]:flex [&>li]:h-8 [&>li]:items-center  [&>li]:justify-center [&>li]:border [&>li]:px-2 sm:[&>li]:border-none ">
+        <ul className="pt-2 sm:pt-0 flex justify-between  w-full items-center  text-sm sm:flex  sm:w-auto md:divide-x-2 md:text-base [&>li]:flex [&>li]:h-8 [&>li]:items-center sm:shrink-0 [&>li]:justify-center sm:[&>li]:px-2 sm:[&>li]:border-none ">
           <li>
             <Link href="/products">조명</Link>
           </li>
@@ -62,21 +85,6 @@ const TopNavigationLayout = ({ user }: TopNavProps) => {
           <li>
             <Link href="/manage">관리자</Link>
           </li>
-
-          {user ? (
-            <>
-              <li>{user?.username}님</li>
-              <li>
-                <form action={logOut}>
-                  <button>로그아웃</button>
-                </form>
-              </li>
-            </>
-          ) : (
-            <li>
-              <Link href="/login">로그인</Link>
-            </li>
-          )}
 
           <li>
             <Link href="/cart">
