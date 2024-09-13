@@ -94,14 +94,16 @@ const Gallery = async () => {
 
   return (
     <div className="m-auto w-[100%-40px] max-w-screen-lg border-t-2 px-4 py-8 sm:px-10 md:px-20">
-      <div className=" flex flex-col px-4 py-4 sm:px-8 sm:py-20">
+      <div className=" flex flex-col px-4 py-20">
         <div className="flex items-center gap-x-10 ">
+
           <div className="fill relative h-24 w-24 shrink-0 sm:h-32 sm:w-32">
             <Image alt="profile" src={profile} 
             placeholder="blur"
             blurDataURL={BLUR_DATA_PROFILE}
             className="rounded-full" />
           </div>
+
           <div className="flex flex-col">
             <div className="flex items-center gap-x-2">
               <span className="text-lg font-semibold">YM Light</span>
