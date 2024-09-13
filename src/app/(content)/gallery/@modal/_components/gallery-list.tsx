@@ -73,17 +73,17 @@ const GalleryList = ({ initialGalleryList }: GalleryListProps) => {
               <div className="group absolute  h-full w-full">
                 <div className="invisible h-full w-full group-hover:visible">
                   <div
-                    className="flex h-full w-full items-center justify-center gap-x-10 text-white"
+                    className="flex h-full w-full items-center justify-center sm:gap-x-10 gap-x-4 sm:text-base text-sm text-white"
                     style={{
                       backgroundColor: `rgba(0,0,0,0.5)`,
                     }}
                   >
-                    <div className="flex items-center gap-x-2">
-                      <EyeIcon className="h-5 w-5" />
+                    <div className="flex items-center sm:gap-x-2 gap-x-1">
+                      <EyeIcon className="sm:size-5 size-4" />
                       <span>{gallery.views}</span>
                     </div>
-                    <div className="flex items-center gap-x-2">
-                      <HandThumbUpIcon className="h-5 w-5" />
+                    <div className="flex items-center sm:gap-x-2 gap-x-1">
+                      <HandThumbUpIcon className="sm:size-5 size-4" />
                       {/* count of hearts */}
                       <span>{gallery._count.likes}</span>
                     </div>
