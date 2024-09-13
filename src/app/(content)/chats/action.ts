@@ -10,10 +10,11 @@ export const createChatRoom = async () => {
   const session = await getSession();
   if (!session.id) {
     // 게스트 생성
+    const guestNumber = Date.now().toString().slice(9)
     const guest = await db.user.create({
       data: {
-        username: `guest_${Date.now()}`,
-        loginId: `guest_${Date.now()}`,
+        username: `guest_${guestNumber}`,
+        loginId: `guest_${guestNumber}`,
         password: "0000",
       },
       select: { id: true, username: true },
