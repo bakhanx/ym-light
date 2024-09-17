@@ -1,22 +1,17 @@
-
-
 .neon {
     color: #fff;
     text-shadow:
         0 0 5px #fff,
         0 0 10px #fff,
         0 0 20px #fff,
-        0 0 40px rgb(0, 145, 255),
-        0 0 80px rgb(0, 145, 255),
-        0 0 90px rgb(0, 145, 255),
-        0 0 100px rgb(0, 145, 255),
-        0 0 150px rgb(0, 145, 255);
-    font-size: calc(1vw + 1vh + 1.5vmin);
+        0 0 40px rgb(0, 145, 255);
+     
+    font-size: 2rem;
 }
 
 @media screen and (max-width: 768px) {
     .neon {
-        font-size: calc(0.5vw + 1vh + 1.5vmin);
+        font-size: 1.5rem;
     }
 }
 
