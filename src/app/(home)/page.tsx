@@ -1,18 +1,12 @@
-import styles from "@/styles/Bulb.module.css";
-import flickers from "@/styles/NeonFlicker.module.css";
-import signs from "@/styles/NeonSquare.module.css";
-import Card from "./_components/card";
-import Link from "next/link";
+import lightFlicker from "@/styles/LightFlicker.module.css";
+
 import db from "@/libs/db";
 import { Metadata } from "next";
 import { unstable_cache as nextCache } from "next/cache";
 import { Suspense } from "react";
-
-import dynamic from "next/dynamic";
-
-const NeonText = dynamic(() => import("./_components/neon-text"), {
-  ssr: false,
-});
+import NeonText from "./_components/neon-text";
+import Card from "./_components/card";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -81,18 +75,11 @@ export default async function Home() {
       <div className="h-screen ">
         <div className="relative flex h-full w-full justify-center">
           {/* Background */}
-          <div className={styles.light_container} />
-
-          {/* Open Neon */}
-          {/* <div className="absolute right-6 md:top-24 top-56">
-            <div className={flickers.container}>
-              <span className={flickers.text}>OPEN</span>
-            </div>
-          </div> */}
+          <div className={lightFlicker.light_container} />
 
           {/* Text */}
           <div className="absolute z-10 flex h-full w-full max-w-screen-2xl flex-col justify-center px-4 pt-24 text-white md:px-20">
-            {/* <NeonText /> */}
+            <NeonText />
           </div>
         </div>
       </div>
