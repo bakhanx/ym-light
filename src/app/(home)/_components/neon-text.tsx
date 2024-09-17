@@ -4,8 +4,8 @@ import noFlickers from "@/styles/NeonNoFlicker.module.css";
 
 const NeonText = () => {
   return (
-    <div>
-      <span className={neons.text}>YM Light</span>
+    <div className="flex flex-col gap-y-8">
+      <div className={neons.text}>YM Light</div>
 
       <div className={noFlickers.container}>
         <span className={noFlickers.neon}>
