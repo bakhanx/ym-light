@@ -92,7 +92,7 @@ export default async function Home() {
 
           {/* Text */}
           <div className="absolute z-10 flex h-full w-full max-w-screen-2xl flex-col justify-center px-4 pt-24 text-white md:px-20">
-            <NeonText />
+            {/* <NeonText /> */}
           </div>
         </div>
       </div>
