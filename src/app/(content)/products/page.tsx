@@ -4,7 +4,6 @@ import { formatOfPrice } from "@/libs/utils";
 import Link from "next/link";
 import { BLUR_DATA_URL_GRAY } from "../../../../public/images/base64/blur-gray-skeleton";
 
-
 type ProductType = {
   id: number;
   title: string;
@@ -27,15 +26,15 @@ const Product = async () => {
   const products = await getProducts();
 
   return (
-    <div className="mx-auto h-screen max-w-screen-2xl px-4 py-32 md:px-20">
-      <div>등록된 상품</div>
+    <div className="mx-auto h-full max-w-screen-2xl px-4 py-32 md:px-20">
+      <div className=" text-lg font-semibold sm:text-2xl">등록된 상품</div>
 
-      <div className="grid grid-cols-2 gap-5 sm:grid-cols-4">
+      <div className="grid grid-cols-2 gap-5 pt-10 sm:grid-cols-4">
         {products.map((product, index) => (
           <Link
             key={product.id}
             href={`products/${product.id}`}
-            className="border-b-2 sm:border-b-0 sm:border-orange-600 sm:hover:border-2"
+            className="border-b-2 rounded-md shadow-sm sm:hover:border-orange-600 sm:hover:border-2  border-gray-300 border-2"
           >
             <div className="flex flex-col p-2 text-sm md:text-base">
               <div className="">
