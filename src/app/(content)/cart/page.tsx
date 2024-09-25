@@ -178,8 +178,8 @@ const Cart = () => {
             {/* Total */}
             <div className="flex flex-col items-center justify-center rounded-md border-4 border-amber-300 bg-white px-2 py-6 shadow-md sm:flex-row sm:px-4">
               <div className="flex w-full items-center justify-between gap-x-1 px-4 sm:w-[70%] sm:gap-x-4 sm:border-r md:gap-x-8 lg:justify-center lg:gap-x-16">
-                <div className="flex flex-col text-sm md:text-base">
-                  <span className="text-center text-gray-400">상품금액</span>
+                <div className="flex flex-col text-center text-sm md:text-base">
+                  <span className=" text-gray-400">상품금액</span>
                   <span className="font-bold">
                     {formatOfPrice(totalOriginalPrice)}원
                   </span>
@@ -187,7 +187,7 @@ const Cart = () => {
                 <div>
                   <span className="text-2xl lg:text-4xl ">-</span>
                 </div>
-                <div className="flex flex-col text-center text-sm md:text-base">
+                <div className="flex flex-col text-center text-sm md:text-base ">
                   <span className="text-gray-400">할인금액</span>
                   <span className="font-bold text-red-500">
                     {formatOfPrice(totalDiscountPrice)}원
@@ -198,8 +198,8 @@ const Cart = () => {
                   <span className="text-2xl lg:text-4xl ">+</span>
                 </div>
 
-                <div className="flex flex-col text-sm md:text-base">
-                  <span className="text-center text-gray-400">배송비</span>
+                <div className="flex flex-col text-center text-sm md:text-base">
+                  <span className="text-gray-400">배송비</span>
                   <span className="font-bold text-green-500">
                     {formatOfPrice(totalDeliveryPrice)}원
                   </span>
@@ -229,7 +229,7 @@ const Cart = () => {
         </div>
 
         {/* Relate product */}
-        <div className="sm:h-96 h-32"></div>
+        <div className="h-32 sm:h-96"></div>
       </div>
     </>
   );
