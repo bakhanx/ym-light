@@ -179,9 +179,9 @@ const Products = ({
 
         {/* Price */}
         <div className="text-sm sm:text-base lg:flex lg:w-[30%] lg:justify-center lg:divide-x-[1px]">
-          <div className="flex items-center justify-between gap-x-5 px-4 sm:px-20 lg:w-1/2 lg:justify-center lg:p-5  ">
+          <div className="flex items-center justify-between gap-x-5 px-4 sm:px-20 lg:w-1/2 lg:justify-center lg:p-5">
             <span className="text-gray-500 lg:hidden">선택상품금액</span>
-            <span>{formatOfPrice(originTotalPrice)}원</span>
+            <span className="">{formatOfPrice(originTotalPrice)}원</span>
           </div>
           <div className="flex items-center justify-between gap-x-5 px-4 sm:hidden sm:px-20 lg:w-1/2 lg:justify-center lg:p-5">
             <span className="text-gray-500 lg:hidden lg:text-black ">
@@ -202,7 +202,7 @@ const Products = ({
       {/* Total Price */}
       <div className="w-full items-center justify-center lg:flex lg:border-t lg:py-5">
         <div className="hidden items-center gap-x-20 lg:flex">
-          <div className="flex flex-col">
+          <div className="flex flex-col text-center">
             <span>선택상품금액</span>
             <span className="font-bold">
               {formatOfPrice(originTotalPrice)}원
@@ -220,14 +220,14 @@ const Products = ({
 
           <div className="font-bold">+</div>
 
-          <div className="flex flex-col">
+          <div className="flex flex-col text-center">
             <span>총 배송비</span>
             <span className="font-bold">{formatOfPrice(deliveryPrice)}원</span>
           </div>
           <div className="hidden lg:block">=</div>
         </div>
 
-        <div className="flex items-center justify-between gap-x-5 px-4 sm:px-20   lg:flex-col lg:justify-center ">
+        <div className="flex items-center justify-between gap-x-5 px-4 text-center   sm:px-20 lg:flex-col lg:justify-center">
           <span className="font-bold">주문금액</span>
           <span className="font-bold text-amber-500">
             {formatOfPrice(
