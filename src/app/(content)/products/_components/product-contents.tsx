@@ -37,7 +37,7 @@ const ProductContents = ({ product }: ProductWithOptions) => {
     }
 
     addToCart({
-      productInfo: { product, quantity },
+      product,
       optionInfoList: selectedOptionList,
     });
     if (
