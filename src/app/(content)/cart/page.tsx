@@ -6,6 +6,7 @@ import Products from "./_components.tsx/products";
 import { CheckIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import { useCartStore } from "@/store/useCartStore";
+import { order } from "./action";
 
 // Issue
 // 0. 선택하지 않은 옵션이 장바구니에 모두 담김
@@ -14,19 +15,20 @@ const Cart = () => {
   const [isSelectAllClick, setIsSelectAllClick] = useState(true);
 
   const { cart } = useCartStore((state) => state);
+  console.log(cart);
   const DELIVERY_PRICE = 7000;
+  const router = useRouter();
   const checkedCart = cart.filter((cartItem) => cartItem.checked);
-
   const totalOriginalPrice = checkedCart
-    .map(({ productInfo, optionInfoList }) => {
+    .map(({ product, optionInfoList }) => {
       const productTotalPrice =
-        productInfo.product.price * productInfo.quantity;
+        product.price * 1;
       const optionTotalPrice =
         optionInfoList.length > 0
           ? optionInfoList
               .map(
                 (optionInfo) =>
-                  (productInfo.product.price + (optionInfo.option.price || 0)) *
+                  (product.price + (optionInfo.option?.price || 0)) *
                   optionInfo.quantity,
               )
               .reduce((acc, cur) => acc + cur, 0)
@@ -36,11 +38,11 @@ const Cart = () => {
     .reduce((acc, cur) => acc + cur, 0);
 
   const totalDiscountPrice = checkedCart
-    .map(({ productInfo, optionInfoList }) => {
+    .map(({ product, optionInfoList }) => {
       return (
-        ((productInfo.product.price * (productInfo.product.discount || 0)) /
+        ((product.price * (product.discount || 0)) /
           100) *
-        (productInfo.quantity +
+        (1 +
           optionInfoList
             .map((optionInfo) => optionInfo.quantity)
             .reduce((acc, cur) => acc + cur, 0))
@@ -62,7 +64,19 @@ const Cart = () => {
     }));
   };
 
-  const router = useRouter();
+  const handleOrderClick = async (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    event.preventDefault();
+    await order(checkedCart)
+      .then((res) =>
+        res?.ok
+          ? alert("주문이 완료되었습니다.")
+          : alert("Error : 주문이 취소되었습니다. 관리자에게 문의해주세요."),
+      )
+      .finally(() => router.push("/"));
+  };
+
   const handleBackButton = () => {
     router.back();
   };
@@ -221,7 +235,11 @@ const Cart = () => {
               >
                 돌아가기
               </button>
-              <button className="w-1/2 rounded-md bg-amber-500 p-5 px-8 font-bold text-white shadow-md sm:w-auto sm:p-5 sm:px-16 sm:text-xl">
+
+              <button
+                onClick={handleOrderClick}
+                className="w-1/2 rounded-md bg-amber-500 p-5 px-8 font-bold text-white shadow-md sm:w-auto sm:p-5 sm:px-16 sm:text-xl"
+              >
                 주문하기
               </button>
             </div>
