@@ -15,30 +15,71 @@ const Products = ({
   index,
   isSelectAllClick,
 }: ProductsProps) => {
-  const initOptionTotalPrice = optionInfoList
-    .map((optionInfo) => optionInfo.option.price || 0)
+  // 가격 정리
+
+  // origin price
+  // discount Rate
+  // discount price
+  // discounted price
+  // delivery price
+  // origin total price
+  // discount total price
+  // discounted total price
+  // option total price
+  // All total price
+
+  const _originProductPrice = productInfo.product.price;
+  const _discountRate = productInfo.product.discount || 0;
+  const _discountPrice = _originProductPrice * (_discountRate / 100);
+  const _discountedProductPrice = _originProductPrice - _discountPrice;
+  const _deliveryPrice = 7000;
+
+  const _originProductTotalPrice = _originProductPrice * productInfo.quantity;
+  const _discountTotalPrice = _discountPrice * productInfo.quantity;
+  const _discountedProductTotalPrice =
+    _discountedProductPrice * productInfo.quantity;
+
+  const _optionTotalPrice = optionInfoList
+    .map((optionInfo) => optionInfo.option.price || 0 * optionInfo.quantity)
     .reduce((acc, cur) => acc + cur, 0);
 
-  const productPrice = productInfo.product.price * productInfo.quantity;
+  const _TotalPrice = _discountedProductTotalPrice + _deliveryPrice;
+
+  const initOptionTotalPrice = optionInfoList
+    .map((optionInfo) => optionInfo.option?.price || 0)
+    .reduce((acc, cur) => acc + cur, 0);
+
   const optionPrice =
     optionInfoList.length > 0
       ? optionInfoList
           .map(
             (optionInfo) =>
-              (productInfo.product.price + (optionInfo.option.price || 0)) *
+              (productInfo.product.price + (optionInfo.option?.price || 0)) *
               optionInfo.quantity,
           )
           .reduce((acc, cur) => acc + cur, 0)
       : 0;
 
-  const initOriginTotalPrice = productPrice + optionPrice;
+  // const initOriginTotalPrice =
+  //   productPrice * productInfo.quantity + optionPrice;
 
   const initDiscountTotalPrice =
     ((productInfo.product.price * (productInfo.product.discount || 0)) / 100) *
-    (productInfo.quantity +
+    productInfo.quantity *
+    (1 +
       optionInfoList
         .map((optionInfo) => optionInfo.quantity)
         .reduce((acc, cur) => acc + cur, 0));
+
+  // const [optionTotalPrice, setOptionTotalPrice] =
+  //   useState(initOptionTotalPrice);
+
+  // const [originTotalPrice, setOriginTotalPrice] =
+  //   useState(initOriginTotalPrice);
+  // const [deliveryPrice, setDeliveryPrice] = useState(7000);
+  // const [discountTotalPrice, setDiscountTotalPrice] = useState(
+  //   initDiscountTotalPrice,
+  // );
 
   const { cart } = useCartStore((state) => state);
 
@@ -46,7 +87,6 @@ const Products = ({
     useCartStore.setState((state) => ({
       cart: state.cart.map((cartItem) => ({ ...cartItem, checked: true })),
     }));
-    console.log("set all true");
   }, []);
 
   const updatedCheckedStatus = (index: number, checked: boolean) => {
@@ -64,19 +104,7 @@ const Products = ({
     updatedCheckedStatus(index, !cart[index].checked);
   };
 
-  useEffect(() => {
-    console.log("index ", index, cart[index].checked);
-  }, [cart, index]);
-
-  const [optionTotalPrice, setOptionTotalPrice] =
-    useState(initOptionTotalPrice);
-
-  const [originTotalPrice, setOriginTotalPrice] =
-    useState(initOriginTotalPrice);
-  const [deliveryPrice, setDeliveryPrice] = useState(7000);
-  const [discountTotalPrice, setDiscountTotalPrice] = useState(
-    initDiscountTotalPrice,
-  );
+  useEffect(() => {}, [cart, index]);
 
   return (
     <div className="flex flex-col px-2 py-4 sm:px-4">
@@ -112,28 +140,24 @@ const Products = ({
                 <strong>{productInfo.product.title}</strong>
 
                 <div className="flex flex-col gap-x-2 text-sm sm:text-base">
-                  {productInfo.product.discount ? (
+                  {_discountRate > 0 ? (
                     <>
                       <div className="text-xs text-gray-500 line-through md:text-sm ">
-                        {formatOfPrice(productInfo.product.price)}원
+                        {formatOfPrice(_originProductPrice)}원
                       </div>
 
                       <div className="flex gap-x-2 ">
                         <span className="font-bold text-red-600  ">
-                          {productInfo.product.discount}%
+                          {_discountRate}%
                         </span>
                         <span className="font-semibold">
-                          {formatOfPrice(
-                            productInfo.product?.price *
-                              ((100 - productInfo.product.discount) / 100),
-                          )}
-                          원
+                          {formatOfPrice(_discountedProductPrice)}원
                         </span>
                       </div>
                     </>
                   ) : (
                     <div className="font-semibold">
-                      {formatOfPrice(productInfo.product.price)}원
+                      {formatOfPrice(_originProductPrice)}원
                     </div>
                   )}
                 </div>
@@ -147,19 +171,19 @@ const Products = ({
           </div>
 
           {/* Option */}
-          {optionInfoList.length > 0 && (
+          {optionInfoList !== null && (
             <ul className="mt-4 flex flex-col gap-y-4 bg-gray-50  p-2 text-sm text-gray-600 sm:text-base [&>li]:border-b-[1px] [&>li]:py-2">
               {optionInfoList.map((optionInfo) => (
-                <li key={optionInfo.option.index}>
+                <li key={optionInfo.option?.index}>
                   <div className="flex items-start justify-between">
                     <span>
-                      {optionInfo.option.index}. {optionInfo.option.name} |{" "}
+                      {optionInfo.option?.index}. {optionInfo.option?.name} |{" "}
                       {optionInfo.quantity}개
                     </span>
                     <div className="flex gap-x-2">
                       <span>
                         {" "}
-                        ( +{formatOfPrice(optionInfo.option.price!)}원 )
+                        ( +{formatOfPrice(optionInfo.option?.price!)}원 )
                       </span>
                       <button className=" text-gray-400">
                         <XMarkIcon className="h-4 w-4 stroke-2" />
@@ -181,20 +205,23 @@ const Products = ({
         <div className="text-sm sm:text-base lg:flex lg:w-[30%] lg:justify-center lg:divide-x-[1px]">
           <div className="flex items-center justify-between gap-x-5 px-4 sm:px-20 lg:w-1/2 lg:justify-center lg:p-5">
             <span className="text-gray-500 lg:hidden">선택상품금액</span>
-            <span className="">{formatOfPrice(originTotalPrice)}원</span>
+            <span className="lg:hidden">
+              {formatOfPrice(_originProductPrice)}원
+            </span>
+            <span className="hidden lg:block">{formatOfPrice(_discountedProductTotalPrice)}원</span>
           </div>
           <div className="flex items-center justify-between gap-x-5 px-4 sm:hidden sm:px-20 lg:w-1/2 lg:justify-center lg:p-5">
             <span className="text-gray-500 lg:hidden lg:text-black ">
               할인금액
             </span>
             <span className="text-red-500 lg:text-black">
-              {formatOfPrice(discountTotalPrice)}원
+              -{formatOfPrice(_discountPrice)}원
             </span>
           </div>
 
           <div className="flex items-center justify-between gap-x-5 px-4 sm:px-20 lg:w-1/2 lg:justify-center lg:p-5 ">
             <span className="text-gray-500 lg:hidden">총 배송비</span>
-            <span>{formatOfPrice(deliveryPrice)}원</span>
+            <span>{formatOfPrice(_deliveryPrice)}원</span>
           </div>
         </div>
       </div>
@@ -205,7 +232,7 @@ const Products = ({
           <div className="flex flex-col text-center">
             <span>선택상품금액</span>
             <span className="font-bold">
-              {formatOfPrice(originTotalPrice)}원
+              {formatOfPrice(_originProductTotalPrice)}원
             </span>
           </div>
 
@@ -214,7 +241,7 @@ const Products = ({
           <div className="flex flex-col text-center">
             <span className="text-red-500 lg:text-black">할인금액</span>
             <span className="font-bold text-red-500">
-              {formatOfPrice(discountTotalPrice)}원
+              {formatOfPrice(_discountTotalPrice)}원
             </span>
           </div>
 
@@ -222,7 +249,7 @@ const Products = ({
 
           <div className="flex flex-col text-center">
             <span>총 배송비</span>
-            <span className="font-bold">{formatOfPrice(deliveryPrice)}원</span>
+            <span className="font-bold">{formatOfPrice(_deliveryPrice)}원</span>
           </div>
           <div className="hidden lg:block">=</div>
         </div>
@@ -230,10 +257,7 @@ const Products = ({
         <div className="flex items-center justify-between gap-x-5 px-4 text-center   sm:px-20 lg:flex-col lg:justify-center">
           <span className="font-bold">주문금액</span>
           <span className="font-bold text-amber-500">
-            {formatOfPrice(
-              originTotalPrice + deliveryPrice - discountTotalPrice,
-            )}
-            원
+            {formatOfPrice(_TotalPrice)}원
           </span>
         </div>
       </div>
