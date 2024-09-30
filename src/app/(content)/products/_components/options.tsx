@@ -5,8 +5,9 @@ import { Option } from "@prisma/client";
 import React, { useEffect, useState } from "react";
 
 export type selectedItemType = {
-  option:Option
+  option:Option;
   quantity: number;
+  price : number;
   totalPrice: number;
 };
 
@@ -51,6 +52,7 @@ const Options = ({ options, price, discount, parentFunc }: OptionsType) => {
     if (!isExistItemInList) {
       const newClickedItem = {
         option: clickedItem,
+        price : clickedItem.price || 0,
         quantity: 1,
         totalPrice: calcPrice(price as number) + (clickedItem.price || 0),
       };
