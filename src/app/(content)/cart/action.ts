@@ -19,7 +19,7 @@ export const order = async (checkedItem: CartItem[]) => {
           create: checkedItem.flatMap(
             (item) =>
               item.optionInfoList.map((info) => ({
-                productId: item.product.id,
+                productId: item.productInfo.product.id,
                 optionId: info.option?.id,
                 quantity: info.quantity,
               })),
