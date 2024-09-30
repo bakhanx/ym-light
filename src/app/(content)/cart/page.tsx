@@ -20,15 +20,15 @@ const Cart = () => {
   const router = useRouter();
   const checkedCart = cart.filter((cartItem) => cartItem.checked);
   const totalOriginalPrice = checkedCart
-    .map(({ product, optionInfoList }) => {
+    .map(({ productInfo, optionInfoList }) => {
       const productTotalPrice =
-        product.price * 1;
+        productInfo.product.price * productInfo.quantity;
       const optionTotalPrice =
         optionInfoList.length > 0
           ? optionInfoList
               .map(
                 (optionInfo) =>
-                  (product.price + (optionInfo.option?.price || 0)) *
+                  (productInfo.product.price + (optionInfo.option?.price || 0)) *
                   optionInfo.quantity,
               )
               .reduce((acc, cur) => acc + cur, 0)
@@ -38,9 +38,9 @@ const Cart = () => {
     .reduce((acc, cur) => acc + cur, 0);
 
   const totalDiscountPrice = checkedCart
-    .map(({ product, optionInfoList }) => {
+    .map(({ productInfo, optionInfoList }) => {
       return (
-        ((product.price * (product.discount || 0)) /
+        ((productInfo.product.price * (productInfo.product.discount || 0)) /
           100) *
         (1 +
           optionInfoList
