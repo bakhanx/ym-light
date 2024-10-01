@@ -42,7 +42,7 @@ const Cart = () => {
       return (
         ((productInfo.product.price * (productInfo.product.discount || 0)) /
           100) *
-        (1 +
+        (productInfo.quantity +
           optionInfoList
             .map((optionInfo) => optionInfo.quantity)
             .reduce((acc, cur) => acc + cur, 0))
