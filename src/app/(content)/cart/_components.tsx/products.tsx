@@ -28,59 +28,37 @@ const Products = ({
   // option total price
   // All total price
 
+  // 1. 원래가격
   const _originProductPrice = productInfo.product.price;
+
+  const _optionProductPrice =
+    optionInfoList
+      .map(
+        (option) =>
+          (productInfo.product.price + option.price) * option.quantity,
+      )
+      .reduce((acc, cur) => acc + cur) || _originProductPrice;
+
+  const _productQuantity =
+    productInfo.quantity +
+    optionInfoList
+      .map((option) => option.quantity)
+      .reduce((acc, cur) => acc + cur, 0);
+
   const _discountRate = productInfo.product.discount || 0;
   const _discountPrice = _originProductPrice * (_discountRate / 100);
+  // 2. 할인된 가격
   const _discountedProductPrice = _originProductPrice - _discountPrice;
+  
   const _deliveryPrice = 7000;
 
-  const _originProductTotalPrice = _originProductPrice * productInfo.quantity;
-  const _discountTotalPrice = _discountPrice * productInfo.quantity;
-  const _discountedProductTotalPrice =
-    _discountedProductPrice * productInfo.quantity;
+  // 선택상품금액
+  const _selectProductPrice =
+    optionInfoList.length > 0 ? _optionProductPrice : _originProductPrice;
 
-  const _optionTotalPrice = optionInfoList
-    .map((optionInfo) => optionInfo.option.price || 0 * optionInfo.quantity)
-    .reduce((acc, cur) => acc + cur, 0);
-
-  const _TotalPrice = _discountedProductTotalPrice + _deliveryPrice;
-
-  const initOptionTotalPrice = optionInfoList
-    .map((optionInfo) => optionInfo.option?.price || 0)
-    .reduce((acc, cur) => acc + cur, 0);
-
-  const optionPrice =
-    optionInfoList.length > 0
-      ? optionInfoList
-          .map(
-            (optionInfo) =>
-              (productInfo.product.price + (optionInfo.option?.price || 0)) *
-              optionInfo.quantity,
-          )
-          .reduce((acc, cur) => acc + cur, 0)
-      : 0;
-
-  // const initOriginTotalPrice =
-  //   productPrice * productInfo.quantity + optionPrice;
-
-  const initDiscountTotalPrice =
-    ((productInfo.product.price * (productInfo.product.discount || 0)) / 100) *
-    productInfo.quantity *
-    (1 +
-      optionInfoList
-        .map((optionInfo) => optionInfo.quantity)
-        .reduce((acc, cur) => acc + cur, 0));
-
-  // const [optionTotalPrice, setOptionTotalPrice] =
-  //   useState(initOptionTotalPrice);
-
-  // const [originTotalPrice, setOriginTotalPrice] =
-  //   useState(initOriginTotalPrice);
-  // const [deliveryPrice, setDeliveryPrice] = useState(7000);
-  // const [discountTotalPrice, setDiscountTotalPrice] = useState(
-  //   initDiscountTotalPrice,
-  // );
-
+  const _discountTotalPrice = _discountPrice * _productQuantity;
+  const _pureTotalPrice = _selectProductPrice - _discountTotalPrice;
+  const _TotalPrice = _pureTotalPrice + _deliveryPrice;
   const { cart } = useCartStore((state) => state);
 
   useEffect(() => {
@@ -183,7 +161,11 @@ const Products = ({
                     <div className="flex gap-x-2">
                       <span>
                         {" "}
-                        ( +{formatOfPrice(optionInfo.option?.price!)}원 )
+                        ( +
+                        {formatOfPrice(
+                          (optionInfo.option?.price || 0) * optionInfo.quantity,
+                        )}
+                        원 )
                       </span>
                       <button className=" text-gray-400">
                         <XMarkIcon className="h-4 w-4 stroke-2" />
@@ -206,16 +188,19 @@ const Products = ({
           <div className="flex items-center justify-between gap-x-5 px-4 sm:px-20 lg:w-1/2 lg:justify-center lg:p-5">
             <span className="text-gray-500 lg:hidden">선택상품금액</span>
             <span className="lg:hidden">
-              {formatOfPrice(_originProductPrice)}원
+              {formatOfPrice(_selectProductPrice)}원
             </span>
-            <span className="hidden lg:block">{formatOfPrice(_discountedProductTotalPrice)}원</span>
+            {/* 할인된 총 상품금액 (배송비x) */}
+            <span className="hidden lg:block">
+              {formatOfPrice(_pureTotalPrice)}원
+            </span>
           </div>
           <div className="flex items-center justify-between gap-x-5 px-4 sm:hidden sm:px-20 lg:w-1/2 lg:justify-center lg:p-5">
             <span className="text-gray-500 lg:hidden lg:text-black ">
               할인금액
             </span>
             <span className="text-red-500 lg:text-black">
-              -{formatOfPrice(_discountPrice)}원
+              -{formatOfPrice(_discountTotalPrice)}원
             </span>
           </div>
 
@@ -232,7 +217,7 @@ const Products = ({
           <div className="flex flex-col text-center">
             <span>선택상품금액</span>
             <span className="font-bold">
-              {formatOfPrice(_originProductTotalPrice)}원
+              {formatOfPrice(_selectProductPrice)}원
             </span>
           </div>
 
