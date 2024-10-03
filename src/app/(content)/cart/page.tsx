@@ -14,12 +14,11 @@ import { order } from "./action";
 const Cart = () => {
   const [isSelectAllClick, setIsSelectAllClick] = useState(true);
 
-  const { cart } = useCartStore((state) => state);
-  console.log(cart);
+  const { cart, removeFromCart } = useCartStore((state) => state);
   const DELIVERY_PRICE = 7000;
   const router = useRouter();
-  const checkedCart = cart.filter((cartItem) => cartItem.checked);
-  const totalOriginalPrice = checkedCart
+  const checkedCarts = cart.filter((cartItem) => cartItem.checked);
+  const totalOriginalPrice = checkedCarts
     .map(({ productInfo, optionInfoList }) => {
       const productTotalPrice =
         productInfo.product.price * productInfo.quantity;
@@ -28,7 +27,8 @@ const Cart = () => {
           ? optionInfoList
               .map(
                 (optionInfo) =>
-                  (productInfo.product.price + (optionInfo.option?.price || 0)) *
+                  (productInfo.product.price +
+                    (optionInfo.option?.price || 0)) *
                   optionInfo.quantity,
               )
               .reduce((acc, cur) => acc + cur, 0)
@@ -37,7 +37,7 @@ const Cart = () => {
     })
     .reduce((acc, cur) => acc + cur, 0);
 
-  const totalDiscountPrice = checkedCart
+  const totalDiscountPrice = checkedCarts
     .map(({ productInfo, optionInfoList }) => {
       return (
         ((productInfo.product.price * (productInfo.product.discount || 0)) /
@@ -50,7 +50,7 @@ const Cart = () => {
     })
     .reduce((acc, cur) => acc + cur, 0);
 
-  const totalDeliveryPrice = checkedCart.length * DELIVERY_PRICE;
+  const totalDeliveryPrice = checkedCarts.length * DELIVERY_PRICE;
   const totalAllPrice =
     totalOriginalPrice - totalDiscountPrice + totalDeliveryPrice;
 
@@ -64,11 +64,21 @@ const Cart = () => {
     }));
   };
 
+  const handleDeleteClick = () => {
+    if (checkedCarts.length > 0) {
+      checkedCarts.map((item) =>
+        removeFromCart({
+          productId: item.productInfo.product.id,
+        }),
+      );
+    }
+  };
+
   const handleOrderClick = async (
     event: React.MouseEvent<HTMLButtonElement>,
   ) => {
     event.preventDefault();
-    await order(checkedCart)
+    await order(checkedCarts)
       .then((res) =>
         res?.ok
           ? alert("주문이 완료되었습니다.")
@@ -132,7 +142,10 @@ const Cart = () => {
                   </button>
                 </div>
                 <div className="px-2">
-                  <button className="flex items-center rounded-md border-2 p-1 text-gray-600">
+                  <button
+                    onClick={handleDeleteClick}
+                    className="flex items-center rounded-md border-2 p-1 text-gray-600"
+                  >
                     <span>
                       <TrashIcon className="h-4 w-4" />
                     </span>
