@@ -13,6 +13,8 @@ import Image from "next/image";
 import { useCartStore } from "@/store/useCartStore";
 import { Option, Product } from "@prisma/client";
 import { useRouter } from "next/navigation";
+import updateCart from "../[id]/addToCart";
+import Loader from "@/components/loader";
 
 type Options = {
   options: Option[];
@@ -23,23 +25,33 @@ type ProductWithOptions = {
 };
 
 const ProductContents = ({ product }: ProductWithOptions) => {
+  const [isLoading, setIsLoading] = useState(false);
   const { addToCart, removeFromCart } = useCartStore((state) => state);
   const [selectedOptionList, setSelectedOptionList] = useState<
     selectedItemType[]
   >([]);
   const [quantity, setQuantity] = useState(product.options.length > 0 ? 0 : 1);
   const router = useRouter();
-  const handleAddtoCart = () => {
+  const handleAddtoCart = async () => {
     // local State
     if (product.options.length > 0 && selectedOptionList.length === 0) {
       alert("상품옵션을 선택해주세요.");
       return;
     }
-
-    addToCart({
-      productInfo: {product, quantity},
+    setIsLoading(true);
+    // z-store
+    const addToCartPromise = addToCart({
+      productInfo: { product, quantity },
       optionInfoList: selectedOptionList,
     });
+    // prisma
+    const updateCartPromise = updateCart({
+      productInfo: { product, quantity },
+      optionInfoList: selectedOptionList,
+    });
+
+    await Promise.all([addToCartPromise, updateCartPromise]);
+    setIsLoading(false);
     if (
       window.confirm(
         "상품을 장바구니에 담았습니다. 장바구니로 이동하시겠습니까?",
@@ -220,6 +232,13 @@ const ProductContents = ({ product }: ProductWithOptions) => {
           </div>
         </div>
       </div>
+
+      {/* Loading */}
+      {isLoading && (
+        <div className="fixed left-0 top-0 h-full w-full">
+          <Loader />
+        </div>
+      )}
     </div>
   );
 };
