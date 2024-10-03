@@ -76,17 +76,13 @@ const Products = ({
     updatedCheckedStatus(index, !cart[index].checked);
   };
 
-  const updatedDeleteProduct = () => {
-    console.log(index);
-    removeFromCart({
-      productId: cart[index].productInfo.product.id
-    })
-  };
+  const updatedDeleteProduct = () => {};
 
   const handleDeleteClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    updatedDeleteProduct();
-    
+    removeFromCart({
+      productId: productInfo.product.id,
+    });
   };
 
   return (
