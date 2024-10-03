@@ -37,7 +37,7 @@ const Products = ({
         (option) =>
           (productInfo.product.price + option.price) * option.quantity,
       )
-      .reduce((acc, cur) => acc + cur) || _originProductPrice;
+      .reduce((acc, cur) => acc + cur, 0 ) || _originProductPrice * productInfo.quantity;
 
   const _productQuantity =
     productInfo.quantity +
@@ -54,7 +54,7 @@ const Products = ({
 
   // 선택상품금액
   const _selectProductPrice =
-    optionInfoList.length > 0 ? _optionProductPrice : _originProductPrice;
+    optionInfoList.length > 0 ? _optionProductPrice : _originProductPrice * _productQuantity;
 
   const _discountTotalPrice = _discountPrice * _productQuantity;
   const _pureTotalPrice = _selectProductPrice - _discountTotalPrice;
