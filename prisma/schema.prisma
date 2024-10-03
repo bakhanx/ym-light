@@ -30,9 +30,9 @@ model User {
 model Log {
   id         Int      @id @default(autoincrement())
   user       User?    @relation(fields: [userId], references: [id])
-  userId     Int?
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+  userId     Int?
 }
 
 model SMSToken {
@@ -42,13 +42,11 @@ model SMSToken {
   updated_at DateTime @updatedAt
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     Int
-
-  @@index([userId])
 }
 
 model Product {
-  id           Int         @id @default(autoincrement())
-  title        String
+  id           Int        @id @default(autoincrement())
+  title        String     @unique
   price        Float
   discount     Float?
   photo        String
@@ -58,61 +56,59 @@ model Product {
   bulb         String
   manufacturer String
   description  String
-  stock        Int         @default(99)
-  created_at   DateTime    @default(now())
-  updated_at   DateTime    @updatedAt
+  stock        Int        @default(99)
+  created_at   DateTime   @default(now())
+  updated_at   DateTime   @updatedAt
   purchaser    User[]
   options      Option[]
   cart_Items   CartItem[]
-  order_Items  OrderItem[]
-}
-
-model Cart {
-  id         Int        @id @default(autoincrement())
-  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     Int
-  cart_Items CartItem[]
-}
-
-model CartItem {
-  id        Int     @id @default(autoincrement())
-  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-  productId Int
-  option    Option? @relation(fields: [optionId], references: [id], onDelete: Cascade)
-  optionId  Int?
-  cart      Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
-  cartId    Int
-  quantity  Int
-}
-
-model Order {
-  id         Int         @id @default(autoincrement())
-  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     Int
-  orderItems OrderItem[]
-}
-
-model OrderItem {
-  id        Int     @id @default(autoincrement())
-  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-  productId Int
-  option    Option? @relation(fields: [optionId], references: [id], onDelete: Cascade)
-  optionId  Int?
-  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  orderId   Int
-  quantity  Int
 }
 
 model Option {
-  id        Int         @id @default(autoincrement())
-  index     Int
-  name      String
-  price     Float?
-  stock     Int         @default(99)
-  product   Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  id             Int              @id @default(autoincrement())
+  index          Int
+  name           String
+  price          Int?
+  stock          Int              @default(99)
+  product        Product          @relation(fields: [productId], references: [id], onDelete: Cascade)
+  CartItemOption CartItemOption[]
+  productId      Int
+}
+
+model Cart {
+  id        Int        @id @default(autoincrement())
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cartItems CartItem[]
+  userId    Int        @unique
+}
+
+model CartItem {
+  id        Int              @id @default(autoincrement())
+  product   Product          @relation(fields: [productId], references: [id], onDelete: Cascade)
+  cart      Cart             @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  Order     Order?           @relation(fields: [orderId], references: [id])
+  options   CartItemOption[]
   productId Int
-  OrderItem OrderItem[]
-  CartItem  CartItem[]
+  cartId    Int
+  quantity  Int
+  orderId   Int?
+}
+
+model CartItemOption {
+  id         Int      @id @default(autoincrement())
+  option     Option   @relation(fields: [optionId], references: [id], onDelete: Cascade)
+  optionId   Int
+  cartItem   CartItem @relation(fields: [cartItemId], references: [id],onDelete: Cascade)
+  cartItemId Int
+  quantity   Int
+}
+
+model Order {
+  id         Int        @id @default(autoincrement())
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     Int
+  cartItems  CartItem[]
+  created_at DateTime   @default(now())
 }
 
 model Gallery {
@@ -127,14 +123,12 @@ model Gallery {
 }
 
 model Like {
-  user    User    @relation(fields: [userId], references: [id])
-  gallery Gallery @relation(fields: [galleryId], references: [id])
-
-  userId    Int
-  galleryId Int
-
+  user       User     @relation(fields: [userId], references: [id])
+  gallery    Gallery  @relation(fields: [galleryId], references: [id])
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+  userId     Int
+  galleryId  Int
 
   @@id(name: "id", [userId, galleryId])
 }
@@ -149,25 +143,20 @@ model Tag {
 }
 
 model ChatRoom {
-  id String @id @default(cuid())
-
-  users User[]
-
+  id         String    @id @default(cuid())
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
+  users      User[]
   messages   Message[]
 }
 
 model Message {
-  id      Int    @id @default(autoincrement())
-  payload String
-
-  user   User @relation(fields: [userId], references: [id])
-  userId Int
-
-  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id])
-  chatRoomId String
-
+  id         Int      @id @default(autoincrement())
+  payload    String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [id])
+  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id])
+  userId     Int
+  chatRoomId String
 }
