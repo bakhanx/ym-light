@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import DeleteForm from "@/app/(admin)/_components/deleteForm";
 import { deleteProduct } from "./actions";
+import { formatOfPrice } from "@/libs/utils";
 
 const getProducts = async () => {
   const products = await db.product.findMany({
@@ -12,6 +13,8 @@ const getProducts = async () => {
       id: true,
       title: true,
       photo: true,
+      price: true,
+      discount : true,
       created_at: true,
       updated_at: true,
     },
@@ -26,7 +29,7 @@ const Edit = async () => {
   const products = await getProducts();
 
   return (
-    <div className="m-auto flex max-w-screen-2xl flex-col gap-y-5 p-4 text-sm md:text-base lg:px-20">
+    <div className="m-auto flex max-w-screen-2xl flex-col gap-y-5 p-4 text-sm md:text-base lg:px-20 pt-24">
       {/* Header */}
       <div className="hidden w-full gap-x-6 border-b-2 border-black py-4 sm:flex">
         <ul className="flex w-[10%] gap-x-2">
@@ -37,7 +40,9 @@ const Edit = async () => {
         <ul className="flex w-[90%] md:gap-x-8 gap-x-2">
           <li className="w-[10%] text-center">사진</li>
           <ul className="flex w-full">
-            <li className="w-[50%] ">상품명</li>
+            <li className="w-[30%] ">상품명</li>
+            <li className="w-[10%] ">할인율</li>
+            <li className="w-[30%] ">가격</li>
             <li className="w-[25%]">최근 수정일</li>
             <li className="w-[25%]">등록일</li>
           </ul>
@@ -71,8 +76,14 @@ const Edit = async () => {
             </div>
 
             <ul className="flex w-full flex-col sm:flex-row items-center justify-center">
-              <li className=" pb-4 font-bold sm:w-[50%] sm:pb-0 sm:font-normal">
+              <li className=" pb-4 font-bold sm:w-[30%] sm:pb-0 sm:font-normal">
                 {product.title}
+              </li>
+              <li className="sm:w-[10%]">
+              {product.discount && `${product.discount}%`}
+              </li>
+              <li className="sm:w-[30%]">
+                {formatOfPrice(product.price)}원
               </li>
               <li className="text-xs sm:w-[25%] md:text-base">
                 <span className="sm:hidden text-gray-600">(최근 수정일) </span>
