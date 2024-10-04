@@ -38,6 +38,7 @@ type Actions = {
   }: ProductProps & OptionInfoList) => void;
   removeFromCart: ({ productId, optionId }: RemoveFromCart) => void;
   setDataLoaded: () => void;
+  
 };
 const INITIAL_STATE: State = {
   cart: [],
@@ -129,6 +130,9 @@ export const useCartStore = create<State & Actions>()(
       setDataLoaded: () => {
         set(() => ({ isDataLoaded:true }));        
       },
+      setInitData : ()=>{
+
+      }
     }),
     {
       name: "cart",
