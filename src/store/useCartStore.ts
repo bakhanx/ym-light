@@ -25,6 +25,7 @@ export type CartItem = ProductProps &
 
 type State = {
   cart: CartItem[];
+  isDataLoaded: boolean;
 };
 type RemoveFromCart = {
   productId: number;
@@ -36,15 +37,18 @@ type Actions = {
     optionInfoList,
   }: ProductProps & OptionInfoList) => void;
   removeFromCart: ({ productId, optionId }: RemoveFromCart) => void;
+  setDataLoaded: () => void;
 };
 const INITIAL_STATE: State = {
   cart: [],
+  isDataLoaded: false,
 };
 
 export const useCartStore = create<State & Actions>()(
   persist(
     (set, get) => ({
       cart: INITIAL_STATE.cart,
+      isDataLoaded: INITIAL_STATE.isDataLoaded,
 
       addToCart: ({ productInfo, optionInfoList }) => {
         console.log(productInfo);
@@ -99,13 +103,13 @@ export const useCartStore = create<State & Actions>()(
 
       removeFromCart: ({ productId }) => {
         const cart = get().cart;
-       
+
         // 상품 제거
         if (productId) {
           const newCart = cart.filter(
             ({ productInfo }) => productInfo.product.id !== productId,
-          )
-          set((state)=> ({...state, cart: newCart}))
+          );
+          set((state) => ({ ...state, cart: newCart }));
         }
 
         // 옵션 제거
@@ -120,6 +124,10 @@ export const useCartStore = create<State & Actions>()(
         //   cart[productIndex].optionInfoList = newOptionList;
         // }
         // set((state) => ({ cart: state.cart }));
+      },
+
+      setDataLoaded: () => {
+        set(() => ({ isDataLoaded:true }));        
       },
     }),
     {
