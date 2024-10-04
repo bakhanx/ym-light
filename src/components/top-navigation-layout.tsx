@@ -2,6 +2,7 @@
 
 import { logOut } from "@/app/action";
 import { cls } from "@/libs/utils";
+import { useCartStore } from "@/store/useCartStore";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -24,6 +25,7 @@ const TopNavigationLayout = ({ user }: TopNavProps) => {
   const isBgWhitePaths = whitePaths.some((whitePath) =>
     pathname.startsWith(whitePath),
   );
+  const { cart } = useCartStore();
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
@@ -86,14 +88,11 @@ const TopNavigationLayout = ({ user }: TopNavProps) => {
             </li>
           )}
 
-          <li>
-            <Link href="/cart">
-              장바구니
-              {/* icon */}
-              {/* <span className="flex h-6 w-6 items-center justify-center">
-            <ShoppingCartIcon className="h-6 w-6" />
-          </span> */}
-            </Link>
+          <li className="relative">
+            <Link href="/cart">장바구니</Link>
+            <span className="text-bold absolute -right-2 -top-3 flex min-w-5 items-center justify-center rounded-full bg-red-400 px-[7px] pb-[1px] text-sm text-white border-[1px] border-red-400">
+              {cart.length}
+            </span>
           </li>
 
           {/* <li className="text-black">
