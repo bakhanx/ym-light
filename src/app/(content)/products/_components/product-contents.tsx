@@ -26,7 +26,7 @@ type ProductWithOptions = {
 
 const ProductContents = ({ product }: ProductWithOptions) => {
   const [isLoading, setIsLoading] = useState(false);
-  const { addToCart, removeFromCart } = useCartStore((state) => state);
+  const { addToCart } = useCartStore((state) => state);
   const [selectedOptionList, setSelectedOptionList] = useState<
     selectedItemType[]
   >([]);
