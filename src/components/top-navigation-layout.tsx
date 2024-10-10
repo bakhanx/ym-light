@@ -33,7 +33,13 @@ const TopNavigationLayout = ({ user }: TopNavProps) => {
     const getCart = async () => {
       if (!isDataLoaded && user) {
         const cartItems = await getCartItems(user.id);
-        setInitData(cartItems);
+        const cartData = cartItems?.cartItems.map((cartItem) => ({
+          cartItem,
+          checked: true,
+        }));
+        if (cartData) {
+          setInitData(cartData);
+        }
       }
     };
     getCart();
