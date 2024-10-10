@@ -54,7 +54,7 @@ type Actions = {
   // }: ProductProps & OptionInfoList) => void;
   removeFromCart: ({ productId, optionId }: RemoveFromCart) => void;
   setDataLoaded: () => void;
-  setInitData: (cart: Cart[]) => void;
+  setInitData: (cartItem: CartItemWithOptions[]) => void;
 };
 const INITIAL_STATE: State = {
   cart: [],
