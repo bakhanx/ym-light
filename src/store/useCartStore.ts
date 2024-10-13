@@ -125,18 +125,18 @@ export const useCartStore = create<State & Actions>()(
           set((state) => ({ ...state, cart: newCart }));
         }
 
-        // 옵션 제거
-        // if (optionId) {
-        //   const productIndex = cart.findIndex(
-        //     (item) => item.productInfo.product.id === productId,
-        //   );
-        //   const newOptionList = cart[productIndex].optionInfoList.filter(
-        //     (optionInfo) => optionInfo.option?.id !== optionId,
-        //   );
+        옵션 제거
+        if (optionId) {
+          const productIndex = cart.findIndex(
+            (item) => item.productInfo.product.id === productId,
+          );
+          const newOptionList = cart[productIndex].optionInfoList.filter(
+            (optionInfo) => optionInfo.option?.id !== optionId,
+          );
 
-        //   cart[productIndex].optionInfoList = newOptionList;
-        // }
-        // set((state) => ({ cart: state.cart }));
+          cart[productIndex].optionInfoList = newOptionList;
+        }
+        set((state) => ({ cart: state.cart }));
       },
 
       setDataLoaded: () => {
