@@ -125,16 +125,14 @@ export const useCartStore = create<State & Actions>()(
           set((state) => ({ ...state, cart: newCart }));
         }
 
-        옵션 제거
-        if (optionId) {
+        // 옵션 제거
+        if (productId) {
           const productIndex = cart.findIndex(
-            (item) => item.productInfo.product.id === productId,
+            (item) => item.cartItem.productId === productId,
           );
-          const newOptionList = cart[productIndex].optionInfoList.filter(
-            (optionInfo) => optionInfo.option?.id !== optionId,
-          );
+          const newOptionList = cart[productIndex].cartItem.productId !== productId
 
-          cart[productIndex].optionInfoList = newOptionList;
+          // cart[productIndex].cartItem = newOptionList;
         }
         set((state) => ({ cart: state.cart }));
       },
