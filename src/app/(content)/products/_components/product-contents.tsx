@@ -41,8 +41,21 @@ const ProductContents = ({ product }: ProductWithOptions) => {
     setIsLoading(true);
     // z-store
     const addToCartPromise = addToCart({
-      productInfo: { product, quantity },
-      optionInfoList: selectedOptionList,
+      cartItem:{
+        id:1,
+        product:product,
+        productId:product.id,
+        cartId:1,
+        quantity:1,
+        orderId:1,
+        options: selectedOptionList.map(selectedOption=>({
+          optionId:selectedOption.option.id,
+          quantity:selectedOption.quantity,
+          cartItemId:1,
+          id:1,
+        }))
+      }
+
     });
     // prisma
     const updateCartPromise = updateCart({
