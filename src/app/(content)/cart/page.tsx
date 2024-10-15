@@ -19,17 +19,18 @@ const Cart = () => {
   const router = useRouter();
   const checkedCarts = cart.filter((cartItem) => cartItem.checked);
   const totalOriginalPrice = checkedCarts
-    .map(({ productInfo, optionInfoList }) => {
+    .map(({ cartItem }) => {
+      console.log(cartItem);
       const productTotalPrice =
-        productInfo.product.price * productInfo.quantity;
+      cartItem.product.price * cartItem.quantity;
       const optionTotalPrice =
-        optionInfoList.length > 0
-          ? optionInfoList
+        cartItem.options.length > 0
+          ?  cartItem.options
               .map(
-                (optionInfo) =>
-                  (productInfo.product.price +
-                    (optionInfo.option?.price || 0)) *
-                  optionInfo.quantity,
+                (option) =>
+                  (cartItem.product.price +
+                    (option.option.price || 0)) *
+                  option.quantity,
               )
               .reduce((acc, cur) => acc + cur, 0)
           : 0;
@@ -38,13 +39,13 @@ const Cart = () => {
     .reduce((acc, cur) => acc + cur, 0);
 
   const totalDiscountPrice = checkedCarts
-    .map(({ productInfo, optionInfoList }) => {
+    .map(({ cartItem }) => {
       return (
-        ((productInfo.product.price * (productInfo.product.discount || 0)) /
+        ((cartItem.product.price * (cartItem.product.discount || 0)) /
           100) *
-        (productInfo.quantity +
-          optionInfoList
-            .map((optionInfo) => optionInfo.quantity)
+        (cartItem.quantity +
+          cartItem.options
+            .map((option) => option.quantity)
             .reduce((acc, cur) => acc + cur, 0))
       );
     })
@@ -68,7 +69,7 @@ const Cart = () => {
     if (checkedCarts.length > 0) {
       checkedCarts.map((item) =>
         removeFromCart({
-          productId: item.productInfo.product.id,
+          productId: item.cartItem.productId,
         }),
       );
     }
