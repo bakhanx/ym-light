@@ -13,7 +13,7 @@ import Image from "next/image";
 import { useCartStore } from "@/store/useCartStore";
 import { Option, Product } from "@prisma/client";
 import { useRouter } from "next/navigation";
-import updateCart from "../[id]/addToCart";
+import updateCart from "../[id]/updateCart";
 import Loader from "@/components/loader";
 
 type Options = {
@@ -39,35 +39,37 @@ const ProductContents = ({ product }: ProductWithOptions) => {
       return;
     }
     setIsLoading(true);
+
+    const cartItem = {
+      id: 1,
+      product: product,
+      productId: product.id,
+      cartId: 1,
+      quantity,
+      orderId: 1,
+      options: selectedOptionList.map((selectedOption, index) => ({
+        optionId: selectedOption.option.id,
+        quantity: selectedOption.quantity,
+        cartItemId: 1,
+        id: 1,
+        option: {
+          id: selectedOption.option.id,
+          index,
+          name: selectedOption.option.name,
+          price: selectedOption.price,
+          productId: product.id,
+          stock: selectedOption.option.stock,
+        },
+      })),
+    };
+
     // z-store
     const addToCartPromise = addToCart({
-      cartItem: {
-        id: 1,
-        product: product,
-        productId: product.id,
-        cartId: 1,
-        quantity,
-        orderId: 1,
-        options: selectedOptionList.map((selectedOption,index) => ({
-          optionId: selectedOption.option.id,
-          quantity: selectedOption.quantity,
-          cartItemId: 1,
-          id: 1,
-          option: {
-            id: 1,
-            index,
-            name: selectedOption.option.name,
-            price: selectedOption.price,
-            productId: 1,
-            stock: selectedOption.option.stock,
-          },
-        })),
-      },
+      cartItem,
     });
     // prisma
     const updateCartPromise = updateCart({
-      productInfo: { product, quantity },
-      optionInfoList: selectedOptionList,
+      cartItem,
     });
 
     await Promise.all([addToCartPromise, updateCartPromise]);
