@@ -11,7 +11,11 @@ const getCartItems = async (userId: number) => {
       select: {
         cartItems: {
           include: {
-            options: true,
+            options: {
+              include:{
+                option:true
+              }
+            },
             product:true,
           },
         },
