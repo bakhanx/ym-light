@@ -41,21 +41,28 @@ const ProductContents = ({ product }: ProductWithOptions) => {
     setIsLoading(true);
     // z-store
     const addToCartPromise = addToCart({
-      cartItem:{
-        id:1,
-        product:product,
-        productId:product.id,
-        cartId:1,
-        quantity:1,
-        orderId:1,
-        options: selectedOptionList.map(selectedOption=>({
-          optionId:selectedOption.option.id,
-          quantity:selectedOption.quantity,
-          cartItemId:1,
-          id:1,
-        }))
-      }
-
+      cartItem: {
+        id: 1,
+        product: product,
+        productId: product.id,
+        cartId: 1,
+        quantity,
+        orderId: 1,
+        options: selectedOptionList.map((selectedOption,index) => ({
+          optionId: selectedOption.option.id,
+          quantity: selectedOption.quantity,
+          cartItemId: 1,
+          id: 1,
+          option: {
+            id: 1,
+            index,
+            name: selectedOption.option.name,
+            price: selectedOption.price,
+            productId: 1,
+            stock: selectedOption.option.stock,
+          },
+        })),
+      },
     });
     // prisma
     const updateCartPromise = updateCart({
