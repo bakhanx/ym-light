@@ -25,16 +25,19 @@ type ProductProps = {
 };
 
 //for client -> zustand
-export type Cart = {
-  cartItem: CartItem;
+export type Cart = CartItemWithOptions & {
   checked: boolean;
 };
 
+type OptionProps = {
+  option : Option
+}
+
 // for server -> zustand
-type CartItemWithOptions = {
+export type CartItemWithOptions = {
   cartItem: CartItem & {
     product: Product;
-    options: CartItemOption[];
+    options: (CartItemOption & OptionProps)[];
   };
 };
 
@@ -126,15 +129,15 @@ export const useCartStore = create<State & Actions>()(
         }
 
         // 옵션 제거
-        if (productId) {
-          const productIndex = cart.findIndex(
-            (item) => item.cartItem.productId === productId,
-          );
-          const newOptionList = cart[productIndex].cartItem.productId !== productId
+        // if (productId) {
+        //   const productIndex = cart.findIndex(
+        //     (item) => item.cartItem.productId === productId,
+        //   );
+        //   const newOptionList = cart[productIndex].cartItem.productId !== productId
 
-          // cart[productIndex].cartItem = newOptionList;
-        }
-        set((state) => ({ cart: state.cart }));
+        //   // cart[productIndex].cartItem = newOptionList;
+        // }
+        // set((state) => ({ cart: state.cart }));
       },
 
       setDataLoaded: () => {
