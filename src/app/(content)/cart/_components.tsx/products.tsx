@@ -1,40 +1,40 @@
 import { cls, formatOfPrice } from "@/libs/utils";
-import { CartItem, useCartStore } from "@/store/useCartStore";
+import {  CartItemWithOptions, useCartStore } from "@/store/useCartStore";
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
 type ProductsProps = {
-  cartItem: CartItem;
+  cartItem: CartItemWithOptions;
   index: number;
   isSelectAllClick: boolean;
 };
 
 const Products = ({
-  cartItem: { productInfo, optionInfoList },
+  cartItem:{cartItem},
   index,
   isSelectAllClick,
 }: ProductsProps) => {
   // ======================== CONST ==========================
   // 1. 원래가격
-  const _originProductPrice = productInfo.product.price;
+  const _originProductPrice = cartItem.product.price;
 
   const _optionProductPrice =
-    optionInfoList
+    cartItem.options
       .map(
         (option) =>
-          (productInfo.product.price + option.price) * option.quantity,
+          (cartItem.product.price + (option.option.price || 0)) * option.quantity,
       )
       .reduce((acc, cur) => acc + cur, 0) ||
-    _originProductPrice * productInfo.quantity;
+    _originProductPrice * cartItem.quantity;
 
   const _productQuantity =
-    productInfo.quantity +
-    optionInfoList
+    cartItem.quantity +
+    cartItem.options
       .map((option) => option.quantity)
       .reduce((acc, cur) => acc + cur, 0);
 
-  const _discountRate = productInfo.product.discount || 0;
+  const _discountRate = cartItem.product.discount || 0;
   const _discountPrice = _originProductPrice * (_discountRate / 100);
   // 2. 할인된 가격
   const _discountedProductPrice = _originProductPrice - _discountPrice;
@@ -43,7 +43,7 @@ const Products = ({
 
   // 선택상품금액
   const _selectProductPrice =
-    optionInfoList.length > 0
+    cartItem.options.length > 0
       ? _optionProductPrice
       : _originProductPrice * _productQuantity;
 
@@ -81,7 +81,7 @@ const Products = ({
   const handleDeleteClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     removeFromCart({
-      productId: productInfo.product.id,
+      productId: cartItem.product.id,
     });
   };
 
@@ -106,8 +106,8 @@ const Products = ({
             <div className="relative pl-6 sm:pl-0">
               <div className="relative h-20 w-20 bg-slate-500">
                 <Image
-                  alt={`${productInfo.product.title}`}
-                  src={`${productInfo.product.photo}/thumbnail`}
+                  alt={`${cartItem.product.title}`}
+                  src={`${cartItem.product.photo}/thumbnail`}
                   fill
                 />
               </div>
@@ -116,7 +116,7 @@ const Products = ({
             {/* Content */}
             <div className="flex w-full flex-col px-5 sm:px-10">
               <div className="flex flex-col">
-                <strong>{productInfo.product.title}</strong>
+                <strong>{cartItem.product.title}</strong>
 
                 <div className="flex flex-col gap-x-2 text-sm sm:text-base">
                   {_discountRate > 0 ? (
@@ -140,9 +140,9 @@ const Products = ({
                     </div>
                   )}
                 </div>
-                {optionInfoList.length === 0 && (
+                {cartItem.options.length === 0 && (
                   <div className="pt-2 text-sm text-gray-500">
-                    상품개수 : {productInfo.quantity}개
+                    상품개수 : {cartItem.quantity}개
                   </div>
                 )}
               </div>
@@ -150,21 +150,22 @@ const Products = ({
           </div>
 
           {/* Option */}
-          {optionInfoList.length > 0 && (
+          {cartItem.options.length > 0 && (
             <ul className="mt-4 flex flex-col gap-y-4 bg-gray-50  p-2 text-sm text-gray-600 sm:text-base [&>li]:border-b-[1px] [&>li]:py-2">
-              {optionInfoList.map((optionInfo) => (
-                <li key={optionInfo.option?.index}>
+              {cartItem.options.map((option, idx) => (
+                // 옵션 인덱스 필요
+                <li key={option.option.index}>
                   <div className="flex items-start justify-between">
                     <span>
-                      {optionInfo.option?.index}. {optionInfo.option?.name} |{" "}
-                      {optionInfo.quantity}개
+                      {option.option.index}. {option.option.name} |{" "}
+                      {option.quantity}개
                     </span>
                     <div className="flex gap-x-2">
                       <span>
                         {" "}
                         ( +
                         {formatOfPrice(
-                          (optionInfo.option?.price || 0) * optionInfo.quantity,
+                          (option.option.price || 0) * option.quantity,
                         )}
                         원 )
                       </span>
