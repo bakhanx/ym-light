@@ -30,8 +30,8 @@ export type Cart = CartItemWithOptions & {
 };
 
 type OptionProps = {
-  option : Option
-}
+  option: Option;
+};
 
 // for server -> zustand
 export type CartItemWithOptions = {
@@ -51,10 +51,6 @@ type RemoveFromCart = {
 };
 type Actions = {
   addToCart: ({ cartItem }: CartItemWithOptions) => void;
-  // addToCart: ({
-  //   productInfo,
-  //   optionInfoList,
-  // }: ProductProps & OptionInfoList) => void;
   removeFromCart: ({ productId, optionId }: RemoveFromCart) => void;
   setDataLoaded: () => void;
   setInitData: (cartItem: CartItemWithOptions[]) => void;
@@ -87,32 +83,33 @@ export const useCartStore = create<State & Actions>()(
         }
         // 이미 장바구니에 있으면
         else {
-          cart[indexExistedProduct].cartItem.quantity += cartItem.quantity;
+          //  no option
+          if (cartItem.quantity > 0) {
+            cart[indexExistedProduct].cartItem.quantity += cartItem.quantity;
+          }
+
+          // Option
+          else {
+            const currentCartIndex = cart.findIndex(
+              (item) => item.cartItem.productId === cartItem.productId,
+            );
+            if (currentCartIndex !== -1) {
+              cartItem.options.map((optionInfo) => {
+                const indexExistedOption = cart[
+                  currentCartIndex
+                ].cartItem.options.findIndex(
+                  (_optionInfo) => _optionInfo.optionId === optionInfo.optionId,
+                );
+                if (indexExistedOption !== -1) {
+                  cart[currentCartIndex].cartItem.options[indexExistedOption]
+                    .quantity += optionInfo.quantity;
+                } else {
+                  cart[currentCartIndex].cartItem.options.push(optionInfo);
+                }
+              });
+            }
+          }
         }
-
-        // Option
-        // {  const currentCartIndex = cart.findIndex(
-        //     (item) => item.productInfo.product.id === productInfo.product.id,
-        //   );
-
-        //   if (currentCartIndex !== -1) {
-
-        //     cart.push({ productInfo, optionInfoList, checked:true });
-
-        //     optionInfoList.map((optionInfo) => {
-        //       const indexExistedOption = cart[
-        //         currentCartIndex
-        //       ].optionInfoList.findIndex(
-        //         (_optionInfo) => _optionInfo.option?.id === optionInfo.option?.id,
-        //       );
-        //       if (indexExistedOption !== -1) {
-        //         cart[currentCartIndex].optionInfoList[indexExistedOption]
-        //           .quantity++;
-        //       } else {
-        //         cart[currentCartIndex].optionInfoList.push(optionInfo);
-        //       }
-        //     });
-        //   }}
 
         set((state) => ({ cart: state.cart }));
       },
