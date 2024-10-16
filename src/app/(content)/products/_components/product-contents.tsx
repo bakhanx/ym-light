@@ -65,7 +65,7 @@ const ProductContents = ({ product }: ProductWithOptions) => {
 
     // z-store
     const addToCartPromise = addToCart(
-      cartItem,
+      {...cartItem, checked:true},
     );
     // prisma
     const updateCartPromise = updateCart(
