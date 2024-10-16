@@ -25,24 +25,23 @@ type ProductProps = {
 };
 
 //for client -> zustand
-export type Cart = CartItemWithOptions & {
-  checked: boolean;
-};
+// export type Cart = CartItemDetail & {
+//   checked: boolean;
+// };
 
 type OptionProps = {
   option: Option;
 };
 
 // for server -> zustand
-export type CartItemWithOptions = {
-  cartItem: CartItem & {
-    product: Product;
-    options: (CartItemOption & OptionProps)[];
-  };
+export type CartItemDetail = CartItem & {
+  product: Product;
+  options: (CartItemOption & OptionProps)[];
+  checked?: boolean;
 };
 
 type State = {
-  cart: Cart[];
+  cart: CartItemDetail[];
   isDataLoaded: boolean;
 };
 type RemoveFromCart = {
@@ -50,10 +49,10 @@ type RemoveFromCart = {
   optionId?: number;
 };
 type Actions = {
-  addToCart: ({ cartItem }: CartItemWithOptions) => void;
+  addToCart: (cartItem: CartItemDetail) => void;
   removeFromCart: ({ productId, optionId }: RemoveFromCart) => void;
   setDataLoaded: () => void;
-  setInitData: (cartItem: CartItemWithOptions[]) => void;
+  setInitData: (cartItems: CartItemDetail[]) => void;
 };
 const INITIAL_STATE: State = {
   cart: [],
@@ -66,45 +65,42 @@ export const useCartStore = create<State & Actions>()(
       cart: INITIAL_STATE.cart,
       isDataLoaded: INITIAL_STATE.isDataLoaded,
 
-      addToCart: ({ cartItem }) => {
+      addToCart: (cartItem) => {
         const cart = get().cart;
         const indexExistedProduct = cart.findIndex(
-          (item) => item.cartItem.productId === cartItem.productId,
+          (item) => item.productId === cartItem.productId,
         );
 
         console.log(indexExistedProduct);
 
         // 장바구니에 없으면
         if (indexExistedProduct === -1) {
-          cart.push({
-            cartItem,
-            checked: true,
-          });
+          cart.push({ ...cartItem, checked: true });
         }
         // 이미 장바구니에 있으면
         else {
           //  no option
           if (cartItem.quantity > 0) {
-            cart[indexExistedProduct].cartItem.quantity += cartItem.quantity;
+            cart[indexExistedProduct].quantity += cartItem.quantity;
           }
 
           // Option
           else {
             const currentCartIndex = cart.findIndex(
-              (item) => item.cartItem.productId === cartItem.productId,
+              (item) => item.productId === cartItem.productId,
             );
             if (currentCartIndex !== -1) {
               cartItem.options.map((optionInfo) => {
                 const indexExistedOption = cart[
                   currentCartIndex
-                ].cartItem.options.findIndex(
+                ].options.findIndex(
                   (_optionInfo) => _optionInfo.optionId === optionInfo.optionId,
                 );
                 if (indexExistedOption !== -1) {
-                  cart[currentCartIndex].cartItem.options[indexExistedOption]
-                    .quantity += optionInfo.quantity;
+                  cart[currentCartIndex].options[indexExistedOption].quantity +=
+                    optionInfo.quantity;
                 } else {
-                  cart[currentCartIndex].cartItem.options.push(optionInfo);
+                  cart[currentCartIndex].options.push(optionInfo);
                 }
               });
             }
@@ -120,7 +116,7 @@ export const useCartStore = create<State & Actions>()(
         // 상품 제거
         if (productId) {
           const newCart = cart.filter(
-            ({ cartItem }) => cartItem.productId !== productId,
+            (cartItem) => cartItem.productId !== productId,
           );
           set((state) => ({ ...state, cart: newCart }));
         }
@@ -140,7 +136,10 @@ export const useCartStore = create<State & Actions>()(
       setDataLoaded: () => {
         set(() => ({ isDataLoaded: true }));
       },
-      setInitData: (cart) => {},
+      setInitData: (cartItems) => {
+        // set(() => ({ cart : cartData }));
+        console.log(cartItems);
+      },
     }),
     {
       name: "cart",
