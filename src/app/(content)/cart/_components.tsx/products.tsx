@@ -1,20 +1,16 @@
 import { cls, formatOfPrice } from "@/libs/utils";
-import {  CartItemWithOptions, useCartStore } from "@/store/useCartStore";
+import { CartItemDetail, useCartStore } from "@/store/useCartStore";
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
 type ProductsProps = {
-  cartItem: CartItemWithOptions;
+  cartItem: CartItemDetail;
   index: number;
   isSelectAllClick: boolean;
 };
 
-const Products = ({
-  cartItem:{cartItem},
-  index,
-  isSelectAllClick,
-}: ProductsProps) => {
+const Products = ({ cartItem, index, isSelectAllClick }: ProductsProps) => {
   // ======================== CONST ==========================
   // 1. 원래가격
   const _originProductPrice = cartItem.product.price;
@@ -23,7 +19,8 @@ const Products = ({
     cartItem.options
       .map(
         (option) =>
-          (cartItem.product.price + (option.option.price || 0)) * option.quantity,
+          (cartItem.product.price + (option.option.price || 0)) *
+          option.quantity,
       )
       .reduce((acc, cur) => acc + cur, 0) ||
     _originProductPrice * cartItem.quantity;
@@ -34,7 +31,7 @@ const Products = ({
       .map((option) => option.quantity)
       .reduce((acc, cur) => acc + cur, 0);
 
-  const _discountRate = cartItem.product.discount || 0;
+  const _discountRate = cartItem?.product.discount || 0;
   const _discountPrice = _originProductPrice * (_discountRate / 100);
   // 2. 할인된 가격
   const _discountedProductPrice = _originProductPrice - _discountPrice;
@@ -43,7 +40,7 @@ const Products = ({
 
   // 선택상품금액
   const _selectProductPrice =
-    cartItem.options.length > 0
+    cartItem?.options?.length > 0
       ? _optionProductPrice
       : _originProductPrice * _productQuantity;
 
