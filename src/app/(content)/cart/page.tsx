@@ -19,7 +19,7 @@ const Cart = () => {
   const router = useRouter();
   const checkedCarts = cart.filter((cartItem) => cartItem.checked);
   const totalOriginalPrice = checkedCarts
-    .map(({ cartItem }) => {
+    .map((cartItem ) => {
       console.log(cartItem);
       const productTotalPrice =
       cartItem.product.price * cartItem.quantity;
@@ -39,7 +39,7 @@ const Cart = () => {
     .reduce((acc, cur) => acc + cur, 0);
 
   const totalDiscountPrice = checkedCarts
-    .map(({ cartItem }) => {
+    .map(( cartItem ) => {
       return (
         ((cartItem.product.price * (cartItem.product.discount || 0)) /
           100) *
@@ -69,7 +69,7 @@ const Cart = () => {
     if (checkedCarts.length > 0) {
       checkedCarts.map((item) =>
         removeFromCart({
-          productId: item.cartItem.productId,
+          productId: item.productId,
         }),
       );
     }
@@ -191,6 +191,7 @@ const Cart = () => {
                   className="my-4 rounded-md border-b-[1px] border-gray-300 bg-white"
                 >
                   <Products
+                  
                     cartItem={cartItem}
                     isSelectAllClick={isSelectAllClick}
                     index={index}
