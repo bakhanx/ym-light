@@ -95,12 +95,13 @@ model CartItem {
 }
 
 model CartItemOption {
-  id         Int      @id @default(autoincrement())
   option     Option   @relation(fields: [optionId], references: [id], onDelete: Cascade)
   optionId   Int
-  cartItem   CartItem @relation(fields: [cartItemId], references: [id],onDelete: Cascade)
+  cartItem   CartItem @relation(fields: [cartItemId], references: [id], onDelete: Cascade)
   cartItemId Int
   quantity   Int
+
+  @@id(name: "id", [optionId, cartItemId])
 }
 
 model Order {
