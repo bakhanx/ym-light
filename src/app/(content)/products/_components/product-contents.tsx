@@ -64,13 +64,13 @@ const ProductContents = ({ product }: ProductWithOptions) => {
     };
 
     // z-store
-    const addToCartPromise = addToCart({
+    const addToCartPromise = addToCart(
       cartItem,
-    });
+    );
     // prisma
-    const updateCartPromise = updateCart({
+    const updateCartPromise = updateCart(
       cartItem,
-    });
+    );
 
     await Promise.all([addToCartPromise, updateCartPromise]);
     setIsLoading(false);
