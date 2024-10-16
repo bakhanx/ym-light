@@ -52,7 +52,7 @@ type Actions = {
   addToCart: (cartItem: CartItemDetail) => void;
   removeFromCart: ({ productId, optionId }: RemoveFromCart) => void;
   setDataLoaded: () => void;
-  setInitData: (cartItems: CartItemDetail[]) => void;
+  setInitData: ({ cartItems }: { cartItems: CartItemDetail[] }) => void;
 };
 const INITIAL_STATE: State = {
   cart: [],
@@ -136,8 +136,8 @@ export const useCartStore = create<State & Actions>()(
       setDataLoaded: () => {
         set(() => ({ isDataLoaded: true }));
       },
-      setInitData: (cartItems) => {
-        // set(() => ({ cart : cartData }));
+      setInitData: ({ cartItems }) => {
+        set(() => ({ cart: cartItems }));
         console.log(cartItems);
       },
     }),
