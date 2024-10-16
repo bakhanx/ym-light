@@ -7,6 +7,7 @@ import { CheckIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import { useCartStore } from "@/store/useCartStore";
 import { order } from "./action";
+import deleteCartItems from "@/app/deleteCartItems";
 
 // Issue
 // 0. 선택하지 않은 옵션이 장바구니에 모두 담김
@@ -19,17 +20,15 @@ const Cart = () => {
   const router = useRouter();
   const checkedCarts = cart.filter((cartItem) => cartItem.checked);
   const totalOriginalPrice = checkedCarts
-    .map((cartItem ) => {
+    .map((cartItem) => {
       console.log(cartItem);
-      const productTotalPrice =
-      cartItem.product.price * cartItem.quantity;
+      const productTotalPrice = cartItem.product.price * cartItem.quantity;
       const optionTotalPrice =
         cartItem.options.length > 0
-          ?  cartItem.options
+          ? cartItem.options
               .map(
                 (option) =>
-                  (cartItem.product.price +
-                    (option.option.price || 0)) *
+                  (cartItem.product.price + (option.option.price || 0)) *
                   option.quantity,
               )
               .reduce((acc, cur) => acc + cur, 0)
@@ -39,10 +38,9 @@ const Cart = () => {
     .reduce((acc, cur) => acc + cur, 0);
 
   const totalDiscountPrice = checkedCarts
-    .map(( cartItem ) => {
+    .map((cartItem) => {
       return (
-        ((cartItem.product.price * (cartItem.product.discount || 0)) /
-          100) *
+        ((cartItem.product.price * (cartItem.product.discount || 0)) / 100) *
         (cartItem.quantity +
           cartItem.options
             .map((option) => option.quantity)
@@ -67,11 +65,12 @@ const Cart = () => {
 
   const handleDeleteClick = () => {
     if (checkedCarts.length > 0) {
-      checkedCarts.map((item) =>
+      checkedCarts.forEach((item) => {
         removeFromCart({
           productId: item.productId,
         }),
-      );
+          deleteCartItems(item.productId);
+      });
     }
   };
 
@@ -191,7 +190,6 @@ const Cart = () => {
                   className="my-4 rounded-md border-b-[1px] border-gray-300 bg-white"
                 >
                   <Products
-                  
                     cartItem={cartItem}
                     isSelectAllClick={isSelectAllClick}
                     index={index}
