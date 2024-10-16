@@ -2,9 +2,9 @@
 
 import db from "@/libs/db";
 import getSession from "@/libs/session";
-import { CartItemWithOptions } from "@/store/useCartStore";
+import { CartItemDetail } from "@/store/useCartStore";
 
-const updateCart = async ({ cartItem }: CartItemWithOptions) => {
+const updateCart = async ( cartItem : CartItemDetail) => {
   const session = await getSession();
 
   try {
