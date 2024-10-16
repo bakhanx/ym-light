@@ -1,3 +1,4 @@
+import deleteCartItems from "@/app/deleteCartItems";
 import { cls, formatOfPrice } from "@/libs/utils";
 import { CartItemDetail, useCartStore } from "@/store/useCartStore";
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
@@ -78,8 +79,9 @@ const Products = ({ cartItem, index, isSelectAllClick }: ProductsProps) => {
   const handleDeleteClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     removeFromCart({
-      productId: cartItem.product.id,
+      productId: cartItem.productId,
     });
+    deleteCartItems(cartItem.productId);
   };
 
   return (
