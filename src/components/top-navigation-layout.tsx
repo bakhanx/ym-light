@@ -1,7 +1,7 @@
 "use client";
 
 import { logOut } from "@/app/action";
-import getCartItems from "@/app/getCartData";
+import getCartItems from "@/app/getCartItems";
 
 import { cls } from "@/libs/utils";
 import { useCartStore } from "@/store/useCartStore";
@@ -33,16 +33,14 @@ const TopNavigationLayout = ({ user }: TopNavProps) => {
     const getCart = async () => {
       if (!isDataLoaded && user) {
         const cartItems = await getCartItems(user.id);
-        const cartData = cartItems?.cartItems.map((cartItem) => ({
-          cartItem,
-          checked: true,
-        }));
-        if (cartData) {
-          setInitData(cartData);
+        if (cartItems) {
+          setInitData(cartItems);
+          console.log("cart store init")
         }
       }
     };
     getCart();
+    
   }, []);
 
   useEffect(() => {
