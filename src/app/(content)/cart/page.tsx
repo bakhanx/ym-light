@@ -6,7 +6,7 @@ import Products from "./_components.tsx/products";
 import { CheckIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import { useCartStore } from "@/store/useCartStore";
-import { order } from "./action";
+import { orderFromCart } from "./orderFromCart";
 import deleteCartItems from "@/app/deleteCartItems";
 
 // Issue
@@ -78,13 +78,33 @@ const Cart = () => {
     event: React.MouseEvent<HTMLButtonElement>,
   ) => {
     event.preventDefault();
-    await order(checkedCarts)
-      .then((res) =>
-        res?.ok
-          ? alert("주문이 완료되었습니다.")
-          : alert("Error : 주문이 취소되었습니다. 관리자에게 문의해주세요."),
-      )
-      .finally(() => router.push("/"));
+    try {
+      const res = await orderFromCart(checkedCarts);
+      if (res?.ok) {
+        alert("주문이 완료되었습니다.");
+        checkedCarts.forEach((item) => {
+          removeFromCart({ productId: item.productId });
+        });
+      } else {
+        alert("Error : 주문이 취소되었습니다. 관리자에게 문의해주세요.");
+      }
+    } catch (error) {
+      console.log("Error : ", error);
+    } finally {
+      router.push("/");
+    }
+
+    // await orderFromCart(checkedCarts)
+    //   .then((res) => {
+    //     if (res?.ok) {
+    //       alert("주문이 완료되었습니다.");
+    //       // 1. store 삭제
+    //       // 2. db 삭제
+    //     } else {
+    //       alert("Error : 주문이 취소되었습니다. 관리자에게 문의해주세요.");;
+    //     }
+    //   })
+    //   .finally(() => router.push("/"));
   };
 
   const handleBackButton = () => {
