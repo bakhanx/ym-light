@@ -6,15 +6,16 @@ const Order = async () => {
   const orderList = await db.order.findMany({
     include: {
       user: true,
-      orderItems: {
-        include: {
-          product: {
-            include: {
-              options: true,
-            },
+      cartItems:{
+        include:{
+          product:true,
+          options:{
+            include:{
+              option:true,
+            }
           },
-        },
-      },
+        }
+      }
     },
   });
   return (
@@ -34,16 +35,15 @@ const Order = async () => {
           <div>{order.id}</div>
           <div>{order.user.username}</div>
           <div>
-            {order.orderItems.map((item) => (
+            {order.cartItems.map((item) => (
               <div key={item.id} className="flex gap-x-28">
-                <div>{item.product.id}</div>
+                <div>{item.id}</div>
                 <div className="flex flex-col">
                   <div>{item.product.title}</div>
                   <div>
-                    {item.product.options.map((option) => (
-                      <div key={option.id} className="text-gray-500">
-                        {option.name} {}
-                        
+                    {item.options.map((optionInfo) => (
+                      <div key={optionInfo.optionId} className="text-gray-500">
+                        {optionInfo.option.name} {}
                       </div>
                     ))}
                   </div>
