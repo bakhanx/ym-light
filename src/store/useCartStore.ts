@@ -2,38 +2,10 @@ import { CartItem, CartItemOption, Option, Product } from "@prisma/client";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-// type 동일시하기
-// 1. (cart) client -> server
-//                  -> zustand
-
-// 2. (cart) zustand -> server -> zustand -> client
-
-// 3. (order) zustand -> server
-
-type OptionInfoList = {
-  optionInfoList: {
-    option: Option;
-    quantity: number;
-  }[];
-};
-
-type ProductProps = {
-  productInfo: {
-    product: Product;
-    quantity: number;
-  };
-};
-
-//for client -> zustand
-// export type Cart = CartItemDetail & {
-//   checked: boolean;
-// };
-
 type OptionProps = {
   option: Option;
 };
 
-// for server -> zustand
 export type CartItemDetail = CartItem & {
   product: Product;
   options: (CartItemOption & OptionProps)[];
@@ -146,6 +118,7 @@ export const useCartStore = create<State & Actions>()(
       storage: createJSONStorage(() => sessionStorage),
       partialize: (state) => ({
         cart: state.cart,
+        isDataLoaded: state.isDataLoaded,
       }),
       skipHydration: true,
     },
