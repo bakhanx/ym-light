@@ -47,7 +47,7 @@ const ProductDetail = async ({ params }: Props) => {
 
   return (
     <>
-      <ScrollTop/>
+      {/* <ScrollTop/> */}
       {product ? (
         <div className="my-container">
           <div className="my-content m-auto max-w-screen-xl px-4 pb-28 pt-32 sm:px-10 ">
@@ -57,7 +57,7 @@ const ProductDetail = async ({ params }: Props) => {
             {/* 상품 정보 디테일 */}
             <div className="my-product-detail-content mt-14 ">
               <div className="my-product-detail-tap-wrap">
-                <div className="my-product-detail-tab flex justify-between gap-x-4 border-b-2 border-t-2 border-b-orange-300 px-8 py-5 text-sm sm:gap-x-36 sm:px-16 sm:text-base">
+                <div className="my-product-detail-tab flex justify-between gap-x-4 border-b-2 border-t-2 border-b-[#010315] px-8 py-5 text-sm sm:gap-x-36 sm:px-16 sm:text-base">
                   <div>관련 상품</div>
                   <div>상품평</div>
                   <div>상품 문의</div>
