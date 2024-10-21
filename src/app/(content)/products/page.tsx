@@ -34,15 +34,13 @@ const Product = async () => {
           <Link
             key={product.id}
             href={`products/${product.id}`}
-            className="border-b-2 rounded-md shadow-sm sm:hover:border-orange-600 sm:hover:border-2  border-gray-300 border-2"
+            className="rounded-md  "
           >
-            <div className="flex flex-col p-2 text-sm md:text-base">
+            <div className="flex flex-col text-sm md:text-base">
               <div className="">
-                <div className="pb-2 text-xl font-bold text-amber-600">
-                  {index + 1}
-                </div>
 
-                <div className="relative aspect-square w-full overflow-hidden rounded-md">
+
+                <div className="relative aspect-square w-full overflow-hidden rounded-t-md border-[1px] border-white">
                   <Image
                     alt={product.title}
                     src={`${product.photo}/sharpen=1,fit=scale-down,w=640`}
@@ -53,8 +51,8 @@ const Product = async () => {
                   />
                 </div>
 
-                <div className="mt-2">
-                  <p className="mb-1">{product.title}</p>
+                <div className="p-2 h-28 border-2 flex flex-col justify-between">
+                  <p className="h-14">{product.title}</p>
 
                   <div className="">
                     {product.discount ? (
