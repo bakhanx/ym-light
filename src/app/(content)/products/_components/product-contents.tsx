@@ -64,13 +64,9 @@ const ProductContents = ({ product }: ProductWithOptions) => {
     };
 
     // z-store
-    const addToCartPromise = addToCart(
-      {...cartItem, checked:true},
-    );
+    const addToCartPromise = addToCart({ ...cartItem, checked: true });
     // prisma
-    const updateCartPromise = updateCart(
-      cartItem,
-    );
+    const updateCartPromise = updateCart(cartItem);
 
     await Promise.all([addToCartPromise, updateCartPromise]);
     setIsLoading(false);
@@ -168,7 +164,6 @@ const ProductContents = ({ product }: ProductWithOptions) => {
               </div>
 
               <div className="flex flex-col gap-y-2 pt-8 text-sm sm:pt-10 sm:text-base">
-                <ProductInfo label="배송비" data={"무료배송"} />
                 <ProductInfo label="색상" data={product?.color} />
                 <ProductInfo label="재질" data={product?.material} />
                 <ProductInfo label="사이즈" data={product?.size} />
