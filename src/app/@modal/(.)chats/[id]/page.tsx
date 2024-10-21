@@ -1,9 +1,9 @@
-import ChatMessages from "@/components/chat-messages";
 import db from "@/libs/db";
 import getSession from "@/libs/session";
 import { Prisma } from "@prisma/client";
 import { notFound } from "next/navigation";
 import React from "react";
+import ChatModalLayout from "./_components/chatModalLayout";
 
 type Props = {
   params: {
@@ -23,7 +23,6 @@ const getChatRoom = async (id: string) => {
   });
   return chatroom;
 };
-
 const getChatMessages = async (id: string) => {
   const messages = await db.message.findMany({
     where: {
@@ -40,7 +39,6 @@ const getChatMessages = async (id: string) => {
   });
   return messages;
 };
-
 const getUser = async (id: number) => {
   const user = await db.user.findUnique({
     where: {
@@ -53,8 +51,9 @@ const getUser = async (id: number) => {
   });
   return user;
 };
-
-export type initialMessages = Prisma.PromiseReturnType<typeof getChatMessages>;
+export type ChatRoomType = Prisma.PromiseReturnType<typeof getChatRoom>;
+export type ChatMessagesType = Prisma.PromiseReturnType<typeof getChatMessages>;
+export type UserType = Prisma.PromiseReturnType<typeof getUser>;
 
 const Modal = async ({ params: { id } }: Props) => {
   const chatRoom = await getChatRoom(id);
@@ -65,24 +64,14 @@ const Modal = async ({ params: { id } }: Props) => {
   if (!chatRoom) {
     return notFound();
   }
+
   return (
-    <div className="fixed bottom-10 right-10 z-50 h-96 w-96  rounded-lg border-4 border-blue-950  bg-white">
-      <div className="fixed flex h-12 w-96 -translate-x-1 -translate-y-1 items-center justify-between rounded-t-md border-4 border-blue-950 border-b-0 bg-gradient-to-tr from-blue-950 to-black px-2 text-white">
-        <span>{user?.username}님과의 대화</span>
-        <span className="text-sm">
-          <span className="text-green-500">●</span> Online
-        </span>
-      </div>
-      <div>
-        <div>
-          <ChatMessages
-            userId={user?.id!}
-            username={user?.username!}
-            chatRoomId={chatRoom.id}
-            initialMessages={initialMessages}
-          />
-        </div>
-      </div>
+    <div>
+      <ChatModalLayout
+        chatRoom={chatRoom}
+        user={user}
+        initialMessages={initialMessages}
+      />
     </div>
   );
 };
