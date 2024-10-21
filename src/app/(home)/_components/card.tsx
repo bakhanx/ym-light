@@ -78,7 +78,7 @@ const Card = ({ name, discount, photoURL }: CardProps) => {
             <p className="truncate">{name}</p>
           </div>
           {discount && (
-            <div className="absolute right-0 top-0 rounded-bl-md rounded-tr-md bg-red-500 p-2 text-xl font-bold text-white">
+            <div className="absolute left-0 top-0 rounded-br-md rounded-tl-md bg-red-500 p-2 text-sm md:text-base lg:text-xl font-bold text-white">
               {discount}%
             </div>
           )}
