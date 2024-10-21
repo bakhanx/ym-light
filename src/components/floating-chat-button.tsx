@@ -5,13 +5,16 @@ import { ChatBubbleLeftEllipsisIcon } from "@heroicons/react/16/solid";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import Loader from "./loader";
+import { useChatStore } from "@/store/useChatStore";
 
 const FloatingButton = () => {
   const router = useRouter();
   const [isShowModal, setIsShowModal] = useState(false);
+  const setIsChatVisible = useChatStore((state) => state.setIsChatVisible);
 
   const EnterChatRoom = () => {
     setIsShowModal(true);
+    setIsChatVisible(true);
     createChatRoom().then((res) => {
       router.push(`/chats/${res.roomId}`, { scroll: false });
       //깜빡임 방지
