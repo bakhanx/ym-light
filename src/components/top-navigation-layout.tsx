@@ -107,7 +107,7 @@ const TopNavigationLayout = ({ user }: TopNavProps) => {
 
           <li className="relative">
             <Link href="/cart">장바구니</Link>
-            <span className="text-bold absolute -right-2 -top-3 flex min-w-5 items-center justify-center rounded-full border-[1px] border-red-400 bg-red-400 px-[7px] pb-[1px] text-sm text-white">
+            <span className="text-bold absolute -right-2 -top-4 flex min-w-5 items-center justify-center rounded-full border-[1px] border-red-400 bg-red-400 px-[7px] pb-[1px] text-sm text-white">
               {cart.length}
             </span>
           </li>
