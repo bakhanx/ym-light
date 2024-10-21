@@ -5,9 +5,9 @@ import { Option } from "@prisma/client";
 import React, { useEffect, useState } from "react";
 
 export type selectedItemType = {
-  option:Option;
+  option: Option;
   quantity: number;
-  price : number;
+  price: number;
   totalPrice: number;
 };
 
@@ -52,7 +52,7 @@ const Options = ({ options, price, discount, parentFunc }: OptionsType) => {
     if (!isExistItemInList) {
       const newClickedItem = {
         option: clickedItem,
-        price : clickedItem.price || 0,
+        price: clickedItem.price || 0,
         quantity: 1,
         totalPrice: calcPrice(price as number) + (clickedItem.price || 0),
       };
@@ -105,7 +105,8 @@ const Options = ({ options, price, discount, parentFunc }: OptionsType) => {
     if (foundItem) {
       if (buttonType === "add") {
         foundItem.quantity++;
-        foundItem.totalPrice += calcPrice(price) + (foundItem.option.price || 0);
+        foundItem.totalPrice +=
+          calcPrice(price) + (foundItem.option.price || 0);
         setQuantity((prev) => {
           const temp = [...prev];
           temp[index]++;
@@ -114,7 +115,8 @@ const Options = ({ options, price, discount, parentFunc }: OptionsType) => {
       } else if (buttonType === "substract") {
         if (quantity[index] === 1) return;
         foundItem.quantity--;
-        foundItem.totalPrice -= calcPrice(price) + (foundItem.option.price || 0);
+        foundItem.totalPrice -=
+          calcPrice(price) + (foundItem.option.price || 0);
         setQuantity((prev) => {
           const temp = [...prev];
           temp[index]--;
@@ -209,8 +211,8 @@ const Options = ({ options, price, discount, parentFunc }: OptionsType) => {
                 className="p-2 hover:cursor-pointer hover:bg-orange-50"
                 onClick={(e) => handleSelectOption(option.index, e)}
               >
-                {` ${option.id} : ${option.name}`}{" "}
-                {option.price && `(+${option.price})`} {` | `}
+                {` ${option.index+1} : ${option.name}`}{" "}
+                {option.price ? `(+${formatOfPrice(option.price)}원)` : ``} {` | `}
                 {`${option.stock}개 남음`}
               </li>
             ))}
@@ -228,7 +230,9 @@ const Options = ({ options, price, discount, parentFunc }: OptionsType) => {
             >
               <div className="flex justify-between">
                 <span>{item.option.name}</span>
-                <button onClick={(e) => handleDeleteOption(item.option.index, e)}>
+                <button
+                  onClick={(e) => handleDeleteOption(item.option.index, e)}
+                >
                   ❌
                 </button>
               </div>
@@ -237,7 +241,9 @@ const Options = ({ options, price, discount, parentFunc }: OptionsType) => {
                 <div className="count-btn flex text-black">
                   <button
                     className="flex h-6 w-6 items-center justify-center border p-2 hover:bg-orange-50"
-                    onClick={(e) => handleButtonClick(item.option.index, "substract")}
+                    onClick={(e) =>
+                      handleButtonClick(item.option.index, "substract")
+                    }
                   >
                     -
                   </button>
