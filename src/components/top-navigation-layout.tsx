@@ -19,7 +19,7 @@ type TopNavProps = {
     | undefined;
 };
 
-const whitePaths = ["/products", "/gallery", "/manage", "/cart"];
+const whitePaths = ["/products", "/gallery", "/manage", "/cart", "/chats"];
 
 const TopNavigationLayout = ({ user }: TopNavProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
