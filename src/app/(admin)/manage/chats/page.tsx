@@ -1,7 +1,10 @@
 import DateTime from "@/components/datetime";
 import db from "@/libs/db";
+import { useChatStore } from "@/store/useChatStore";
 import Link from "next/link";
 import React from "react";
+import EnterButton from "./chat-enter-button";
+
 
 const Chat = async () => {
   const chatRooms = await db.chatRoom.findMany({
@@ -9,6 +12,9 @@ const Chat = async () => {
       _count: true,
       users: true,
     },
+    orderBy:{
+      updated_at:"desc"
+    }
   });
 
   return (
@@ -16,10 +22,9 @@ const Chat = async () => {
       <p>채팅페이지</p>
       <div className="flex flex-col gap-y-10 pt-10">
         {chatRooms.map((room) => (
-          <div key={room.id} className="flex w-full gap-x-5 border-2 p-2">
-            <Link href={`/chats/${room.id}`} className="bg-gray-300 p-2">
-              입장
-            </Link>
+          <div key={room.id} className="flex w-full gap-x-5 border-2 p-2 items-center">
+            <EnterButton roomId={room.id} />
+
             <div className="w-64">
               {
                 room.users.filter((user) => user.username !== "admin")[0]
