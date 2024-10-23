@@ -80,18 +80,21 @@ const Cart = () => {
     event.preventDefault();
     try {
       const res = await orderFromCart(checkedCarts);
-      if (res?.ok) {
+      if (!res?.ok) {
+        alert("로그인을 해주세요.");
+        router.push("/login");
+      } else if (res?.ok) {
         alert("주문이 완료되었습니다.");
         checkedCarts.forEach((item) => {
           removeFromCart({ productId: item.productId });
         });
+        router.push("/");
       } else {
         alert("Error : 주문이 취소되었습니다. 관리자에게 문의해주세요.");
+        router.push("/contact");
       }
     } catch (error) {
       console.log("Error : ", error);
-    } finally {
-      router.push("/");
     }
 
     // await orderFromCart(checkedCarts)
