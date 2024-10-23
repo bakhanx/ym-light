@@ -6,6 +6,11 @@ import { CartItemDetail } from "@/store/useCartStore";
 
 export const orderFromCart = async (checkedItems: CartItemDetail[]) => {
   const session = await getSession();
+  if(!session){
+    return {
+      ok: false,
+    }
+  }
   const cartItemIds = await Promise.all(
     checkedItems.map(async (item) => {
       const cartItem = await db.cartItem.findFirst({
