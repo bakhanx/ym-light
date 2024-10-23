@@ -56,6 +56,7 @@ const ChatMessages = ({
   };
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (message === "") return;
     console.log(message);
     setMessages((prev) => [
       ...prev,
@@ -95,8 +96,7 @@ const ChatMessages = ({
 
   return (
     <div>
-      <ul className="flex flex-col pt-12  pb-4 px-4 overflow-y-scroll h-80">
-      
+      <ul className="flex h-80 flex-col  overflow-y-scroll px-4 pb-4 pt-12">
         {messages.map((message) => (
           <li
             key={message.id}
@@ -118,9 +118,7 @@ const ChatMessages = ({
         <div className="inline" ref={scrollRef}></div>
       </ul>
 
-      
-
-      <div className="absolute pt-2 w-96 px-1 -translate-x-1 rounded-md">
+      <div className="absolute w-96 -translate-x-1 rounded-md px-1 pt-2">
         <form onSubmit={onSubmit} className="flex shadow-md">
           <input
             onChange={onChange}
@@ -128,8 +126,8 @@ const ChatMessages = ({
             type="text"
             value={message}
           />
-          <button className="w-20 border-4 border-yellow-500 bg-yellow-500 p-2 font-bold text-white flex justify-center items-center ">
-            <PaperAirplaneIcon className="w-6 h-6"/>
+          <button className="flex w-20 items-center justify-center border-4 border-yellow-500 bg-yellow-500 p-2 font-bold text-white ">
+            <PaperAirplaneIcon className="h-6 w-6" />
           </button>
         </form>
       </div>
