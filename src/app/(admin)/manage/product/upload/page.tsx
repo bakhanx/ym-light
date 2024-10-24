@@ -5,7 +5,7 @@ import { PhotoIcon, XMarkIcon } from "@heroicons/react/16/solid";
 import React, { useState } from "react";
 import { uploadProduct } from "../actions/uploadProduct";
 import { useFormState } from "react-dom";
-import { getUploadURL } from "@/app/(admin)/actions/getUploadUrl";
+import { getUploadUrl } from "@/app/(admin)/actions/getUploadUrl";
 import FormButton from "@/components/form-button";
 import { Option } from "@prisma/client";
 
@@ -69,7 +69,7 @@ export const Upload = ({
           return temp;
         });
       }
-      const { result, success } = await getUploadURL();
+      const { result, success } = await getUploadUrl();
       if (success) {
         const { id: URLId, uploadURL } = result;
         setPhotoId(URLId);
