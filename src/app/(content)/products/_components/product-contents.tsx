@@ -1,6 +1,6 @@
 "use client";
 
-import { formatOfPrice } from "@/libs/utils";
+import { formatPrice } from "@/utils/formatPrice";
 import {
   HeartIcon,
   ShoppingBagIcon,
@@ -8,12 +8,12 @@ import {
 } from "@heroicons/react/16/solid";
 import React, { useState } from "react";
 import Options, { selectedItemType } from "./options";
-import ProductInfo from "./productInfo";
+import ProductInfo from "./product-Info";
 import Image from "next/image";
 import { useCartStore } from "@/store/useCartStore";
 import { Option, Product } from "@prisma/client";
 import { useRouter } from "next/navigation";
-import updateCart from "../[id]/updateCart";
+import updateCart from "../actions/updateCart";
 import Loader from "@/components/loader";
 
 type Options = {
@@ -23,8 +23,11 @@ type Options = {
 type ProductWithOptions = {
   product: Product & Options;
 };
+type ProductContentsProps = ProductWithOptions & {
+  userId: number;
+};
 
-const ProductContents = ({ product }: ProductWithOptions) => {
+const ProductContents = ({ product, userId }: ProductContentsProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const { addToCart } = useCartStore((state) => state);
   const [selectedOptionList, setSelectedOptionList] = useState<
@@ -85,7 +88,7 @@ const ProductContents = ({ product }: ProductWithOptions) => {
   };
 
   // Quantity Button
-  const handleButtonClick = (
+  const handleQuantityClick = (
     event: React.MouseEvent<HTMLButtonElement>,
     buttonType: "add" | "substract",
   ) => {
@@ -106,6 +109,19 @@ const ProductContents = ({ product }: ProductWithOptions) => {
       setQuantity(1);
     } else {
       setQuantity(+event.target.value);
+    }
+  };
+
+  const handleOrderClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    if (!userId) {
+      if (
+        confirm("로그인이 필요한 서비스입니다. 로그인 페이지로 이동합니다.")
+      ) {
+        router.push("/login");
+      }
+    } else {
+      
     }
   };
 
@@ -148,17 +164,17 @@ const ProductContents = ({ product }: ProductWithOptions) => {
                     </span>
 
                     <span className="text-sm text-yellow-500 line-through opacity-60 sm:text-base ">
-                      {formatOfPrice(product?.price)}원
+                      {formatPrice(product?.price)}원
                     </span>
                   </div>
                 )}
 
                 <span className="text-lg sm:text-2xl">
                   {product?.discount
-                    ? formatOfPrice(
+                    ? formatPrice(
                         product?.price * ((100 - product.discount) / 100),
                       )
-                    : formatOfPrice(product?.price)}
+                    : formatPrice(product?.price)}
                   원
                 </span>
               </div>
@@ -188,7 +204,7 @@ const ProductContents = ({ product }: ProductWithOptions) => {
                 <div className="count-btn flex text-black">
                   <button
                     className="flex h-6 w-6 items-center justify-center border p-2 hover:bg-orange-50"
-                    onClick={(e) => handleButtonClick(e, "substract")}
+                    onClick={(e) => handleQuantityClick(e, "substract")}
                   >
                     -
                   </button>
@@ -202,7 +218,7 @@ const ProductContents = ({ product }: ProductWithOptions) => {
                   />
                   <button
                     className="flex h-6 w-6 items-center justify-center border p-2 hover:bg-orange-50"
-                    onClick={(e) => handleButtonClick(e, "add")}
+                    onClick={(e) => handleQuantityClick(e, "add")}
                   >
                     +
                   </button>
@@ -213,12 +229,12 @@ const ProductContents = ({ product }: ProductWithOptions) => {
                   <span className="w-36 text-right text-xl font-bold">
                     <span className="text-lg sm:text-2xl">
                       {product?.discount
-                        ? formatOfPrice(
+                        ? formatPrice(
                             product?.price *
                               ((100 - product.discount) / 100) *
                               quantity,
                           )
-                        : formatOfPrice(product?.price * quantity)}
+                        : formatPrice(product?.price * quantity)}
                       원
                     </span>
                   </span>
@@ -229,9 +245,12 @@ const ProductContents = ({ product }: ProductWithOptions) => {
 
           {/* 구매 장바구니 찜 버튼 */}
           <div className="my-btn-wrap flex flex-col gap-y-5 pt-5 text-sm font-bold text-white sm:text-base">
-            <button className="flex w-full items-center justify-center gap-x-1 rounded-md bg-amber-500 p-4 hover:bg-amber-600 sm:p-5">
-              <TruckIcon className="h-5 w-5 sm:h-7 sm:w-7 " />
-              구매하기
+            <button
+              onClick={handleOrderClick}
+              className="flex w-full items-center justify-center gap-x-1 rounded-md bg-amber-500 p-4 hover:bg-amber-600 sm:p-5"
+            >
+              <TruckIcon className="h-5 w-5 sm:h-7 sm:w-7" />
+              바로주문하기
             </button>
             <div className="flex gap-x-4">
               <button
