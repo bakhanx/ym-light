@@ -1,5 +1,5 @@
-import db from "@/libs/db";
-import { formatOfPrice } from "@/libs/utils";
+import db from "@/utils/db";
+import { formatPrice } from "@/utils/formatPrice";
 import React from "react";
 
 const Order = async () => {
@@ -59,7 +59,7 @@ const Order = async () => {
                     </div>
                   </div>
                   <div className="w-48">
-                    {formatOfPrice(item.product.price)}원
+                    {formatPrice(item.product.price)}원
                   </div>
                   {/* <div>{item.product.photo}</div> */}
                   <div className="w-20  text-center">

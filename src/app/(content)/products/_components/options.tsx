@@ -1,6 +1,7 @@
 "use client";
 
-import { cls, formatOfPrice } from "@/libs/utils";
+import { cls } from "@/utils/cls";
+import { formatPrice } from "@/utils/formatPrice";
 import { Option } from "@prisma/client";
 import React, { useEffect, useState } from "react";
 
@@ -212,7 +213,7 @@ const Options = ({ options, price, discount, parentFunc }: OptionsType) => {
                 onClick={(e) => handleSelectOption(option.index, e)}
               >
                 {` ${option.index+1} : ${option.name}`}{" "}
-                {option.price ? `(+${formatOfPrice(option.price)}원)` : ``} {` | `}
+                {option.price ? `(+${formatPrice(option.price)}원)` : ``} {` | `}
                 {`${option.stock}개 남음`}
               </li>
             ))}
@@ -266,7 +267,7 @@ const Options = ({ options, price, discount, parentFunc }: OptionsType) => {
                 </div>
 
                 <div className="item-price">
-                  <span>{formatOfPrice(item.totalPrice)}원</span>
+                  <span>{formatPrice(item.totalPrice)}원</span>
                 </div>
               </div>
             </div>
@@ -279,14 +280,14 @@ const Options = ({ options, price, discount, parentFunc }: OptionsType) => {
                 추가 할인
               </span>
               <span className="w-36 text-right font-bold text-red-500">
-                {formatOfPrice(totalOriginalPrice - totalItemListPrice)}원
+                {formatPrice(totalOriginalPrice - totalItemListPrice)}원
               </span>
             </div>
           )}
           <div className="flex items-end justify-end gap-x-10 ">
             <span className="font-semibold text-slate-700">총 금액</span>
             <span className="w-36 text-right text-xl font-bold">
-              {formatOfPrice(totalItemListPrice)}원
+              {formatPrice(totalItemListPrice)}원
             </span>
           </div>
         </div>

@@ -3,12 +3,11 @@
 import Input from "@/app/(admin)/_components/Input";
 import { PhotoIcon, XMarkIcon } from "@heroicons/react/16/solid";
 import React, { useState } from "react";
-import { uploadProduct } from "./actions";
+import { uploadProduct } from "../actions/uploadProduct";
 import { useFormState } from "react-dom";
-import { getUploadURL } from "@/app/(admin)/_components/getUploadURL";
+import { getUploadURL } from "@/app/(admin)/actions/getUploadUrl";
 import FormButton from "@/components/form-button";
 import { Option } from "@prisma/client";
-import { formatOfPrice } from "@/libs/utils";
 
 type ProductType = {
   id: number;
@@ -42,7 +41,7 @@ export const Upload = ({
   const [uploadURL, setUploadURL] = useState("");
   const [photoId, setPhotoId] = useState("");
   const [optionCnt, setOptionCnt] = useState(product?.options.length || 0);
-  
+
   const handleChangeImage = async (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Noto_Sans_KR } from "next/font/google";
 import "../styles/globals.css";
-import TopNav from "@/components/top-navigation";
+import TopNav from "@/components/top-navigation-conatiner";
 import Footer from "@/components/footer";
 import ChatFloatingButtonContainer from "@/components/chat-floating-button-container";
 

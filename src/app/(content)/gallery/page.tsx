@@ -1,4 +1,4 @@
-import db from "@/libs/db";
+import db from "@/utils/db";
 import { BoltIcon } from "@heroicons/react/16/solid";
 
 import Image from "next/image";
@@ -6,7 +6,7 @@ import profile from "@/../public/images/ym-light-001.jpg";
 import GalleryList from "./@modal/_components/gallery-list";
 import { Prisma } from "@prisma/client";
 import { unstable_cache as nextCache } from "next/cache";
-import getSession from "@/libs/session";
+import getSession from "@/utils/session";
 import { useEffect } from "react";
 import { BLUR_DATA_PROFILE } from "../../../../public/images/base64/blur-profile";
 

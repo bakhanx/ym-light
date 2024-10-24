@@ -1,6 +1,6 @@
 import Image from "next/image";
 import getProducts from "./getProducts";
-import { formatOfPrice } from "@/libs/utils";
+import { formatPrice } from "@/libs/utils";
 import Link from "next/link";
 import { BLUR_DATA_URL_GRAY } from "../../../../public/images/base64/blur-gray-skeleton";
 
@@ -58,7 +58,7 @@ const Product = async () => {
                     {product.discount ? (
                       <>
                         <div className="text-xs text-gray-500 line-through md:text-sm ">
-                          {formatOfPrice(product.price)}원
+                          {formatPrice(product.price)}원
                         </div>
 
                         <div className="flex gap-x-2 ">
@@ -66,7 +66,7 @@ const Product = async () => {
                             {product.discount}%
                           </span>
                           <span className="font-semibold">
-                            {formatOfPrice(
+                            {formatPrice(
                               product?.price * ((100 - product.discount) / 100),
                             )}
                             원
@@ -75,7 +75,7 @@ const Product = async () => {
                       </>
                     ) : (
                       <div className="font-semibold">
-                        {formatOfPrice(product.price)}원
+                        {formatPrice(product.price)}원
                       </div>
                     )}
                   </div>

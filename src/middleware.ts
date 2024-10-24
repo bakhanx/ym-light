@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import React from "react";
-import getSession from "./libs/session";
+import getSession from "./utils/session";
 
 const publicPaths = new Set(["/login", "/register"]);
 const privatePaths = new Set(["/profile", "/manage"]);

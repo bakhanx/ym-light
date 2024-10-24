@@ -5,7 +5,7 @@ import FormInput from "@/components/form-input";
 import React, { useEffect, useState } from "react";
 import { useFormState } from "react-dom";
 import { registerAction } from "./action";
-import { PASSWORD_MIN_LENGTH, WORDS_MAX_LENGTH } from "@/libs/constants";
+import { PASSWORD_MIN_LENGTH, WORDS_MAX_LENGTH } from "@/utils/constants/loginConstants";
 // import { } from '@/libs/db'
 
 const Register = () => {

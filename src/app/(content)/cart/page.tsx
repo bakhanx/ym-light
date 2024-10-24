@@ -1,13 +1,14 @@
 "use client";
 
-import { cls, formatOfPrice } from "@/libs/utils";
 import { useEffect, useState } from "react";
 import Products from "./_components.tsx/products";
 import { CheckIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import { useCartStore } from "@/store/useCartStore";
-import { orderFromCart } from "./orderFromCart";
-import deleteCartItems from "@/app/deleteCartItems";
+import { orderCartItems } from "./actions/orderFromCart";
+import deleteCartItems from "@/app/(content)/cart/actions/deleteCartItems";
+import { cls } from "@/utils/cls";
+import { formatPrice } from "@/utils/formatPrice";
 
 // Issue
 // 0. 선택하지 않은 옵션이 장바구니에 모두 담김
@@ -79,7 +80,7 @@ const Cart = () => {
   ) => {
     event.preventDefault();
     try {
-      const res = await orderFromCart(checkedCarts);
+      const res = await orderCartItems(checkedCarts);
       if (!res?.ok) {
         alert("로그인을 해주세요.");
         router.push("/login");
@@ -231,7 +232,7 @@ const Cart = () => {
                 <div className="flex flex-col text-center text-sm md:text-base">
                   <span className=" text-gray-400">상품금액</span>
                   <span className="font-bold">
-                    {formatOfPrice(totalOriginalPrice)}원
+                    {formatPrice(totalOriginalPrice)}원
                   </span>
                 </div>
                 <div>
@@ -240,7 +241,7 @@ const Cart = () => {
                 <div className="flex flex-col text-center text-sm md:text-base ">
                   <span className="text-gray-400">할인금액</span>
                   <span className="font-bold text-red-500">
-                    {formatOfPrice(totalDiscountPrice)}원
+                    {formatPrice(totalDiscountPrice)}원
                   </span>
                 </div>
 
@@ -251,7 +252,7 @@ const Cart = () => {
                 <div className="flex flex-col text-center text-sm md:text-base">
                   <span className="text-gray-400">배송비</span>
                   <span className="font-bold text-green-500">
-                    {formatOfPrice(totalDeliveryPrice)}원
+                    {formatPrice(totalDeliveryPrice)}원
                   </span>
                 </div>
               </div>
@@ -259,7 +260,7 @@ const Cart = () => {
               <div className="mt-4 flex w-full flex-col items-end justify-end pr-4 sm:mt-0 sm:w-[30%] sm:pt-0 lg:items-center lg:pr-0">
                 <span className="font-bold text-gray-600">총 금액</span>
                 <span className="text-xl font-bold  text-blue-500 md:text-2xl">
-                  {formatOfPrice(totalAllPrice)}원
+                  {formatPrice(totalAllPrice)}원
                 </span>
               </div>
             </div>

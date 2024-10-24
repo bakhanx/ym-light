@@ -1,8 +1,9 @@
 import NotFound from "@/app/not-found";
-import db from "@/libs/db";
+import db from "@/utils/db";
 import { unstable_cache as nextCache } from "next/cache";
 import ProductContents from "../_components/product-contents";
 import ScrollTop from "@/components/scrollTop";
+import getSession from "@/utils/session";
 
 type Props = {
   params: {
@@ -36,6 +37,8 @@ const getProduct = async (id: number) => {
   return product;
 };
 
+
+
 const getCahcedProduct = nextCache(getProduct, ["product"], {
   tags: ["light", "product"],
 });
@@ -44,7 +47,7 @@ export const dynamic = 'force-dynamic';
 
 const ProductDetail = async ({ params }: Props) => {
   const product = await getCahcedProduct(params.id);
-
+  const session = await getSession();
   return (
     <>
       {/* <ScrollTop/> */}
@@ -52,7 +55,7 @@ const ProductDetail = async ({ params }: Props) => {
         <div className="my-container">
           <div className="my-content m-auto max-w-screen-xl px-4 pb-28 pt-32 sm:px-10 ">
             {/* 상품 내용 */}
-            <ProductContents product={product} />
+            <ProductContents product={product} userId={session.id} />
 
             {/* 상품 정보 디테일 */}
             <div className="my-product-detail-content mt-14 ">

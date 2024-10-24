@@ -1,10 +1,10 @@
-import db from "@/libs/db";
+import db from "@/utils/db";
 import React from "react";
-import DateTime from "@/components/datetime";
 import Link from "next/link";
 import Image from "next/image";
 import DeleteForm from "@/app/(admin)/_components/deleteForm";
-import { deleteGallery } from "./actions";
+import { deleteGallery } from "../actions/deleteGallery";
+import { formatDate } from "@/utils/formatDate";
 
 const getGalleryList = async () => {
   const gallery = await db.gallery.findMany({
@@ -53,12 +53,8 @@ const Edit = async () => {
             />
           </div>
           <div className="w-[30%]">{gallery.content}</div>
-          <div className="w-[20%]">
-            <DateTime date={gallery.updated_at} />
-          </div>
-          <div className="w-[20%]">
-            <DateTime date={gallery.created_at} />
-          </div>
+          <div className="w-[20%]">{formatDate(gallery.updated_at)}</div>
+          <div className="w-[20%]">{formatDate(gallery.created_at)}</div>
         </div>
       ))}
     </div>

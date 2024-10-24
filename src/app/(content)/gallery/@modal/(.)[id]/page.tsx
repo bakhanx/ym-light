@@ -1,18 +1,14 @@
 import { BoltIcon, EyeIcon, PhotoIcon } from "@heroicons/react/16/solid";
 import { notFound } from "next/navigation";
-
 import React from "react";
-import db from "@/libs/db";
-
+import db from "@/utils/db";
 import Image from "next/image";
-
 import BackButton from "../_components/backButton";
-import DateTime from "@/components/datetime";
-
-import PreventScroll from "@/components/preventScroll";
-import getSession from "@/libs/session";
+import PreventScroll from "@/utils/preventScroll";
+import getSession from "@/utils/session";
 import { unstable_cache as nextCache } from "next/cache";
 import LikeButton from "../_components/likeButton";
+import { formatDate } from "@/utils/formatDate";
 
 type Props = {
   params: {
@@ -136,7 +132,7 @@ const Modal = async ({ params }: Props) => {
                         likeCount={likeCount}
                       />
                       <div className="flex gap-x-1">
-                        <EyeIcon  className="h-5 w-5 text-slate-600" />
+                        <EyeIcon className="h-5 w-5 text-slate-600" />
                         <span>{gallery.views}</span>
                       </div>
                     </div>
@@ -162,7 +158,7 @@ const Modal = async ({ params }: Props) => {
 
                     {/* Date */}
                     <div className="text-gray-500">
-                      <DateTime date={gallery.created_at} />
+                      {formatDate(gallery.created_at)}
                     </div>
                   </div>
                 </div>

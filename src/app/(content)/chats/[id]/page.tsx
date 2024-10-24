@@ -1,6 +1,6 @@
 import ChatMessages from "@/components/chat-messages";
-import db from "@/libs/db";
-import getSession from "@/libs/session";
+import db from "@/utils/db";
+import getSession from "@/utils/session";
 import { Prisma } from "@prisma/client";
 import { notFound } from "next/navigation";
 import React from "react";

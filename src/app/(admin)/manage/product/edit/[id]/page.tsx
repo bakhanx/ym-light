@@ -1,4 +1,4 @@
-import db from "@/libs/db";
+import db from "@/utils/db";
 import Upload from "../../upload/page";
 
 const getProduct = async (id: string) => {

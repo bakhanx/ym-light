@@ -1,7 +1,7 @@
 "use server";
 
-import db from "@/libs/db";
-import getSession from "@/libs/session";
+import db from "@/utils/db";
+import getSession from "@/utils/session";
 import { redirect, RedirectType, useRouter } from "next/navigation";
 
 const ADMIN_ID = 1;

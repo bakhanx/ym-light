@@ -1,6 +1,7 @@
-import deleteCartItems from "@/app/deleteCartItems";
-import { cls, formatOfPrice } from "@/libs/utils";
+import deleteCartItems from "@/app/(content)/cart/actions/deleteCartItems";
 import { CartItemDetail, useCartStore } from "@/store/useCartStore";
+import { cls } from "@/utils/cls";
+import { formatPrice } from "@/utils/formatPrice";
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
@@ -121,7 +122,7 @@ const Products = ({ cartItem, index, isSelectAllClick }: ProductsProps) => {
                   {_discountRate > 0 ? (
                     <>
                       <div className="text-xs text-gray-500 line-through md:text-sm ">
-                        {formatOfPrice(_originProductPrice)}원
+                        {formatPrice(_originProductPrice)}원
                       </div>
 
                       <div className="flex gap-x-2 ">
@@ -129,13 +130,13 @@ const Products = ({ cartItem, index, isSelectAllClick }: ProductsProps) => {
                           {_discountRate}%
                         </span>
                         <span className="font-semibold">
-                          {formatOfPrice(_discountedProductPrice)}원
+                          {formatPrice(_discountedProductPrice)}원
                         </span>
                       </div>
                     </>
                   ) : (
                     <div className="font-semibold">
-                      {formatOfPrice(_originProductPrice)}원
+                      {formatPrice(_originProductPrice)}원
                     </div>
                   )}
                 </div>
@@ -163,7 +164,7 @@ const Products = ({ cartItem, index, isSelectAllClick }: ProductsProps) => {
                       <span>
                         {" "}
                         ( +
-                        {formatOfPrice(
+                        {formatPrice(
                           (option.option.price || 0) * option.quantity,
                         )}
                         원 )
@@ -192,11 +193,11 @@ const Products = ({ cartItem, index, isSelectAllClick }: ProductsProps) => {
           <div className="flex items-center justify-between gap-x-5 px-4 sm:px-20 lg:w-1/2 lg:justify-center lg:p-5">
             <span className="text-gray-500 lg:hidden">선택상품금액</span>
             <span className="lg:hidden">
-              {formatOfPrice(_selectProductPrice)}원
+              {formatPrice(_selectProductPrice)}원
             </span>
             {/* 할인된 총 상품금액 (배송비x) */}
             <span className="hidden lg:block">
-              {formatOfPrice(_pureTotalPrice)}원
+              {formatPrice(_pureTotalPrice)}원
             </span>
           </div>
           <div className="flex items-center justify-between gap-x-5 px-4 sm:hidden sm:px-20 lg:w-1/2 lg:justify-center lg:p-5">
@@ -204,13 +205,13 @@ const Products = ({ cartItem, index, isSelectAllClick }: ProductsProps) => {
               할인금액
             </span>
             <span className="text-red-500 lg:text-black">
-              -{formatOfPrice(_discountTotalPrice)}원
+              -{formatPrice(_discountTotalPrice)}원
             </span>
           </div>
 
           <div className="flex items-center justify-between gap-x-5 px-4 sm:px-20 lg:w-1/2 lg:justify-center lg:p-5 ">
             <span className="text-gray-500 lg:hidden">총 배송비</span>
-            <span>{formatOfPrice(_deliveryPrice)}원</span>
+            <span>{formatPrice(_deliveryPrice)}원</span>
           </div>
         </div>
       </div>
@@ -221,7 +222,7 @@ const Products = ({ cartItem, index, isSelectAllClick }: ProductsProps) => {
           <div className="flex flex-col text-center">
             <span>선택상품금액</span>
             <span className="font-bold">
-              {formatOfPrice(_selectProductPrice)}원
+              {formatPrice(_selectProductPrice)}원
             </span>
           </div>
 
@@ -230,7 +231,7 @@ const Products = ({ cartItem, index, isSelectAllClick }: ProductsProps) => {
           <div className="flex flex-col text-center">
             <span className="text-red-500 lg:text-black">할인금액</span>
             <span className="font-bold text-red-500">
-              {formatOfPrice(_discountTotalPrice)}원
+              {formatPrice(_discountTotalPrice)}원
             </span>
           </div>
 
@@ -238,7 +239,7 @@ const Products = ({ cartItem, index, isSelectAllClick }: ProductsProps) => {
 
           <div className="flex flex-col text-center">
             <span>총 배송비</span>
-            <span className="font-bold">{formatOfPrice(_deliveryPrice)}원</span>
+            <span className="font-bold">{formatPrice(_deliveryPrice)}원</span>
           </div>
           <div className="hidden lg:block">=</div>
         </div>
@@ -246,7 +247,7 @@ const Products = ({ cartItem, index, isSelectAllClick }: ProductsProps) => {
         <div className="flex items-center justify-between gap-x-5 px-4 text-center sm:w-[30%] sm:px-20 lg:flex-col lg:justify-center">
           <span className="font-bold">주문금액</span>
           <span className="font-bold text-amber-500">
-            {formatOfPrice(_TotalPrice)}원
+            {formatPrice(_TotalPrice)}원
           </span>
         </div>
       </div>

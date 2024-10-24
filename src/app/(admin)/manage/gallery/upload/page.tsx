@@ -6,7 +6,7 @@ import { BoltIcon, PhotoIcon } from "@heroicons/react/16/solid";
 import React, { useState } from "react";
 import { useFormState } from "react-dom";
 import { uploadGallery } from "./actions";
-import { getUploadURL } from "@/app/(admin)/_components/getUploadURL";
+import { getUploadURL } from "@/app/(admin)/actions/getUploadUrl";
 
 const DEFAULT_CONTENT =
   "(예시) Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus sint architecto ut commodi. Optio nostrum aliquid tenetur labore voluptate consequuntur dolorem eius!";

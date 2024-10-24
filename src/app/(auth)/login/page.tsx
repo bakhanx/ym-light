@@ -5,11 +5,11 @@ import FormInput from "@/components/form-input";
 import Link from "next/link";
 import React from "react";
 import { useFormState } from "react-dom";
-import { loginActions } from "./actions";
-import { PASSWORD_MIN_LENGTH, WORDS_MAX_LENGTH } from "@/libs/constants";
+import { login } from "./actions";
+import { PASSWORD_MIN_LENGTH, WORDS_MAX_LENGTH } from "@/utils/constants/loginConstants";
 
 const Login = () => {
-  const [state, dispatch] = useFormState(loginActions, null);
+  const [state, dispatch] = useFormState(login, null);
 
   return (
     <div className="h-screen bg-gray-800  text-white">
