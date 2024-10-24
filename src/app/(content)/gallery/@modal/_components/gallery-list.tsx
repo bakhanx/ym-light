@@ -1,14 +1,13 @@
 "use client";
 
 import {
-  ChatBubbleLeftEllipsisIcon,
   HandThumbUpIcon,
 } from "@heroicons/react/16/solid";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import { InitialGalleryListType } from "../../page";
-import getMoreGalleryList from "../../action";
+import getMoreGalleryList from "../../actions/getGalleryList";
 import Loader from "@/components/loader";
 import { EyeIcon } from "@heroicons/react/16/solid";
 import { BLUR_DATA_URL_GRAY } from "../../../../../../public/images/base64/blur-gray-skeleton";

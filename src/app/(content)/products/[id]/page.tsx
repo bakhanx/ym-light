@@ -2,7 +2,7 @@ import NotFound from "@/app/not-found";
 import db from "@/utils/db";
 import { unstable_cache as nextCache } from "next/cache";
 import ProductContents from "../_components/product-contents";
-import ScrollTop from "@/components/scrollTop";
+import ScrollTop from "@/utils/scrollTop";
 import getSession from "@/utils/session";
 
 type Props = {

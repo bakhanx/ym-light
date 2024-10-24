@@ -5,7 +5,7 @@ import Products from "./_components.tsx/products";
 import { CheckIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import { useCartStore } from "@/store/useCartStore";
-import { orderCartItems } from "./actions/orderFromCart";
+import { orderCartItems } from "./actions/orderCartItems";
 import deleteCartItems from "@/app/(content)/cart/actions/deleteCartItems";
 import { cls } from "@/utils/cls";
 import { formatPrice } from "@/utils/formatPrice";

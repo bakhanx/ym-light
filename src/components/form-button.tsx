@@ -1,7 +1,7 @@
 "use client";
 import { useFormStatus } from "react-dom";
 import Loader from "./loader";
-import PreventScroll from "./preventScroll";
+import PreventScroll from "../utils/preventScroll";
 
 type FormButtonType = {
   name?: string;

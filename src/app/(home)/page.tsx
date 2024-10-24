@@ -1,6 +1,6 @@
 import lightFlicker from "@/styles/LightFlicker.module.css";
 
-import db from "@/libs/db";
+import db from "@/utils/db";
 import { Metadata } from "next";
 import { unstable_cache as nextCache } from "next/cache";
 import { Suspense } from "react";

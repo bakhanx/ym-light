@@ -1,6 +1,6 @@
-import getSession from "@/libs/session";
-import React, { useEffect } from "react";
+import React from "react";
 import ChatFloatingButton from "./chat-floating-button";
+import getSession from "@/utils/session";
 
 const ChatFloatingButtonContainer = async () => {
   const session = await getSession();

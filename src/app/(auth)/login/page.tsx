@@ -5,7 +5,7 @@ import FormInput from "@/components/form-input";
 import Link from "next/link";
 import React from "react";
 import { useFormState } from "react-dom";
-import { login } from "./actions";
+import { login } from "../../../actions/login";
 import { PASSWORD_MIN_LENGTH, WORDS_MAX_LENGTH } from "@/utils/constants/loginConstants";
 
 const Login = () => {

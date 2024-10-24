@@ -1,8 +1,9 @@
 import Image from "next/image";
-import getProducts from "./getProducts";
-import { formatPrice } from "@/libs/utils";
+import getProducts from "./actions/getProducts";
+
 import Link from "next/link";
 import { BLUR_DATA_URL_GRAY } from "../../../../public/images/base64/blur-gray-skeleton";
+import { formatPrice } from "@/utils/formatPrice";
 
 type ProductType = {
   id: number;
@@ -38,8 +39,6 @@ const Product = async () => {
           >
             <div className="flex flex-col text-sm md:text-base">
               <div className="">
-
-
                 <div className="relative aspect-square w-full overflow-hidden rounded-t-md border-[1px] border-white">
                   <Image
                     alt={product.title}
@@ -51,7 +50,7 @@ const Product = async () => {
                   />
                 </div>
 
-                <div className="p-2 h-28 border-2 flex flex-col justify-between">
+                <div className="flex h-28 flex-col justify-between border-2 p-2">
                   <p className="h-14">{product.title}</p>
 
                   <div className="">

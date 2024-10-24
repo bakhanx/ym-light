@@ -1,7 +1,7 @@
 "use client";
 
 import { initialMessages } from "@/app/(content)/chats/[id]/page";
-import { cls } from "@/libs/utils";
+import { cls } from "@/utils/cls";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createClient, RealtimeChannel } from "@supabase/supabase-js";
 import { saveChatMessages } from "@/app/(content)/chats/action";

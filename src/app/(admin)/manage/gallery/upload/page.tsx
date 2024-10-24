@@ -5,7 +5,7 @@ import FormInput from "@/components/form-input";
 import { BoltIcon, PhotoIcon } from "@heroicons/react/16/solid";
 import React, { useState } from "react";
 import { useFormState } from "react-dom";
-import { uploadGallery } from "./actions";
+import { uploadGallery } from "../actions/uploadGallery";
 import { getUploadURL } from "@/app/(admin)/actions/getUploadUrl";
 
 const DEFAULT_CONTENT =
@@ -38,10 +38,6 @@ export const Upload = ({
   gallery: galleryType;
   isEdit: boolean;
 }) => {
-  // const [formValue, setFormValue] = useState([
-  //   gallery?.content ?? DEFAULT_CONTENT,
-  //   gallery?.tags ?? DEFAULT_TAG,
-  // ]);
   const [formContent, setFormContent] = useState(
     gallery?.content ?? DEFAULT_CONTENT,
   );
