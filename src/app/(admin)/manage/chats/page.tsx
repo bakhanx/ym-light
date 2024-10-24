@@ -2,7 +2,7 @@ import db from "@/utils/db";
 import { useChatStore } from "@/store/useChatStore";
 import Link from "next/link";
 import React from "react";
-import EnterButton from "./_components/chat-enter-button";
+import ChatEnterButton from "./_components/chat-enter-button";
 import { formatDate } from "@/utils/formatDate";
 
 const Chat = async () => {
@@ -25,7 +25,7 @@ const Chat = async () => {
             key={room.id}
             className="flex w-full items-center gap-x-5 border-2 p-2"
           >
-            <EnterButton roomId={room.id} />
+            <ChatEnterButton roomId={room.id} />
 
             <div className="w-64">
               {
