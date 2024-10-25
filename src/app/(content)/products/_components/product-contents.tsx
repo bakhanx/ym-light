@@ -10,11 +10,12 @@ import React, { useState } from "react";
 import Options, { selectedItemType } from "./options";
 import ProductInfo from "./product-Info";
 import Image from "next/image";
-import { useCartStore } from "@/store/useCartStore";
+import { CartItemDetail, useCartStore } from "@/store/useCartStore";
 import { Option, Product } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import updateCart from "../actions/updateCart";
 import Loader from "@/components/loader";
+import createDirectOrder from "../actions/createDirectOrder";
 
 type Options = {
   options: Option[];
@@ -34,41 +35,45 @@ const ProductContents = ({ product, userId }: ProductContentsProps) => {
     selectedItemType[]
   >([]);
   const [quantity, setQuantity] = useState(product.options.length > 0 ? 0 : 1);
+
   const router = useRouter();
+
+  const createCartItem = () => ({
+    id: 1,
+    product: product,
+    productId: product.id,
+    cartId: 1,
+    quantity,
+    orderId: 1,
+    options: selectedOptionList.map((selectedOption, index) => ({
+      optionId: selectedOption.option.id,
+      quantity: selectedOption.quantity,
+      cartItemId: 1,
+      id: 1,
+      option: {
+        id: selectedOption.option.id,
+        index,
+        name: selectedOption.option.name,
+        price: selectedOption.price,
+        productId: product.id,
+        stock: selectedOption.option.stock,
+      },
+    })),
+  });
+
   const handleAddtoCart = async () => {
     // local State
     if (product.options.length > 0 && selectedOptionList.length === 0) {
       alert("상품옵션을 선택해주세요.");
       return;
     }
+    const cartItem = createCartItem();
     setIsLoading(true);
-
-    const cartItem = {
-      id: 1,
-      product: product,
-      productId: product.id,
-      cartId: 1,
-      quantity,
-      orderId: 1,
-      options: selectedOptionList.map((selectedOption, index) => ({
-        optionId: selectedOption.option.id,
-        quantity: selectedOption.quantity,
-        cartItemId: 1,
-        id: 1,
-        option: {
-          id: selectedOption.option.id,
-          index,
-          name: selectedOption.option.name,
-          price: selectedOption.price,
-          productId: product.id,
-          stock: selectedOption.option.stock,
-        },
-      })),
-    };
 
     // z-store
     const addToCartPromise = addToCart({ ...cartItem, checked: true });
     // prisma
+
     const updateCartPromise = updateCart(cartItem);
 
     await Promise.all([addToCartPromise, updateCartPromise]);
@@ -112,7 +117,9 @@ const ProductContents = ({ product, userId }: ProductContentsProps) => {
     }
   };
 
-  const handleOrderClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleOrderClick = async (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
     event.preventDefault();
     if (!userId) {
       if (
@@ -121,7 +128,21 @@ const ProductContents = ({ product, userId }: ProductContentsProps) => {
         router.push("/login");
       }
     } else {
-      
+      const cartItem = createCartItem();
+
+      if (confirm("바로 주문하시겠습니까?")) {
+        try {
+          const response = await createDirectOrder(cartItem);
+          if (response.ok) {
+            alert("주문이 완료되었습니다.");
+            router.push("/");
+          }
+        } catch (error) {
+          console.log("Error: 주문 생성 실패", error);
+          alert("Error: 주문실패. 관리자에게 문의해주세요.");
+          router.push("/contact");
+        }
+      }
     }
   };
 
