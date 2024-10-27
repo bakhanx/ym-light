@@ -1,7 +1,4 @@
 "use client";
-
-import { topNavLinks } from "@/utils/constants/topNavLinks";
-import Link from "next/link";
 import React from "react";
 
 const Manage = () => {
