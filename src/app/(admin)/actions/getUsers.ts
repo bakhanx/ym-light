@@ -1,6 +1,7 @@
-"use server"
+"use server";
 
 import db from "@/utils/db";
+import { Prisma } from "@prisma/client";
 
 const getUsers = async () => {
   const users = await db.user.findMany({
@@ -24,11 +25,13 @@ const getUsers = async () => {
         },
       },
     },
-    orderBy:{
-      id:"asc"
-    }
+    orderBy: {
+      id: "asc",
+    },
   });
   return users;
 };
+
+export type UserType = Prisma.PromiseReturnType<typeof getUsers>;
 
 export default getUsers;
