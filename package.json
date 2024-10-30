@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && prisma migrate deploy && next build",
+    "build": "next build && next start",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy" : "prisma generate && prisma migrate deploy && next build && next start"
   },
   "dependencies": {
     "@heroicons/react": "^2.1.3",
