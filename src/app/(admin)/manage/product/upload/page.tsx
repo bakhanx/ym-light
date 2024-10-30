@@ -5,7 +5,7 @@ import { PhotoIcon, XMarkIcon } from "@heroicons/react/16/solid";
 import React, { useState } from "react";
 import { uploadProduct } from "../actions/uploadProduct";
 import { useFormState } from "react-dom";
-import { getUploadUrl } from "@/app/(admin)/actions/getUploadUrl";
+import getUploadUrl from "@/app/(admin)/actions/getUploadUrl";
 import FormButton from "@/components/form-button";
 import { Option } from "@prisma/client";
 
