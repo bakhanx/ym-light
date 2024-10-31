@@ -1,16 +1,13 @@
 import lightFlicker from "@/styles/LightFlicker.module.css";
-
+import textFlicker from "@/styles/textFlicker.module.css";
 import db from "@/utils/db";
 import { Metadata } from "next";
 import { unstable_cache as nextCache } from "next/cache";
 import { Suspense } from "react";
-import NeonText from "./_components/neon-text";
 import Card from "./_components/card";
 import Link from "next/link";
 import Image from "next/image";
-import signOn from "@/../public/images/text/sign-on.webp";
-import signOff from "@/../public/images/text/sign-off.webp";
-import dscription from "@/../public/images/text/description.webp";
+import description from "@/../public/images/text/description.webp";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -85,13 +82,13 @@ export default async function Home() {
           <div className="absolute z-10 flex h-full w-full max-w-screen-2xl flex-col justify-center px-4 pt-24 text-white md:px-20">
             {/* <NeonText /> */}
             <div className="">
-              <Image src={signOn} className="relative" alt="ymlightOn" />
-              <Image
-                src={signOff}
-                className="relative hidden"
-                alt="ymlightOn"
+              <div className={textFlicker.light_container} />
+              <div
+                className="z-50 h-[60px] w-[500px] bg-no-repeat "
+                style={{
+                  backgroundImage: `url(${description.src})`,
+                }}
               />
-              <Image src={dscription} className="relative" alt="ymlightOn" />
             </div>
           </div>
         </div>
