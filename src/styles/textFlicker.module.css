@@ -1,0 +1,77 @@
+.light_container {
+    background-image: url("../../public/images/text/sign-on.webp");
+    width: 325px;
+    height: 90px;
+    background-size: cover;
+    background-position: center;
+    animation: flashlight 10s linear infinite;
+}
+
+@media screen and (max-width:768px) {
+    .light_container {
+        background-position: 60% 50%;
+    }
+}
+
+@keyframes flashlight {
+    0% {
+        opacity: 0;
+    }
+
+    0.5% {
+        opacity: 0;
+    }
+
+    0.501% {
+        opacity: 1;
+    }
+
+    5% {
+        opacity: 0;
+    }
+
+    6.001% {
+        opacity: 1;
+    }
+
+    7% {
+        opacity: 1;
+    }
+
+    7.001% {
+        opacity: 1;
+    }
+
+    7.002% {
+        opacity: 0;
+    }
+
+    8% {
+        opacity: 1;
+    }
+
+    8.001% {
+        opacity: 0;
+    }
+
+    8.002% {
+        opacity: 1
+    }
+
+    8.003% {
+        opacity: 0;
+    }
+
+    13% {
+        opacity: 1;
+    }
+
+    14% {
+        opacity: 0;
+    }
+
+    30% {
+        opacity: 1;
+    }
+
+}
