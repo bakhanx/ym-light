@@ -14,63 +14,51 @@ export const metadata: Metadata = {
 };
 
 const getProducts = async () => {
-  const products = await db.product.findMany({
-    select: {
-      id: true,
-      title: true,
-      created_at: true,
-      updated_at: true,
-      photo: true,
-      discount: true,
-    },
-    orderBy: {
-      updated_at: "desc",
-    },
-    take: 4,
-  });
-
-  return products;
-};
-
-const getDiscontProducts = async () => {
-  const products = await db.product.findMany({
-    where: {
-      discount: {
-        not: null,
+  const [allProducts, discountedProducts] = await Promise.all([
+    db.product.findMany({
+      select: {
+        id: true,
+        title: true,
+        created_at: true,
+        updated_at: true,
+        photo: true,
+        discount: true,
       },
-    },
-    select: {
-      id: true,
-      title: true,
-      created_at: true,
-      updated_at: true,
-      photo: true,
-      discount: true,
-    },
+      orderBy: {
+        updated_at: "desc",
+      },
+      take: 4,
+    }),
+    db.product.findMany({
+      where: {
+        discount: {
+          not: null,
+        },
+      },
+      select: {
+        id: true,
+        title: true,
+        created_at: true,
+        updated_at: true,
+        photo: true,
+        discount: true,
+      },
 
-    orderBy: {
-      updated_at: "desc",
-    },
-    take: 4,
-  });
-
-  return products;
+      orderBy: {
+        updated_at: "desc",
+      },
+      take: 4,
+    }),
+  ]);
+  return { allProducts, discountedProducts };
 };
 
 const getCachedProducts = nextCache(getProducts, ["home-products"], {
   tags: ["products", "product"],
 });
-const getCachedDiscountProducts = nextCache(
-  getDiscontProducts,
-  ["home-discount-products"],
-  {
-    tags: ["products", "product"],
-  },
-);
 
 export default async function Home() {
-  const products = await getCachedProducts();
-  const discountedProducts = await getCachedDiscountProducts();
+  const { allProducts, discountedProducts } = await getCachedProducts();
   return (
     <div className="bg-black">
       <div className="h-screen ">
@@ -102,7 +90,7 @@ export default async function Home() {
                 새로 등록된 상품
               </div>
               <div className="grid  gap-8 pt-4  min-[320px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 ">
-                {products.map((product) => (
+                {allProducts.map((product) => (
                   <Link key={product.id} href={`/products/${product.id}`}>
                     <Card
                       key={product.id}
