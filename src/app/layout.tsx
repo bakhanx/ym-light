@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Noto_Sans_KR } from "next/font/google";
 import "../styles/globals.css";
-import TopNavigationContainer from "@/components/top-navigation-conatiner";
 import Footer from "@/components/footer";
 import ChatFloatingButtonContainer from "@/components/chat-floating-button-container";
+import TopNavigation from "@/components/top-navigation";
 
 // const inter = Inter({ subsets: ["latin"] });
 
@@ -32,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${noto_sans_kr.className}`}>
-        <TopNavigationContainer />
+        <TopNavigation />
         <div className="">
           {/* <div className="pt-36  sm:pt-20"> */}
           {children} {modal}
