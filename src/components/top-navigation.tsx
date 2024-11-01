@@ -1,8 +1,8 @@
 "use client";
 
+import { getUser } from "@/actions/getUser";
 import { logOut } from "@/actions/logout";
 import getCartItems from "@/app/(content)/cart/actions/getCartItems";
-
 
 import { useCartStore } from "@/store/useCartStore";
 import { cls } from "@/utils/cls";
@@ -10,25 +10,32 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-type TopNavProps = {
-  user:
-    | {
-        username: string;
-        id: number;
-        loginId: string;
-      }
-    | undefined;
+type User = {
+  username: string;
+  id: number;
+  loginId: string;
 };
-
 const whitePaths = ["/products", "/gallery", "/manage", "/cart", "/chats"];
 
-const TopNavigation = ({ user }: TopNavProps) => {
+const TopNavigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
   const isBgWhitePaths = whitePaths.some((whitePath) =>
     pathname.startsWith(whitePath),
   );
+  const [user, setUser] = useState<User>();
   const { cart, isDataLoaded, setInitData } = useCartStore();
+
+  useEffect(() => {
+    const getLoginUser = async () => {
+      const _user = await getUser();
+      if (_user) {
+        setUser(_user);
+        console.log("Login: success");
+      }
+    };
+    getLoginUser();
+  }, []);
 
   useEffect(() => {
     const getCart = async () => {
@@ -36,13 +43,12 @@ const TopNavigation = ({ user }: TopNavProps) => {
         const cartItems = await getCartItems(user.id);
         if (cartItems) {
           setInitData(cartItems);
-          console.log("cart store init")
+          console.log("cart store init");
         }
       }
     };
     getCart();
-    
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     const handleScroll = () => {
