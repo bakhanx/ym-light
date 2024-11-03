@@ -4,12 +4,40 @@ import FormButton from "@/components/form-button";
 import FormInput from "@/components/form-input";
 import Link from "next/link";
 import React from "react";
-import { useFormState } from "react-dom";
 import { login } from "../../../actions/login";
-import { PASSWORD_MIN_LENGTH, WORDS_MAX_LENGTH } from "@/utils/constants/loginConstants";
+import {
+  PASSWORD_MIN_LENGTH,
+  WORDS_MAX_LENGTH,
+} from "@/utils/constants/loginConstants";
+import { useUserStore } from "@/store/useUserStore";
+import { useRouter } from "next/navigation";
+import useCustomFormState from "@/hooks/useCustomFormState";
+
+type LoginForm = {
+  id: number;
+  username: string;
+};
 
 const Login = () => {
-  const [state, dispatch] = useFormState(login, null);
+  const setUser = useUserStore((state) => state.setUser);
+  const router = useRouter();
+  // const [state, dispatch] = useFormState(login, null);
+
+  const [state, dispatch] = useCustomFormState<LoginForm>(
+    { id: 0, username: "" },
+    login,
+    (result) => {
+      if (result.success) {
+        setUser({
+          id: result.data.id,
+          username: result.data.username,
+        });
+        router.push("/");
+      } else {
+        console.log("Error: 로그인 실패, ", result.error);
+      }
+    },
+  );
 
   return (
     <div className="h-screen bg-gray-800  text-white">
@@ -23,7 +51,7 @@ const Login = () => {
               placeholder="ymlight123"
               required
               max={WORDS_MAX_LENGTH}
-              error={state?.fieldErrors.loginId}
+              error={state?.error?.loginId}
             />
 
             <FormInput
@@ -33,7 +61,7 @@ const Login = () => {
               placeholder="****"
               required
               min={PASSWORD_MIN_LENGTH}
-              error={state?.fieldErrors.password}
+              error={state?.error?.password}
             />
           </div>
 
