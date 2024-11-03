@@ -1,8 +1,6 @@
 "use server";
 
 import {
-  PASSWORD_REGEX,
-  PASSWORD_REGEX_ERROR,
   PASSWORD_REQUIRED_ERROR,
   LOGINID_REQUIRED_ERROR,
 } from "@/utils/constants/loginConstants";
@@ -10,7 +8,6 @@ import db from "@/utils/db";
 import { z } from "zod";
 import bcrypt from "bcrypt";
 import getSession from "@/utils/session";
-import { RedirectType, redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
 const checkLoginIdExists = async (loginId: string) => {
@@ -37,16 +34,32 @@ const loginSchema = z.object({
   }),
 });
 
-export const login = async (prevState: any, formData: FormData) => {
+type User = {
+  id: number;
+  username: string;
+};
+
+type ValidationError = {
+  fieldErrors: { loginId?: string[]; password?: string[] };
+};
+type FormState<T> = {
+  data: T;
+  error: ValidationError | null;
+  success: boolean;
+};
+
+export const login = async (
+  prevState: any,
+  formData: FormData,
+): Promise<FormState<User>> => {
   const data = {
     loginId: formData.get("loginId"),
     password: formData.get("password"),
   };
-
   const result = await loginSchema.spa(data);
 
   if (!result.success) {
-    return result.error.flatten();
+    return { data: prevState, error: result.error.flatten(), success: false };
   } else {
     const user = await db.user.findUnique({
       where: {
@@ -54,31 +67,32 @@ export const login = async (prevState: any, formData: FormData) => {
       },
       select: {
         id: true,
+        username: true,
         password: true,
       },
     });
-    const ok = await bcrypt.compare(result.data.password, user!.password);
 
-    if (ok) {
-      const session = await getSession();
-      session.id = user!.id;
-      session.save();
-
-      await db.log.create({
-        data: {
-          userId: session.id,
-        },
-      });
-
-      revalidatePath("/");
-      redirect("/");
-    } else {
+    if (!user || !(await bcrypt.compare(result.data.password, user.password))) {
       return {
-        fieldErrors: {
-          loginId: [],
-          password: ["잘못된 비밀번호 입니다."],
+        data: prevState,
+        error: {
+          fieldErrors: { loginId: [], password: ["잘못된 비밀번호 입니다."] },
         },
+        success: false,
       };
     }
+    const session = await getSession();
+    session.id = user.id;
+    await session.save();
+
+    await db.log.create({ data: { userId: session.id } });
+
+    revalidatePath("/");
+
+    return {
+      data: { id: user.id, username: user.username },
+      error: null,
+      success: true,
+    };
   }
 };
