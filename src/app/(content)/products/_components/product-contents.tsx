@@ -6,7 +6,7 @@ import {
   ShoppingBagIcon,
   TruckIcon,
 } from "@heroicons/react/16/solid";
-import React, { useState } from "react";
+import React, { useEffect, useId, useState } from "react";
 import Options, { selectedItemType } from "./options";
 import ProductInfo from "./product-Info";
 import Image from "next/image";
@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import updateCart from "../actions/updateCart";
 import Loader from "@/components/loader";
 import createDirectOrder from "../actions/createDirectOrder";
+import { useUserStore } from "@/store/useUserStore";
 
 type Options = {
   options: Option[];
@@ -30,26 +31,27 @@ type ProductContentsProps = ProductWithOptions & {
 
 const ProductContents = ({ product, userId }: ProductContentsProps) => {
   const [isLoading, setIsLoading] = useState(false);
-  const { addToCart } = useCartStore((state) => state);
+  const { addToCart } = useCartStore();
+  const { addToCartItemCount } = useUserStore();
   const [selectedOptionList, setSelectedOptionList] = useState<
     selectedItemType[]
   >([]);
   const [quantity, setQuantity] = useState(product.options.length > 0 ? 0 : 1);
 
   const router = useRouter();
-
+  const tempId = Date.now();
   const createCartItem = () => ({
-    id: 1,
+    id: tempId,
     product: product,
     productId: product.id,
-    cartId: 1,
+    cartId: tempId,
     quantity,
-    orderId: 1,
+    orderId: tempId,
     options: selectedOptionList.map((selectedOption, index) => ({
       optionId: selectedOption.option.id,
       quantity: selectedOption.quantity,
-      cartItemId: 1,
-      id: 1,
+      cartItemId: tempId,
+      id: tempId,
       option: {
         id: selectedOption.option.id,
         index,
@@ -73,10 +75,15 @@ const ProductContents = ({ product, userId }: ProductContentsProps) => {
     // z-store
     const addToCartPromise = addToCart({ ...cartItem, checked: true });
     // prisma
-
     const updateCartPromise = updateCart(cartItem);
 
     await Promise.all([addToCartPromise, updateCartPromise]);
+
+    const isExist = useCartStore.getState().isExist;
+    if (!isExist) {
+      addToCartItemCount();
+    }
+
     setIsLoading(false);
     if (
       window.confirm(
