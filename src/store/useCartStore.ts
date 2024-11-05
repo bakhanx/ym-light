@@ -15,6 +15,7 @@ export type CartItemDetail = CartItem & {
 type State = {
   cart: CartItemDetail[];
   isDataLoaded: boolean;
+  isExist: boolean;
 };
 type RemoveFromCart = {
   productId: number;
@@ -28,6 +29,7 @@ type Actions = {
 };
 const INITIAL_STATE: State = {
   cart: [],
+  isExist: false,
   isDataLoaded: false,
 };
 
@@ -36,17 +38,19 @@ export const useCartStore = create<State & Actions>()(
     (set, get) => ({
       cart: INITIAL_STATE.cart,
       isDataLoaded: INITIAL_STATE.isDataLoaded,
-
+      isExist: INITIAL_STATE.isExist,
       addToCart: (cartItem) => {
         const cart = get().cart;
         const indexExistedProduct = cart.findIndex(
           (item) => item.productId === cartItem.productId,
         );
 
-        console.log(indexExistedProduct);
+        const isExist = indexExistedProduct !== -1;
+        console.log(isExist);
+        set({ isExist });
 
         // 장바구니에 없으면
-        if (indexExistedProduct === -1) {
+        if (!isExist) {
           cart.push({ ...cartItem, checked: true });
         }
         // 이미 장바구니에 있으면
@@ -109,7 +113,11 @@ export const useCartStore = create<State & Actions>()(
         set(() => ({ isDataLoaded: true }));
       },
       setInitData: ({ cartItems }) => {
-        set(() => ({ cart: cartItems }));
+        const updateToCheckCartItems = cartItems.map((item) => ({
+          ...item,
+          checked: true,
+        }));
+        set(() => ({ cart: updateToCheckCartItems }));
         console.log(cartItems);
       },
     }),
@@ -119,6 +127,7 @@ export const useCartStore = create<State & Actions>()(
       partialize: (state) => ({
         cart: state.cart,
         isDataLoaded: state.isDataLoaded,
+        isExist: state.isExist,
       }),
       skipHydration: true,
     },
