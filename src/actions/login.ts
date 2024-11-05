@@ -37,6 +37,7 @@ const loginSchema = z.object({
 type User = {
   id: number;
   username: string;
+  cartItemCount: number;
 };
 
 type ValidationError = {
@@ -69,6 +70,16 @@ export const login = async (
         id: true,
         username: true,
         password: true,
+
+        carts: {
+          select: {
+            cartItems: {
+              select: {
+                _count: true,
+              },
+            },
+          },
+        },
       },
     });
 
@@ -90,7 +101,11 @@ export const login = async (
     revalidatePath("/");
 
     return {
-      data: { id: user.id, username: user.username },
+      data: {
+        id: user.id,
+        username: user.username,
+        cartItemCount: user.carts[0].cartItems.length,
+      },
       error: null,
       success: true,
     };
