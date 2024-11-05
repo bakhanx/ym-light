@@ -2,7 +2,6 @@ import NotFound from "@/app/not-found";
 import db from "@/utils/db";
 import { unstable_cache as nextCache } from "next/cache";
 import ProductContents from "../_components/product-contents";
-import ScrollTop from "@/utils/scrollTop";
 import getSession from "@/utils/session";
 
 type Props = {
@@ -37,13 +36,11 @@ const getProduct = async (id: number) => {
   return product;
 };
 
-
-
 const getCahcedProduct = nextCache(getProduct, ["product"], {
   tags: ["light", "product"],
 });
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 const ProductDetail = async ({ params }: Props) => {
   const product = await getCahcedProduct(params.id);
