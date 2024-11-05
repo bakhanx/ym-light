@@ -38,8 +38,10 @@ const TopNavigation = () => {
     const storedUserData = localStorage.getItem("user-storage");
     if (storedUserData) {
       const _user = JSON.parse(storedUserData).state.user;
-      setUser(_user);
-      setCartItemCount(_user.cartItemCount);
+      if (_user) {
+        setUser(_user);
+        setCartItemCount(_user.cartItemCount);
+      }
     }
 
     const unsubscribe = useUserStore.subscribe((state) => {
