@@ -16,23 +16,24 @@ import useCustomFormState from "@/hooks/useCustomFormState";
 type LoginForm = {
   id: number;
   username: string;
+  cartItemCount: number;
 };
 
 const Login = () => {
   const setUser = useUserStore((state) => state.setUser);
   const router = useRouter();
   // const [state, dispatch] = useFormState(login, null);
-
   const [state, dispatch] = useCustomFormState<LoginForm>(
-    { id: 0, username: "" },
+    { id: Date.now(), username: "", cartItemCount: 0 },
     login,
     (result) => {
       if (result.success) {
         setUser({
           id: result.data.id,
           username: result.data.username,
+          cartItemCount: result.data.cartItemCount,
         });
-        router.push("/");
+        window.location.href = "/";
       } else {
         console.log("Error: 로그인 실패, ", result.error);
       }
