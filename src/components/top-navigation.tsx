@@ -1,54 +1,54 @@
 "use client";
 
-import { getUser } from "@/actions/getUser";
 import { logOut } from "@/actions/logout";
-import getCartItems from "@/app/(content)/cart/actions/getCartItems";
-
-import { useCartStore } from "@/store/useCartStore";
+import { useUserStore } from "@/store/useUserStore";
 import { cls } from "@/utils/cls";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-type User = {
-  username: string;
-  id: number;
-  loginId: string;
-};
 const whitePaths = ["/products", "/gallery", "/manage", "/cart", "/chats"];
+
+type UserType = {
+  id: number;
+  username: string;
+  cartItemCount: number;
+};
 
 const TopNavigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  // const [user, setUser] = useState<UserType | null>(null);
+  const { user, setUser } = useUserStore();
+  const [cartItemCount, setCartItemCount] = useState(
+    user ? user.cartItemCount : 0,
+  );
   const pathname = usePathname();
   const isBgWhitePaths = whitePaths.some((whitePath) =>
     pathname.startsWith(whitePath),
   );
-  const [user, setUser] = useState<User>();
-  const { cart, isDataLoaded, setInitData } = useCartStore();
+  const handleLogout = async () => {
+    localStorage.removeItem("user-storage");
+    await logOut();
+    window.location.href = "/";
+  };
 
   useEffect(() => {
-    const getLoginUser = async () => {
-      const _user = await getUser();
-      if (_user) {
-        setUser(_user);
-        console.log("Login: success");
-      }
-    };
-    getLoginUser();
-  }, []);
+    useUserStore.persist.rehydrate();
 
-  useEffect(() => {
-    const getCart = async () => {
-      if (!isDataLoaded && user) {
-        const cartItems = await getCartItems(user.id);
-        if (cartItems) {
-          setInitData(cartItems);
-          console.log("cart store init");
-        }
-      }
-    };
-    getCart();
-  }, [user]);
+    const storedUserData = localStorage.getItem("user-storage");
+    if (storedUserData) {
+      const _user = JSON.parse(storedUserData).state.user;
+      setUser(_user);
+      setCartItemCount(_user.cartItemCount);
+    }
+
+    const unsubscribe = useUserStore.subscribe((state) => {
+      const cartItemCount = state.user?.cartItemCount;
+      setCartItemCount(cartItemCount || 0);
+    });
+
+    return () => unsubscribe();
+  }, [setUser]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -72,15 +72,14 @@ const TopNavigation = () => {
           <div className="flex  shrink-0 items-center bg-gradient-to-tr from-yellow-500 to-yellow-200 bg-clip-text text-xl font-bold text-transparent md:text-2xl">
             <Link href="/">YM Light</Link>
           </div>
-
           <div className="flex items-center gap-x-1 text-gray-300 sm:pr-2">
             {user ? (
               <>
                 <span>{user?.username}님</span>
                 <span>
-                  <form action={logOut}>
-                    <button className="text-sm  underline">로그아웃</button>
-                  </form>
+                  <button onClick={handleLogout} className="text-sm  underline">
+                    로그아웃
+                  </button>
                 </span>
               </>
             ) : (
@@ -114,9 +113,11 @@ const TopNavigation = () => {
 
           <li className="relative">
             <Link href="/cart">장바구니</Link>
-            <span className="text-bold absolute -right-2 -top-4 flex min-w-5 items-center justify-center rounded-full border-[1px] border-red-400 bg-red-400 px-[7px] pb-[1px] text-sm text-white">
-              {cart.length}
-            </span>
+            {user && (
+              <span className="text-bold absolute -right-2 -top-4 flex min-w-5 items-center justify-center rounded-full border-[1px] border-red-400 bg-red-400 px-[7px] pb-[1px] text-sm text-white">
+                {cartItemCount}
+              </span>
+            )}
           </li>
 
           {/* <li className="text-black">
