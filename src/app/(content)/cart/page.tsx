@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Products from "./_components.tsx/products";
 import { CheckIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
@@ -9,6 +9,10 @@ import { orderCartItems } from "./actions/orderCartItems";
 import deleteCartItems from "@/app/(content)/cart/actions/deleteCartItems";
 import { cls } from "@/utils/cls";
 import { formatPrice } from "@/utils/formatPrice";
+import { useUserStore } from "@/store/useUserStore";
+import getCartItems from "./actions/getCartItems";
+import Loader from "@/components/loader";
+import { isLatLong } from "validator";
 
 // Issue
 // 0. 선택하지 않은 옵션이 장바구니에 모두 담김
@@ -16,9 +20,13 @@ import { formatPrice } from "@/utils/formatPrice";
 const Cart = () => {
   const [isSelectAllClick, setIsSelectAllClick] = useState(true);
 
-  const { cart, removeFromCart } = useCartStore((state) => state);
+  const { cart, removeFromCart, isDataLoaded, setInitData, setDataLoaded } =
+    useCartStore((state) => state);
+  const { substractToCartItemCount } = useUserStore();
+  const { user } = useUserStore();
   const DELIVERY_PRICE = 7000;
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const checkedCarts = cart.filter((cartItem) => cartItem.checked);
   const totalOriginalPrice = checkedCarts
     .map((cartItem) => {
@@ -54,6 +62,23 @@ const Cart = () => {
   const totalAllPrice =
     totalOriginalPrice - totalDiscountPrice + totalDeliveryPrice;
 
+  // 장바구니 데이터 초기화 server -> zustand
+  useEffect(() => {
+    const getCart = async () => {
+      if (!isDataLoaded && user) {
+        setIsLoading(true);
+        setDataLoaded();
+        const cartItems = await getCartItems(user.id);
+        if (cartItems) {
+          setInitData(cartItems);
+          console.log("cart store init");
+          setIsLoading(false);
+        }
+      }
+    };
+    getCart();
+  }, [user, isDataLoaded, setDataLoaded, setInitData]);
+
   const handleSelectAllClick = () => {
     setIsSelectAllClick((prev) => !prev);
     useCartStore.setState((state) => ({
@@ -69,8 +94,9 @@ const Cart = () => {
       checkedCarts.forEach((item) => {
         removeFromCart({
           productId: item.productId,
-        }),
-          deleteCartItems(item.productId);
+        });
+        deleteCartItems(item.productId);
+        substractToCartItemCount();
       });
     }
   };
@@ -206,24 +232,33 @@ const Cart = () => {
                 </div>
               </div>
             </div>
-            {/* products */}
-            {cart.length > 0 ? (
-              cart.map((cartItem, index) => (
-                <div
-                  key={index}
-                  className="my-4 rounded-md border-b-[1px] border-gray-300 bg-white"
-                >
-                  <Products
-                    cartItem={cartItem}
-                    isSelectAllClick={isSelectAllClick}
-                    index={index}
-                  />
-                </div>
-              ))
-            ) : (
-              <div className="w-full bg-white p-10 text-center">
-                장바구니에 담긴 상품이 없습니다.
+
+            {isLoading ? (
+              <div className="py-20">
+                <Loader />
               </div>
+            ) : (
+              <>
+                {/* products */}
+                {cart.length > 0 ? (
+                  cart.map((cartItem, index) => (
+                    <div
+                      key={index}
+                      className="my-4 rounded-md border-b-[1px] border-gray-300 bg-white"
+                    >
+                      <Products
+                        cartItem={cartItem}
+                        isSelectAllClick={isSelectAllClick}
+                        index={index}
+                      />
+                    </div>
+                  ))
+                ) : (
+                  <div className="w-full bg-white p-10 text-center">
+                    장바구니에 담긴 상품이 없습니다.
+                  </div>
+                )}
+              </>
             )}
 
             {/* Total */}
