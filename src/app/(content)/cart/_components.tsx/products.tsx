@@ -1,5 +1,6 @@
 import deleteCartItems from "@/app/(content)/cart/actions/deleteCartItems";
 import { CartItemDetail, useCartStore } from "@/store/useCartStore";
+import { useUserStore } from "@/store/useUserStore";
 import { cls } from "@/utils/cls";
 import { formatPrice } from "@/utils/formatPrice";
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
@@ -53,7 +54,7 @@ const Products = ({ cartItem, index, isSelectAllClick }: ProductsProps) => {
   // ============================================================
 
   const { cart, removeFromCart } = useCartStore((state) => state);
-
+  const { substractToCartItemCount } = useUserStore();
   useEffect(() => {
     useCartStore.setState((state) => ({
       cart: state.cart.map((cartItem) => ({ ...cartItem, checked: true })),
@@ -83,6 +84,7 @@ const Products = ({ cartItem, index, isSelectAllClick }: ProductsProps) => {
       productId: cartItem.productId,
     });
     deleteCartItems(cartItem.productId);
+    substractToCartItemCount();
   };
 
   return (
