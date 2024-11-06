@@ -14,7 +14,7 @@ import CartHeader from "./_components.tsx/cartHeader";
 
 import ProductList from "./_components.tsx/productList";
 import PriceSummary from "./_components.tsx/priceSummary";
-import ProductListHeader from "./_components.tsx/ProductListHeader";
+import ProductListHeader from "./_components.tsx/productListHeader";
 
 // Issue
 // 0. 선택하지 않은 옵션이 장바구니에 모두 담김
