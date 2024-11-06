@@ -7,13 +7,12 @@ import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
-type ProductsProps = {
+type ProductProps = {
   cartItem: CartItemDetail;
   index: number;
-  isSelectAllClick: boolean;
 };
 
-const Products = ({ cartItem, index, isSelectAllClick }: ProductsProps) => {
+const Product = ({ cartItem, index }: ProductProps) => {
   // ======================== CONST ==========================
   // 1. 원래가격
   const _originProductPrice = cartItem.product.price;
@@ -75,8 +74,6 @@ const Products = ({ cartItem, index, isSelectAllClick }: ProductsProps) => {
     event.preventDefault();
     updatedCheckedStatus(index, !cart[index].checked);
   };
-
-  const updatedDeleteProduct = () => {};
 
   const handleDeleteClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -192,7 +189,7 @@ const Products = ({ cartItem, index, isSelectAllClick }: ProductsProps) => {
 
         {/* Price */}
         <div className="text-sm sm:text-base lg:flex lg:w-[30%] lg:justify-center lg:divide-x-[1px]">
-          <div className="flex items-center justify-between gap-x-5 px-4 sm:px-20 lg:w-1/2 lg:justify-center lg:p-5">
+          <div className="flex items-center justify-between gap-x-5 px-4 sm:px-10 lg:w-1/2 lg:justify-center lg:p-5">
             <span className="text-gray-500 lg:hidden">선택상품금액</span>
             <span className="lg:hidden">
               {formatPrice(_selectProductPrice)}원
@@ -202,7 +199,7 @@ const Products = ({ cartItem, index, isSelectAllClick }: ProductsProps) => {
               {formatPrice(_pureTotalPrice)}원
             </span>
           </div>
-          <div className="flex items-center justify-between gap-x-5 px-4 sm:hidden sm:px-20 lg:w-1/2 lg:justify-center lg:p-5">
+          <div className="flex items-center justify-between gap-x-5 px-4 lg:hidden sm:px-10 lg:w-1/2 lg:justify-center lg:p-5">
             <span className="text-gray-500 lg:hidden lg:text-black ">
               할인금액
             </span>
@@ -211,7 +208,7 @@ const Products = ({ cartItem, index, isSelectAllClick }: ProductsProps) => {
             </span>
           </div>
 
-          <div className="flex items-center justify-between gap-x-5 px-4 sm:px-20 lg:w-1/2 lg:justify-center lg:p-5 ">
+          <div className="flex items-center justify-between gap-x-5 px-4 sm:px-10 lg:w-1/2 lg:justify-center lg:p-5 ">
             <span className="text-gray-500 lg:hidden">총 배송비</span>
             <span>{formatPrice(_deliveryPrice)}원</span>
           </div>
@@ -246,7 +243,7 @@ const Products = ({ cartItem, index, isSelectAllClick }: ProductsProps) => {
           <div className="hidden lg:block">=</div>
         </div>
 
-        <div className="flex items-center justify-between gap-x-5 px-4 text-center sm:w-[30%] sm:px-20 lg:flex-col lg:justify-center">
+        <div className="flex items-center justify-between gap-x-5 px-4 text-center lg:w-[30%] sm:px-10 lg:flex-col lg:justify-center">
           <span className="font-bold">주문금액</span>
           <span className="font-bold text-amber-500">
             {formatPrice(_TotalPrice)}원
@@ -257,4 +254,4 @@ const Products = ({ cartItem, index, isSelectAllClick }: ProductsProps) => {
   );
 };
 
-export default Products;
+export default Product;
