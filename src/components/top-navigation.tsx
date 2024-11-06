@@ -69,7 +69,7 @@ const TopNavigation = () => {
         "transion-color fixed z-50  w-full items-center justify-between py-4 text-white duration-500 sm:flex sm:py-6 ",
       )}
     >
-      <div className="mx-auto flex w-full max-w-screen-2xl flex-col px-4  sm:flex-row  md:px-20">
+      <div className="mx-auto flex w-full max-w-screen-2xl flex-col px-2  sm:flex-row  md:px-20">
         <div className="flex w-full justify-between">
           <div className="flex  shrink-0 items-center bg-gradient-to-tr from-yellow-500 to-yellow-200 bg-clip-text text-xl font-bold text-transparent md:text-2xl">
             <Link href="/">YM Light</Link>
