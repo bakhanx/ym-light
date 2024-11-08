@@ -27,7 +27,7 @@ const Product = async () => {
   const products = await getProducts();
 
   return (
-    <div className="mx-auto h-full max-w-screen-2xl px-4 py-32 md:px-20">
+    <div className="mx-auto min-h-screen max-w-screen-2xl px-4 py-32 md:px-20">
       <div className=" text-lg font-semibold sm:text-2xl">등록된 상품</div>
 
       <div className="grid grid-cols-2 gap-5 pt-10 sm:grid-cols-4">
