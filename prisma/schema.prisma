@@ -49,7 +49,8 @@ model Product {
   title        String     @unique
   price        Float
   discount     Float?
-  photo        String
+  photos       String[]   @default([])
+  detailPhotos String[]   @default([])
   color        String
   material     String
   size         String
