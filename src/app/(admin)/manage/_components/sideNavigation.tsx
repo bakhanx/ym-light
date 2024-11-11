@@ -20,7 +20,7 @@ const SideNavigation = () => {
       </div>
 
       <div
-        className={`${cls(isVisible ? "translate-x-48" : "", "m:gap-x-8 grid h-[60%]  items-center gap-y-4 border bg-blue-900 bg-opacity-90 p-1 text-sm text-white transition-transform md:text-base [&>button]:w-40")}`}
+        className={`${cls(isVisible ? "" : "translate-x-48", "m:gap-x-8 grid h-[60%]  items-center gap-y-4 border bg-blue-900 bg-opacity-90 p-1 text-sm text-white transition-transform md:text-base [&>button]:w-40")}`}
       >
         {topNavLinks.map((navLink) => (
           <Link
