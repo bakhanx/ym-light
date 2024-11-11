@@ -2,10 +2,13 @@
 
 import FormButton from "@/components/form-button";
 import FormInput from "@/components/form-input";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useFormState } from "react-dom";
 import { registerAction } from "../../../actions/register";
-import { PASSWORD_MIN_LENGTH, WORDS_MAX_LENGTH } from "@/utils/constants/loginConstants";
+import {
+  PASSWORD_MIN_LENGTH,
+  WORDS_MAX_LENGTH,
+} from "@/utils/constants/loginConstants";
 // import { } from '@/libs/db'
 
 const Register = () => {
@@ -25,7 +28,7 @@ const Register = () => {
 
   return (
     <div className=" bg-gray-800  text-white">
-      <div className="flex h-full mx-auto max-w-screen-lg items-center justify-center pt-32 pb-12">
+      <div className="mx-auto flex h-full max-w-screen-lg items-center justify-center pb-12 pt-32">
         <form action={dispatch} className="w-80">
           <div className="flex flex-col gap-y-5">
             <FormInput
