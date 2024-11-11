@@ -21,7 +21,7 @@ const getProducts = async () => {
         title: true,
         created_at: true,
         updated_at: true,
-        photo: true,
+        photos: true,
         discount: true,
       },
       orderBy: {
@@ -40,7 +40,7 @@ const getProducts = async () => {
         title: true,
         created_at: true,
         updated_at: true,
-        photo: true,
+        photos: true,
         discount: true,
       },
 
@@ -95,7 +95,7 @@ export default async function Home() {
                     <Card
                       key={product.id}
                       name={product.title}
-                      photoURL={product.photo}
+                      photoURL={product.photos[0]}
                       discount={product.discount || undefined}
                     />
                   </Link>
@@ -113,7 +113,7 @@ export default async function Home() {
                     <Card
                       key={product.id}
                       name={product.title}
-                      photoURL={product.photo}
+                      photoURL={product.photos[0]}
                       discount={product.discount || undefined}
                     />
                   </Link>
