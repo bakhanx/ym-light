@@ -16,10 +16,10 @@ const productSchema = z.object({
   bulb: z.string({ required_error: "전구타입을 입력해주세요." }),
   manufacturer: z.string({ required_error: "제조사를 입력해주세요." }),
   description: z.string().optional(),
-  photo0: z.string({ required_error: "사진을 등록해주세요." }),
-  // photo1: z.string().optional(),
-  // photo2: z.string().optional(),
-  // photo3: z.string().optional(),
+  photos: z.array(z.string({ required_error: "사진을 등록해주세요." })),
+  detailPhotos: z.array(
+    z.string({ required_error: "상세사진을 등록해주세요." }),
+  ),
 
   options: z
     .array(
@@ -45,6 +45,8 @@ export const uploadProduct = async (
   productId?: number,
   optionLength?: number,
 ) => {
+  const photoList: String[] = [];
+  const detailPhotoList: String[] = [];
   const optionList: OptionListType = [];
 
   optionLength !== undefined &&
@@ -57,6 +59,24 @@ export const uploadProduct = async (
       });
     });
 
+  let photoIndex = 0;
+  while (formData.has(`photo${photoIndex}`)) {
+    const photo = formData.get(`photo${photoIndex}`);
+    if (typeof photo === "string") {
+      photoList.push(photo);
+    }
+    photoIndex++;
+  }
+
+  let detailPhotoIndex = 0;
+  while (formData.has(`detailPhoto${detailPhotoIndex}`)) {
+    const photo = formData.get(`detailPhoto${detailPhotoIndex}`);
+    if (typeof photo === "string") {
+      detailPhotoList.push(photo);
+    }
+    detailPhotoIndex++;
+  }
+
   const data = {
     name: formData.get("name"),
     price: formData.get("price"),
@@ -68,12 +88,9 @@ export const uploadProduct = async (
     bulb: formData.get("bulb"),
     manufacturer: formData.get("manufacturer"),
     description: formData.get("description"),
-    photo0: formData.get("photo0"),
+    photos: photoList,
+    detailPhotos: detailPhotoList,
     options: optionList.length > 0 ? optionList : undefined,
-
-    // photo1: formData.get("photo1"),
-    // photo2: formData.get("photo2"),
-    // photo3: formData.get("photo3"),
   };
   const result = productSchema.safeParse(data);
   if (!result.success) {
@@ -87,6 +104,8 @@ export const uploadProduct = async (
           data: {
             title: result.data.name,
             price: result.data.price,
+            photos: result.data.photos,
+            detailPhotos: result.data.detailPhotos,
             discount: result.data.discount || null,
             color: result.data.color || "",
             material: result.data.material || "",
@@ -95,7 +114,6 @@ export const uploadProduct = async (
             manufacturer: result.data.manufacturer,
             description: result.data.description || "",
             stock: result.data.stock,
-            photo: result.data.photo0,
           },
           select: {
             id: true,
@@ -105,6 +123,8 @@ export const uploadProduct = async (
           data: {
             title: result.data.name,
             price: result.data.price,
+            photos: result.data.photos,
+            detailPhotos: result.data.detailPhotos,
             stock: result.data.stock,
             discount: result.data.discount || null,
             color: result.data.color || "",
@@ -113,9 +133,7 @@ export const uploadProduct = async (
             bulb: result.data.bulb,
             manufacturer: result.data.manufacturer,
             description: result.data.description || "",
-            photo: result.data.photo0,
           },
-
           select: {
             id: true,
           },
