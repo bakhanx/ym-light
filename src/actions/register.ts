@@ -16,6 +16,7 @@ import bcrypt from "bcrypt";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import getSession from "@/utils/session";
+import { revalidatePath } from "next/cache";
 
 const checkPassowrd = ({
   password,
@@ -176,7 +177,6 @@ export const registerAction = async (
 
       const session = await getSession();
       session.id = user.id;
-      await session.save();
 
       await db.log.create({
         data: {
