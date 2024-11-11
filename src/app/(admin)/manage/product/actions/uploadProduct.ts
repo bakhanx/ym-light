@@ -80,6 +80,8 @@ export const uploadProduct = async (
   const data = {
     name: formData.get("name"),
     price: formData.get("price"),
+    photos: photoList,
+    detailPhotos: detailPhotoList,
     stock: formData.get("stock"),
     discount: formData.get("discount"),
     color: formData.get("color"),
@@ -88,8 +90,6 @@ export const uploadProduct = async (
     bulb: formData.get("bulb"),
     manufacturer: formData.get("manufacturer"),
     description: formData.get("description"),
-    photos: photoList,
-    detailPhotos: detailPhotoList,
     options: optionList.length > 0 ? optionList : undefined,
   };
   const result = productSchema.safeParse(data);
