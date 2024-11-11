@@ -3,6 +3,7 @@ import db from "@/utils/db";
 import { unstable_cache as nextCache } from "next/cache";
 import ProductContents from "../_components/product-contents";
 import getSession from "@/utils/session";
+import Image from "next/image";
 
 type Props = {
   params: {
@@ -20,7 +21,8 @@ const getProduct = async (id: number) => {
       title: true,
       price: true,
       discount: true,
-      photo: true,
+      photos: true,
+      detailPhotos: true,
       color: true,
       material: true,
       size: true,
