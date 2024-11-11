@@ -16,7 +16,8 @@ type ProductType = {
   price: number;
   stock: number;
   discount: number | null;
-  photo: string;
+  photos: string[];
+  detailPhotos: string[];
   color: string;
   material: string;
   size: string;
@@ -35,10 +36,9 @@ export const Upload = ({
   product: ProductType;
   isEdit?: boolean;
 }) => {
-
   const [optionCnt, setOptionCnt] = useState(product?.options.length || 0);
 
- const handleIncreaseOption = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleIncreaseOption = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     setOptionCnt((prev) => prev + 1);
   };
@@ -55,7 +55,7 @@ export const Upload = ({
     const uploadImage = async (imageKey: string) => {
       const file = formData.get(imageKey) as File;
       const isExistsFile = file.size > 0;
- 
+
       if (!isExistsFile) {
         console.log("not found file");
         return;
