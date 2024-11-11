@@ -106,7 +106,7 @@ const Product = ({ cartItem, index }: ProductProps) => {
               <div className="relative h-20 w-20 bg-slate-500">
                 <Image
                   alt={`${cartItem.product.title}`}
-                  src={`${cartItem.product.photo}/thumbnail`}
+                  src={`${cartItem.product.photos[0]}/thumbnail`}
                   fill
                 />
               </div>
