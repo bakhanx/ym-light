@@ -13,7 +13,7 @@ const getProducts = async () => {
     select: {
       id: true,
       title: true,
-      photo: true,
+      photos: true,
       price: true,
       discount: true,
       created_at: true,
@@ -72,7 +72,7 @@ const Edit = async () => {
               <Image
                 fill
                 alt={String(product.id)}
-                src={`${product.photo}/thumbnail`}
+                src={`${product.photos[0]}/thumbnail`}
               />
             </div>
 
