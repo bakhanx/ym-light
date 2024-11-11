@@ -28,6 +28,8 @@ const TopNavigation = () => {
   );
   const handleLogout = async () => {
     localStorage.removeItem("user-storage");
+    sessionStorage.removeItem('cart');
+    sessionStorage.removeItem('chat');
     await logOut();
     window.location.href = "/";
   };
