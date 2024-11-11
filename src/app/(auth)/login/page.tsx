@@ -31,7 +31,7 @@ const Login = () => {
         setUser({
           id: result.data.id,
           username: result.data.username,
-          cartItemCount: result.data.cartItemCount,
+          cartItemCount: result.data.cartItemCount || 0,
         });
         window.location.href = "/";
       } else {
@@ -52,9 +52,8 @@ const Login = () => {
               placeholder="ymlight123"
               required
               max={WORDS_MAX_LENGTH}
-              error={state?.error?.loginId}
+              error={state?.error?.fieldErrors?.loginId?.[0]}
             />
-
             <FormInput
               label="비밀번호"
               name="password"
@@ -62,10 +61,10 @@ const Login = () => {
               placeholder="****"
               required
               min={PASSWORD_MIN_LENGTH}
-              error={state?.error?.password}
+              error={state?.error?.fieldErrors?.password?.[0]}
             />
           </div>
-
+          <div>{state.success}</div>
           <div className="pt-5">
             <FormButton name="로그인" />
           </div>
