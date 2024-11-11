@@ -104,7 +104,7 @@ export const login = async (
       data: {
         id: user.id,
         username: user.username,
-        cartItemCount: user.carts[0].cartItems.length,
+        cartItemCount: user.carts?.[0]?.cartItems?.length || 0,
       },
       error: null,
       success: true,
