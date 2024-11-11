@@ -8,6 +8,7 @@ import { useFormState } from "react-dom";
 import getUploadUrl from "@/app/(admin)/actions/getUploadUrl";
 import FormButton from "@/components/form-button";
 import { Option } from "@prisma/client";
+import useImageUploader from "@/hooks/useImageUploader";
 
 type ProductType = {
   id: number;
@@ -34,98 +35,10 @@ export const Upload = ({
   product: ProductType;
   isEdit?: boolean;
 }) => {
-  const [preview, setPreview] = useState<string[]>(
-    product ? [`${product?.photo}/public`] : [],
-  );
 
-  const [uploadURL, setUploadURL] = useState("");
-  const [photoId, setPhotoId] = useState("");
   const [optionCnt, setOptionCnt] = useState(product?.options.length || 0);
 
-  const handleChangeImage = async (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const {
-      target: { files },
-    } = event;
-    if (files) {
-      const {
-        target: { id },
-      } = event;
-      const index = +id.charAt(id.length - 1);
-      const file = files[0];
-      const url = URL.createObjectURL(file);
-
-      if (preview[index]) {
-        setPreview((prev) => {
-          const temp = [...prev];
-          temp.splice(index, 1, url);
-          return temp;
-        });
-      } else {
-        setPreview((prev) => {
-          const temp = [...prev];
-          temp.push(url);
-          return temp;
-        });
-      }
-      const { result, success } = await getUploadUrl();
-      if (success) {
-        const { id: URLId, uploadURL } = result;
-        setPhotoId(URLId);
-        setUploadURL(uploadURL);
-      }
-    }
-  };
-
-  const handleDeleteImage = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-
-    console.log(event.currentTarget.id);
-    const {
-      currentTarget: { id },
-    } = event;
-    setPreview((prev) => {
-      const temp = [...prev];
-      temp.splice(+id, 1);
-      return temp;
-    });
-  };
-
-  const interceptAction = async (_: any, formData: FormData) => {
-    const file = formData.get("photo0") as File;
-    const isExistsFile = file.size > 0;
-
-    if (preview[0] && !isExistsFile) {
-      console.log("preview exists!");
-      formData.set("photo0", product?.photo || "");
-      return uploadProduct(formData, product?.id, optionCnt);
-    }
-
-    if (!isExistsFile && !preview[0]) {
-      console.log("not found file");
-      return;
-    }
-
-    const cloudflareForm = new FormData();
-    cloudflareForm.append("file", file);
-
-    const response = await fetch(uploadURL, {
-      method: "post",
-      body: cloudflareForm,
-    });
-    console.log(await response.text());
-    if (response.status !== 200) {
-      console.log("Error!!");
-      return;
-    }
-
-    const photoURL = `https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${photoId}`;
-    formData.set("photo0", photoURL);
-
-    return uploadProduct(formData, product?.id, optionCnt);
-  };
-  const handleIncreaseOption = (event: React.MouseEvent<HTMLButtonElement>) => {
+ const handleIncreaseOption = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     setOptionCnt((prev) => prev + 1);
   };
@@ -133,6 +46,49 @@ export const Upload = ({
     event.preventDefault();
     if (optionCnt === 0) return;
     setOptionCnt((prev) => prev - 1);
+  };
+
+  const imageUploader = useImageUploader();
+  const detailImageUploader = useImageUploader();
+
+  const interceptAction = async (_: any, formData: FormData) => {
+    const uploadImage = async (imageKey: string) => {
+      const file = formData.get(imageKey) as File;
+      const isExistsFile = file.size > 0;
+ 
+      if (!isExistsFile) {
+        console.log("not found file");
+        return;
+      }
+      console.log(imageKey);
+      console.log(file);
+      const cloudflareForm = new FormData();
+      cloudflareForm.append("file", file);
+      const response = await fetch(imageUploader.uploadUrl, {
+        method: "post",
+        body: cloudflareForm,
+      });
+
+      console.log(await response.text());
+      if (response.status !== 200) {
+        console.log("Error!!");
+        return;
+      }
+      const photoURL = `https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${imageUploader.photoId}`;
+      formData.set(imageKey, photoURL);
+      console.log(formData);
+    };
+    let photoIndex = 0;
+    while (formData.has(`photo${photoIndex}`)) {
+      await uploadImage(`photo${photoIndex}`);
+      photoIndex++;
+    }
+    let detailPhotoIndex = 0;
+    while (formData.has(`detailPhoto${detailPhotoIndex}`)) {
+      await uploadImage(`detailPhoto${detailPhotoIndex}`);
+      detailPhotoIndex++;
+    }
+    return uploadProduct(formData, product?.id, optionCnt);
   };
 
   const [state, action] = useFormState(interceptAction, null);
@@ -154,24 +110,24 @@ export const Upload = ({
                       htmlFor="photo0"
                       className="flex aspect-square w-full cursor-pointer flex-col items-center justify-center border-2 border-dashed border-gray-400 text-gray-500"
                       style={{
-                        backgroundImage: `url(${preview[0]})`,
+                        backgroundImage: `url(${imageUploader.previews[0]})`,
                         backgroundSize: "contain",
                         backgroundRepeat: "no-repeat",
                         backgroundPosition: "50% 50%",
                       }}
                     >
-                      {!preview[0] && (
+                      {!imageUploader.previews[0] && (
                         <>
                           <PhotoIcon className="w-1/3 text-gray-400" />
                           <div>사진을 추가해주세요.</div>
                           <div className="text-red-500">
-                            {state?.fieldErrors.photo0}
+                            {state?.fieldErrors.photos}
                           </div>
                         </>
                       )}
                     </label>
                     <input
-                      onChange={handleChangeImage}
+                      onChange={imageUploader.handleChangeImage}
                       type="file"
                       className="hidden"
                       id="photo0"
@@ -188,16 +144,18 @@ export const Upload = ({
                           htmlFor={`photo${index + 1}`}
                           className="relative flex aspect-square w-1/3 cursor-pointer flex-col items-center justify-center border-2 border-dashed border-gray-400 text-gray-500"
                           style={{
-                            backgroundImage: `url(${preview[index + 1]})`,
+                            backgroundImage: `url(${imageUploader.previews[index + 1]})`,
                             backgroundSize: "contain",
                             backgroundRepeat: "no-repeat",
                             backgroundPosition: "50% 50%",
                           }}
                         >
-                          {preview[index + 1] ? (
+                          {imageUploader.previews[index + 1] ? (
                             <button
                               id={String(index + 1)}
-                              onClick={handleDeleteImage}
+                              onClick={() =>
+                                imageUploader.handleDeleteImage(index + 1)
+                              }
                               className="absolute right-0 top-0 z-20 rounded-sm bg-red-500 p-[2px] hover:bg-red-600"
                             >
                               <XMarkIcon className="size-5 text-white " />
@@ -210,7 +168,7 @@ export const Upload = ({
                           )}
 
                           <input
-                            onChange={handleChangeImage}
+                            onChange={imageUploader.handleChangeImage}
                             type="file"
                             className="hidden"
                             id={`photo${index + 1}`}
@@ -398,6 +356,7 @@ export const Upload = ({
                   <p>표시할 게시물이 없습니다.</p>
                 </div>
               </div>
+
               <div className="my-product-detail-item item-detail pt-6">
                 <div className="my-item-title text-lg font-bold">
                   <div>상품 상세정보</div>
