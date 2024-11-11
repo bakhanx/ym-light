@@ -42,7 +42,7 @@ const Product = async () => {
                 <div className="relative aspect-square w-full overflow-hidden rounded-t-md border-[1px] border-white">
                   <Image
                     alt={product.title}
-                    src={`${product.photo}/sharpen=1,fit=scale-down,w=640`}
+                    src={`${product.photos[0]}/sharpen=1,fit=scale-down,w=640`}
                     fill
                     objectFit="cover"
                     placeholder="blur"
