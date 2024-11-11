@@ -17,6 +17,7 @@ import updateCart from "../actions/updateCart";
 import Loader from "@/components/loader";
 import createDirectOrder from "../actions/createDirectOrder";
 import { useUserStore } from "@/store/useUserStore";
+import getCartItems from "../../cart/actions/getCartItems";
 
 type Options = {
   options: Option[];
@@ -31,7 +32,8 @@ type ProductContentsProps = ProductWithOptions & {
 
 const ProductContents = ({ product, userId }: ProductContentsProps) => {
   const [isLoading, setIsLoading] = useState(false);
-  const { addToCart } = useCartStore();
+  const { addToCart, isDataLoaded, setDataLoaded, setInitData } =
+    useCartStore();
   const { addToCartItemCount } = useUserStore();
   const [selectedOptionList, setSelectedOptionList] = useState<
     selectedItemType[]
@@ -71,6 +73,19 @@ const ProductContents = ({ product, userId }: ProductContentsProps) => {
     }
     const cartItem = createCartItem();
     setIsLoading(true);
+
+    // 장바구니 데이터 초기화 server -> zustand
+    const getCart = async () => {
+      if (!isDataLoaded && userId) {
+        setDataLoaded();
+        const cartItems = await getCartItems(userId);
+        if (cartItems) {
+          setInitData(cartItems);
+          console.log("cart store init");
+        }
+      }
+    };
+    await getCart();
 
     // z-store
     const addToCartPromise = addToCart({ ...cartItem, checked: true });
@@ -161,7 +176,7 @@ const ProductContents = ({ product, userId }: ProductContentsProps) => {
           <div className="my-banner-image ">
             <div className="relative aspect-square w-full bg-slate-500">
               <Image
-                src={`${product.photo}/sharpen=1,fit=scale-down,w=640`}
+                src={`${product.photos[0]}/sharpen=1,fit=scale-down,w=640`}
                 fill
                 alt="temp"
                 objectFit="cover"
