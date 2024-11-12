@@ -1,10 +1,10 @@
-import getUploadUrl from "@/app/(admin)/actions/getUploadUrl";
 import { useState } from "react";
 
-const useImageUploader = () => {
-  const [previews, setPreviews] = useState(["", "", "", ""]);
-  const [uploadUrl, setUploadUrl] = useState("");
-  const [photoId, setPhotoId] = useState("");
+const MAX_COUNT = 3;
+const initail_previews = [...Array(MAX_COUNT).fill("")];
+
+const useImagePreviews = () => {
+  const [previews, setPreviews] = useState(initail_previews);
 
   const handleChangeImage = async (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -23,14 +23,6 @@ const useImageUploader = () => {
         temp[index] = url;
         return temp;
       });
-
-      const { result, success } = await getUploadUrl();
-      if (success) {
-        const { id: cfUrlId, uploadURL:cfUrl } = result;
-        setPhotoId(cfUrlId);
-        console.log(cfUrl);
-        setUploadUrl(cfUrl);
-      }
     }
   };
 
@@ -42,7 +34,7 @@ const useImageUploader = () => {
     });
   };
 
-  return { previews, handleChangeImage, handleDeleteImage, uploadUrl, photoId };
+  return { previews, handleChangeImage, handleDeleteImage };
 };
 
-export default useImageUploader;
+export default useImagePreviews;
