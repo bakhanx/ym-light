@@ -6,11 +6,11 @@ import {
   ShoppingBagIcon,
   TruckIcon,
 } from "@heroicons/react/16/solid";
-import React, { useEffect, useId, useState } from "react";
+import React, { useState } from "react";
 import Options, { selectedItemType } from "./options";
 import ProductInfo from "./product-Info";
 import Image from "next/image";
-import { CartItemDetail, useCartStore } from "@/store/useCartStore";
+import { useCartStore } from "@/store/useCartStore";
 import { Option, Product } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import updateCart from "../actions/updateCart";
@@ -18,6 +18,7 @@ import Loader from "@/components/loader";
 import createDirectOrder from "../actions/createDirectOrder";
 import { useUserStore } from "@/store/useUserStore";
 import getCartItems from "../../cart/actions/getCartItems";
+import { cls } from "@/utils/cls";
 
 type Options = {
   options: Option[];
@@ -39,6 +40,9 @@ const ProductContents = ({ product, userId }: ProductContentsProps) => {
     selectedItemType[]
   >([]);
   const [quantity, setQuantity] = useState(product.options.length > 0 ? 0 : 1);
+
+  const [mainImage, setMainImage] = useState(product.photos[0]);
+  const [selectedThumbnail, setSelectedThumbnail] = useState(0);
 
   const router = useRouter();
   const tempId = Date.now();
@@ -168,23 +172,48 @@ const ProductContents = ({ product, userId }: ProductContentsProps) => {
     }
   };
 
+  const handleImageSelect = (photo: string, index: number) => {
+    setMainImage(photo);
+    setSelectedThumbnail(index);
+  };
+
   return (
     <div className="my-column_bind flex flex-col divide-y-2 divide-slate-300 sm:flex-row sm:divide-x-2 sm:divide-y-0">
       {/* left */}
       <div className="my-column-left pb-4 sm:w-[50%] sm:pr-10 ">
         <div className="my-column-box">
           <div className="my-banner-image ">
-            <div className="relative aspect-square w-full bg-slate-500">
+            <div className="relative aspect-square bg-slate-500">
               <Image
-                src={`${product.photos[0]}/sharpen=1,fit=scale-down,w=640`}
+                src={`${mainImage}/sharpen=1,fit=scale-down,w=640`}
                 fill
                 alt="temp"
                 objectFit="cover"
               />
             </div>
           </div>
-          <div className="my-banner-func pt-5">
-            <div className="h-16 w-full border-2">이미지 슬라이드</div>
+          <div className="my-banner-func flex justify-center pt-5">
+            <div className="flex w-full justify-between gap-2">
+              {product.photos.map((photo, index) => (
+                <div
+                  key={index}
+                  className={cls(
+                    selectedThumbnail === index
+                      ? "border-blue-500"
+                      : "border-gray-300",
+                    "relative aspect-square w-[33%] cursor-pointer border-2",
+                  )}
+                  onClick={() => handleImageSelect(photo, index)}
+                >
+                  <Image
+                    src={`${photo}/sharpen=1,fit=scale-down,w=200`}
+                    fill
+                    alt={`추가사진${index}`}
+                    className="object-cover"
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
