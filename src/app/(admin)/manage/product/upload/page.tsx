@@ -8,7 +8,7 @@ import { useFormState } from "react-dom";
 import getUploadUrl from "@/app/(admin)/actions/getUploadUrl";
 import FormButton from "@/components/form-button";
 import { Option } from "@prisma/client";
-import useImageUploader from "@/hooks/useImageUploader";
+import useImagePreviews from "@/hooks/useImagePreviews";
 
 type ProductType = {
   id: number;
@@ -48,8 +48,8 @@ export const Upload = ({
     setOptionCnt((prev) => prev - 1);
   };
 
-  const imageUploader = useImageUploader();
-  const detailImageUploader = useImageUploader();
+  const imageUploader = useImagePreviews();
+  const detailImageUploader = useImagePreviews();
 
   const interceptAction = async (_: any, formData: FormData) => {
     const uploadImage = async (imageKey: string) => {
@@ -62,21 +62,26 @@ export const Upload = ({
       }
       console.log(imageKey);
       console.log(file);
+
+      const { result, success } = await getUploadUrl();
+      if (!success) {
+        console.log("Failed to get upload URL");
+        return;
+      }
+      const { id: cfUrlId, uploadURL: cfUrl } = result;
+
       const cloudflareForm = new FormData();
       cloudflareForm.append("file", file);
-      const response = await fetch(imageUploader.uploadUrl, {
+      const response = await fetch(cfUrl, {
         method: "post",
         body: cloudflareForm,
       });
-
-      console.log(await response.text());
       if (response.status !== 200) {
         console.log("Error!!");
         return;
       }
-      const photoURL = `https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${imageUploader.photoId}`;
+      const photoURL = `https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${cfUrlId}`;
       formData.set(imageKey, photoURL);
-      console.log(formData);
     };
     let photoIndex = 0;
     while (formData.has(`photo${photoIndex}`)) {
@@ -108,7 +113,7 @@ export const Upload = ({
                   <div className="my-banner-image">
                     <label
                       htmlFor="photo0"
-                      className="flex aspect-square w-full cursor-pointer flex-col items-center justify-center border-2 border-dashed border-gray-400 text-gray-500"
+                      className="flex aspect-square w-full cursor-pointer flex-col items-center justify-center border-2 border-dashed border-gray-400 text-gray-500 relative"
                       style={{
                         backgroundImage: `url(${imageUploader.previews[0]})`,
                         backgroundSize: "contain",
@@ -116,7 +121,15 @@ export const Upload = ({
                         backgroundPosition: "50% 50%",
                       }}
                     >
-                      {!imageUploader.previews[0] && (
+                      {imageUploader.previews[0] ? (
+                        <button
+                          id="0"
+                          onClick={() => imageUploader.handleDeleteImage(0)}
+                          className="absolute right-0 top-0 z-20 rounded-sm bg-red-500 p-[2px] hover:bg-red-600"
+                        >
+                          <XMarkIcon className="size-7 md:size-10 text-white " />
+                        </button>
+                      ) : (
                         <>
                           <PhotoIcon className="w-1/3 text-gray-400" />
                           <div>사진을 추가해주세요.</div>
@@ -138,7 +151,34 @@ export const Upload = ({
 
                   <div className="my-banner-func mt-4 border-2">
                     <div className="flex w-full items-center justify-between gap-x-8">
-                      {[...Array(3)].map((_, index) => (
+                      <label
+                        key={0}
+                        htmlFor={`photo0`}
+                        className="relative flex aspect-square w-1/3 cursor-pointer flex-col items-center justify-center  border-2 border-gray-400 text-gray-500"
+                        style={{
+                          backgroundImage: `url(${imageUploader.previews[0]})`,
+                          backgroundSize: "contain",
+                          backgroundRepeat: "no-repeat",
+                          backgroundPosition: "50% 50%",
+                        }}
+                      >
+                        {imageUploader.previews[0] ? (
+                          <button
+                            id="0"
+                            onClick={() => imageUploader.handleDeleteImage(0)}
+                            className="absolute right-0 top-0 z-20 rounded-sm bg-red-500 p-[2px] hover:bg-red-600"
+                          >
+                            <XMarkIcon className="size-4 md:size-5 text-white " />
+                          </button>
+                        ) : (
+                          <>
+                            <PhotoIcon className="w-1/3" />
+                            <div className="text-xs">대표사진</div>
+                          </>
+                        )}
+                      </label>
+
+                      {[...Array(2)].map((_, index) => (
                         <label
                           key={index}
                           htmlFor={`photo${index + 1}`}
