@@ -85,8 +85,8 @@ const Cart = () => {
         if (cartItems) {
           setInitData(cartItems);
           console.log("cart store init");
-          setIsLoading(false);
         }
+        setIsLoading(false);
       }
     };
     getCart();
