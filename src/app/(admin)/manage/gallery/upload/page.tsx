@@ -6,7 +6,7 @@ import { BoltIcon, PhotoIcon } from "@heroicons/react/16/solid";
 import React, { useState } from "react";
 import { useFormState } from "react-dom";
 import { uploadGallery } from "../actions/uploadGallery";
-import  getUploadUrl  from "@/app/(admin)/actions/getUploadUrl";
+import getUploadUrl from "@/app/(admin)/actions/getUploadUrl";
 
 const DEFAULT_CONTENT =
   "(예시) Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus sint architecto ut commodi. Optio nostrum aliquid tenetur labore voluptate consequuntur dolorem eius!";
@@ -123,7 +123,7 @@ export const Upload = ({
 
   return (
     <div className="my-container">
-      <div className="my-content m-auto h-full max-w-screen-xl px-4 py-5 md:px-10">
+      <div className="pt-28 my-content m-auto min-h-full max-w-screen-xl px-2 py-5 xl:px-0">
         <form action={action}>
           <p className="pb-5 text-3xl font-bold">
             갤러리 {isEdit ? "수정하기" : "등록하기"}
