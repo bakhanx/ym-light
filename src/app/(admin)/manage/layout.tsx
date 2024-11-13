@@ -5,7 +5,9 @@ const HomeLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div>
       <SideNavigation />
-      {children}
+      <div className="max-w-screen-xl mx-auto">
+      {children}  
+      </div>
     </div>
   );
 };
