@@ -2,7 +2,7 @@ import React from "react";
 
 const Loading = () => {
   return (
-    <div className="mx-auto min-h-screen max-w-screen-2xl px-4 py-32 md:px-20">
+    <div className="mx-auto min-h-screen max-w-screen-xl px-2 xl:px-0 py-32">
       <div className="h-8 w-1/4  bg-slate-200 text-lg font-semibold sm:text-2xl" />
       <div className="grid grid-cols-2 gap-5 pt-10 sm:grid-cols-4">
         {[...Array(8)].map((_, index) => (

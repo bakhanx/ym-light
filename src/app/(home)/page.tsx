@@ -67,7 +67,7 @@ export default async function Home() {
           <div className={lightFlicker.light_container} />
 
           {/* Text */}
-          <div className="absolute z-10 flex h-full w-full max-w-screen-2xl flex-col justify-center px-4 pt-24 text-white md:px-20">
+          <div className="absolute z-10 flex h-full w-full max-w-screen-xl flex-col justify-center px-2 pt-24 text-white xl:px-0">
             {/* <NeonText /> */}
             <div className="">
               <div className={textFlicker.light_container} />
@@ -83,13 +83,13 @@ export default async function Home() {
       </div>
 
       <Suspense fallback="Loading...">
-        <div className="mx-auto max-w-screen-2xl  px-4 py-5 text-white sm:px-10 sm:py-10  md:px-20">
+        <div className="mx-auto max-w-screen-xl px-2 py-5 text-white sm:py-10 xl:px-0">
           <div className="flex flex-col gap-y-10 divide-y-2">
             <div className="my-product-wrap">
               <div className=" text-lg font-semibold sm:text-2xl">
                 새로 등록된 상품
               </div>
-              <div className="grid  gap-8 pt-4  min-[320px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 ">
+              <div className="grid  gap-8 pt-4  min-[320px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 px-4">
                 {allProducts.map((product) => (
                   <Link key={product.id} href={`/products/${product.id}`}>
                     <Card

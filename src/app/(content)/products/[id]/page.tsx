@@ -52,7 +52,7 @@ const ProductDetail = async ({ params }: Props) => {
       {/* <ScrollTop/> */}
       {product ? (
         <div className="my-container">
-          <div className="my-content m-auto max-w-screen-xl px-4 pb-28 pt-32 sm:px-10 ">
+          <div className="my-content m-auto max-w-screen-xl pb-28 pt-32 xl:px-0 px-2 ">
             {/* 상품 내용 */}
             <ProductContents product={product} userId={session.id} />
 
