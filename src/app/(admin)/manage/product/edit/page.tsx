@@ -30,7 +30,7 @@ const Edit = async () => {
   const products = await getProducts();
 
   return (
-    <div className="m-auto flex max-w-screen-2xl flex-col gap-y-5 p-4 pt-24 text-sm md:text-base lg:px-20">
+    <div className="m-auto h-screen flex max-w-screen-xl flex-col gap-y-5 pt-24 text-sm md:text-base xl:px-0 px-2">
       {/* Header */}
       <div className="hidden w-full gap-x-6 border-b-2 border-black py-4 sm:flex">
         <ul className="flex w-[10%] gap-x-2">
