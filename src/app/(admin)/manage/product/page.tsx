@@ -6,7 +6,7 @@ import React from "react";
 const revalidateProducts = async () => {
   "use server";
   revalidateTag("product");
-  alert('갱신 완료')
+  alert("갱신 완료");
 };
 
 const navLinks = [
@@ -16,10 +16,10 @@ const navLinks = [
 
 const Product = () => {
   return (
-    <div className="mx-auto h-[60vh] max-w-screen-2xl pt-10">
+    <div className="mx-auto h-screen max-w-screen-xl pt-28">
       <div>상품관리페이지</div>
 
-      <div className="flex flex-col items-center gap-y-8 p-10 sm:gap-x-8 md:flex-row [&>button]:w-40 ">
+      <div className="flex flex-col items-center gap-y-8 pt-10 sm:gap-x-8 md:flex-row [&>button]:w-40 ">
         {navLinks.map((navLink) => (
           <Link
             href={navLink.href}
