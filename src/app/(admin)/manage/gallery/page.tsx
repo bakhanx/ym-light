@@ -9,14 +9,14 @@ const revalidateGallery = async () => {
 
 const navLinks = [
   { key: "upload", name: "업로드", href: "gallery/upload" },
-  { key: "edit", name: "상품수정", href: "gallery/edit" },
+  { key: "edit", name: "갤러리 수정", href: "gallery/edit" },
 ];
 
 const Gallery = () => {
   return (
-    <div className="mx-auto h-[60vh] max-w-screen-2xl pt-10">
+    <div className="mx-auto min-h-screen max-w-screen-xl pt-28 px-2 xl:px-0">
       <div>갤러리 관리</div>
-      <div className="flex flex-col items-center gap-y-8 p-10  sm:gap-x-8 md:flex-row [&>button]:w-40 ">
+      <div className="pt-10 flex flex-col items-center gap-y-8 sm:gap-x-8 md:flex-row [&>button]:w-40 ">
         {navLinks.map((navLink) => (
           <Link
             href={navLink.href}
