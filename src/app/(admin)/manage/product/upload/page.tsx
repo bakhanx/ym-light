@@ -100,7 +100,7 @@ export const Upload = ({
   return (
     <div className="pt-16">
       <div className="my-container py-10">
-        <div className="my-content m-auto max-w-screen-xl px-4 md:px-10 ">
+        <div className="my-content m-auto max-w-screen-xl px-2 xl:px-0 ">
           <p className="pb-5 text-3xl font-bold">
             상품 {isEdit ? "수정하기" : "등록하기"}
           </p>
