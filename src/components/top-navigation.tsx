@@ -28,8 +28,8 @@ const TopNavigation = () => {
   );
   const handleLogout = async () => {
     localStorage.removeItem("user-storage");
-    sessionStorage.removeItem('cart');
-    sessionStorage.removeItem('chat');
+    sessionStorage.removeItem("cart");
+    sessionStorage.removeItem("chat");
     await logOut();
     window.location.href = "/";
   };
@@ -68,10 +68,10 @@ const TopNavigation = () => {
         isScrolled || isBgWhitePaths
           ? "bg-[#010315] bg-opacity-90"
           : "bg-transparent",
-        "transion-color fixed z-50  w-full items-center justify-between py-4 text-white duration-500 sm:flex sm:py-6 ",
+        " fixed z-50 w-full items-center justify-between py-4 text-white duration-500 sm:flex sm:py-6 ",
       )}
     >
-      <div className="mx-auto flex w-full max-w-screen-2xl flex-col px-2  sm:flex-row  md:px-20">
+      <div className="mx-auto flex w-full max-w-screen-xl flex-col xl:px-0 px-2 sm:flex-row ">
         <div className="flex w-full justify-between">
           <div className="flex  shrink-0 items-center bg-gradient-to-tr from-yellow-500 to-yellow-200 bg-clip-text text-xl font-bold text-transparent md:text-2xl">
             <Link href="/">YM Light</Link>
@@ -79,9 +79,9 @@ const TopNavigation = () => {
           <div className="flex items-center gap-x-1 text-gray-300 sm:pr-2">
             {user ? (
               <>
-                <span>{user?.username}님</span>
+                <span>{user.username}님</span>
                 <span>
-                  <button onClick={handleLogout} className="text-sm  underline">
+                  <button onClick={handleLogout} className="text-sm underline">
                     로그아웃
                   </button>
                 </span>
@@ -123,17 +123,8 @@ const TopNavigation = () => {
               </span>
             )}
           </li>
-
-          {/* <li className="text-black">
-        <select>
-          <option>한국어</option>
-          <option>English</option>
-          <option>中國語</option>
-        </select>
-      </li> */}
         </ul>
       </div>
-      {/* <div className="h-1 w-full bg-gradient-to-r from-amber-100 via-amber-500 to-yellow-200 sm:hidden" /> */}
     </div>
   );
 };
