@@ -4,7 +4,7 @@ import Image from "next/image";
 import React from "react";
 import Table from "../_components/table";
 import { formatDate } from "@/utils/formatDate";
-import Card from "../_components/card";
+import Card, { RowData, TableData } from "../_components/card";
 
 const Order = async () => {
   const orderList = await db.order.findMany({
@@ -25,8 +25,8 @@ const Order = async () => {
 
   const headers = ["주문 ID", "고객명", "상품 정보", "주문일자"];
 
-  const data = orderList.length > 0 ? orderList.map((order) => {
-    const orderData = [
+  const data: TableData = orderList.length > 0 ? orderList.map((order) => {
+    const orderData: RowData[] = [
       [order.id, "text-center"],
       [order.user.username, "text-center"],
       [
