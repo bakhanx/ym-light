@@ -6,6 +6,8 @@ import { UserType } from "@/app/(admin)/actions/getUsers";
 import { formatDate } from "@/utils/formatDate";
 import { useRouter } from "next/navigation";
 import React from "react";
+import Table, { RowData } from "../../_components/table";
+import Card from "../../_components/card";
 
 const UserInfo = ({ users }: { users: UserType }) => {
   const router = useRouter();
@@ -37,6 +39,31 @@ const UserInfo = ({ users }: { users: UserType }) => {
       alert("게스트 계정 삭제에 실패했습니다.");
     }
   };
+
+  const headers = [
+    "ID",
+    "고객명",
+    "로그인ID",
+    "이메일",
+    "전화번호",
+    "가입일",
+    "최근 방문일",
+  ];
+  const data : RowData [][]= users.map((user) => [
+    [user.id, "text-center"],
+    [user.username, "whitespace-nowrap"],
+    [user.loginId, "whitespace-nowrap"],
+    [user.email, "whitespace-nowrap"],
+    [user.phone, "whitespace-nowrap"],
+    [formatDate(user.created_at), ""],
+    [
+      user.logs.map((log) => (
+        <div key={log.id}>{formatDate(log.created_at)}</div>
+      )),
+      "text-left",
+    ],
+  ]);
+
   return (
     <>
       <div className="py-4">
@@ -51,37 +78,17 @@ const UserInfo = ({ users }: { users: UserType }) => {
         </div>
       </div>
       <div>총 유저수 : {users.length}</div>
-      <div className="py-2">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th>ID</th>
-              <th>고객명</th>
-              <th>로그인ID</th>
-              <th>이메일</th>
-              <th>전화번호</th>
-              <th>가입일</th>
-              <th>최근 방문일</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200 bg-white">
-            {users.map((user) => (
-              <tr key={user.id} className="divide-x [&>td]:py-2">
-                <td>{user.id}</td>
-                <td>{user.username}</td>
-                <td>{user.loginId}</td>
-                <td>{user.email}</td>
-                <td>{user.phone}</td>
-                <td>{formatDate(user.created_at)}</td>
-                <td>
-                  {user.logs.map((log) => (
-                    <div key={log.id}>{formatDate(log.created_at)}</div>
-                  ))}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+
+      <div className="mx-auto  max-w-screen-xl pt-8 ">
+        <h1 className="text-xl font-bold">유저 리스트</h1>
+        <div className="pt-4">
+          <div className="hidden lg:block">
+            <Table headers={headers} data={data} />
+          </div>
+          <div className="block lg:hidden">
+            <Card headers={headers} data={data} />
+          </div>
+        </div>
       </div>
     </>
   );
