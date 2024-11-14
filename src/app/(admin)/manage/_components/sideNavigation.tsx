@@ -12,7 +12,7 @@ const SideNavigation = () => {
   };
 
   return (
-    <div className="fixed right-0 pt-28 ">
+    <div className="fixed right-0 pt-28 z-50">
       <div className="flex w-full justify-end">
         <button onClick={handleToggle}>
           <Bars3Icon className="size-8 bg-black text-white" />
@@ -20,7 +20,7 @@ const SideNavigation = () => {
       </div>
 
       <div
-        className={`${cls(isVisible ? "" : "translate-x-48", "m:gap-x-8 grid h-[60%]  items-center gap-y-4 border bg-blue-900 bg-opacity-90 p-1 text-sm text-white transition-transform md:text-base [&>button]:w-40")}`}
+        className={`${cls(isVisible ? "" : " translate-x-48 ", "absolute right-0 grid items-center gap-y-4 border duration-300 bg-blue-900 bg-opacity-90 p-1 text-sm text-white transition-transform sm:gap-x-8 md:text-base [&>button]:w-40")}`}
       >
         {topNavLinks.map((navLink) => (
           <Link
