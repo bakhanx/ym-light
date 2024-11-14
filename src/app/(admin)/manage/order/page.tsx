@@ -2,9 +2,9 @@ import db from "@/utils/db";
 import { formatPrice } from "@/utils/formatPrice";
 import Image from "next/image";
 import React from "react";
-import Table from "../_components/table";
+import Table, { RowData } from "../_components/table";
 import { formatDate } from "@/utils/formatDate";
-import Card, { RowData, TableData } from "../_components/card";
+import Card from "../_components/card";
 
 const Order = async () => {
   const orderList = await db.order.findMany({
@@ -25,44 +25,60 @@ const Order = async () => {
 
   const headers = ["주문 ID", "고객명", "상품 정보", "주문일자"];
 
-  const data: TableData = orderList.length > 0 ? orderList.map((order) => {
-    const orderData: RowData[] = [
-      [order.id, "text-center"],
-      [order.user.username, "text-center"],
-      [
-        order.cartItems.map((item) => (
-          <div key={item.id} className="flex items-center gap-2 py-1">
-            <div className="flex flex-col">
-              <Image
-                src={`${item.product.photos[0]}/w=200`}
-                alt={item.product.title}
-                className="h-16 w-16 object-cover"
-                width={64}
-                height={64}
-              />
-              <span className="text-sm">id: {item.id}</span>
-            </div>
-            <div>
-              <span className="block overflow-hidden text-ellipsis whitespace-nowrap">
-                {item.product.title}
-              </span>
-              {item.options.map((optionInfo) => (
-                <div key={optionInfo.optionId} className="text-gray-500">
-                  {optionInfo.option.name}
+  const data: RowData[][] =
+    orderList.length > 0
+      ? orderList.map((order) => {
+          const orderData: RowData[] = [
+            [order.id, "text-center"],
+            [order.user.username, "text-center"],
+            [
+              order.cartItems.map((item) => (
+                <div key={item.id} className="flex items-center gap-2 py-4">
+                  <div className="relative flex flex-col">
+                    <Image
+                      src={`${item.product.photos[0]}/w=200`}
+                      alt={item.product.title}
+                      className="size-24 object-cover"
+                      width={64}
+                      height={64}
+                    />
+                    <span className="absolute -top-5 left-0 text-sm">
+                      [id:{item.productId}]
+                    </span>
+                  </div>
+
+                  <div>
+                    <div className="block overflow-hidden text-ellipsis whitespace-nowrap">
+                      <span className="font-semibold">상품명: </span>{" "}
+                      {item.product.title}
+                    </div>
+                    {item.options.map((optionInfo) => (
+                      <div key={optionInfo.optionId} className="text-gray-500">
+                        {optionInfo.option.name}
+                      </div>
+                    ))}
+                    <div>
+                      <span className="font-semibold">가격: </span>
+                      {`${formatPrice(item.product.price)}원`}
+                    </div>
+                    <div>
+                      <span className="font-semibold">할인율: </span>
+                      {`${item.product.discount || 0}%`}
+                    </div>
+                    <div>
+                      <span className="font-semibold">수량: </span>
+                      {item.quantity}
+                    </div>
+                  </div>
                 </div>
-              ))}
-              <div>{`${formatPrice(item.product.price)}원`}</div>
-              <div>{`할인율: ${item.product.discount || 0}%`}</div>
-              <div>{`수량: ${item.quantity}`}</div>
-            </div>
-          </div>
-        )),
-        "text-left",
-      ],
-      [formatDate(order.created_at), "text-left"],
-    ];
-    return orderData;
-  }) : [];
+              )),
+              "",
+            ],
+            [formatDate(order.created_at), ""],
+          ];
+          return orderData;
+        })
+      : [];
 
   return (
     <div className="mx-auto min-h-screen max-w-screen-xl px-2 pt-32 xl:px-0">
