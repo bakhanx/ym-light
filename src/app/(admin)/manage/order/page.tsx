@@ -25,7 +25,7 @@ const Order = async () => {
 
   const headers = ["주문 ID", "고객명", "상품 정보", "주문일자"];
 
-  const data = orderList.map((order) => {
+  const data = orderList.length > 0 ? orderList.map((order) => {
     const orderData = [
       [order.id, "text-center"],
       [order.user.username, "text-center"],
@@ -62,7 +62,7 @@ const Order = async () => {
       [formatDate(order.created_at), "text-left"],
     ];
     return orderData;
-  });
+  }) : [];
 
   return (
     <div className="mx-auto min-h-screen max-w-screen-xl px-2 pt-32 xl:px-0">
