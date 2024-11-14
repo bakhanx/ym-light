@@ -1,8 +1,11 @@
 import React from "react";
+import Image from "next/image";
 
+export type CellData = React.ReactNode | string | number | number[];
+export type RowData = [CellData, string];
 export type TableProps = {
   headers: string[];
-  data: (React.ReactNode | string | number | number[])[][][];
+  data: RowData[][];
 };
 
 const Table = ({ headers, data }: TableProps) => {
@@ -12,7 +15,10 @@ const Table = ({ headers, data }: TableProps) => {
         <thead className="bg-gray-700 text-white">
           <tr>
             {headers.map((header, index) => (
-              <th key={index} className="border border-gray-500 p-2">
+              <th
+                key={index}
+                className="whitespace-nowrap border border-gray-500 p-2"
+              >
                 {header}
               </th>
             ))}
@@ -21,19 +27,31 @@ const Table = ({ headers, data }: TableProps) => {
 
         <tbody>
           {data.map((row, rowIndex) => (
-            <>
-              <tr key={rowIndex} className="hover:bg-gray-200">
+            <React.Fragment key={rowIndex}>
+              <tr className="hover:bg-gray-200">
                 {row.map((cell, cellIndex) => (
                   <td
                     key={cellIndex}
                     className={`border border-gray-500 p-2 ${cell[1]}`}
                   >
-                    {cell[0]}
+                    {typeof cell[0] === "string" &&
+                    cell[0].startsWith("http") ? (
+                      <div className=" flex justify-center">
+                        <Image
+                          src={`${cell[0]}/w=200`}
+                          alt={`${cellIndex}`}
+                          className="min-h-16 min-w-16 object-cover"
+                          width={64}
+                          height={64}
+                        />
+                      </div>
+                    ) : (
+                      cell[0]
+                    )}
                   </td>
                 ))}
               </tr>
-             
-            </>
+            </React.Fragment>
           ))}
         </tbody>
       </table>
