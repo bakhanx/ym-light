@@ -16,7 +16,7 @@ const Card = ({ headers, data }: CardProps) => {
             <div key={headerIndex} className="mb-2">
               <span className="font-semibold">{header}:</span> {" "}
               {Array.isArray(row[headerIndex][0]) 
-                ? row[headerIndex][0].map((item, itemIndex) => (
+                ? row[headerIndex][0]?.map((item, itemIndex) => (
                     typeof item === 'object' && React.isValidElement(item) ? (
                       <div key={itemIndex} className="mt-2">{item}</div>
                     ) : (
