@@ -8,23 +8,32 @@ export type CardProps = {
 };
 
 const Card = ({ headers, data }: CardProps) => {
+  if (data.length === 0) {
+    return <div>주문 내역이 없습니다.</div>;
+  }
   return (
-    <div className="block lg:hidden space-y-4">
+    <div className="block space-y-4 lg:hidden">
       {data.map((row, rowIndex) => (
-        <div key={rowIndex} className="border border-gray-500 p-4 rounded-lg shadow-md">
+        <div
+          key={rowIndex}
+          className="rounded-lg border border-gray-500 p-4 shadow-md"
+        >
           {headers.map((header, headerIndex) => (
             <div key={headerIndex} className="mb-2">
-              <span className="font-semibold">{header}:</span> {" "}
-              {Array.isArray(row[headerIndex][0]) 
-                ? row[headerIndex][0]?.map((item, itemIndex) => (
-                    typeof item === 'object' && React.isValidElement(item) ? (
-                      <div key={itemIndex} className="mt-2">{item}</div>
+              <span className="font-semibold">{header}:</span>
+              {Array.isArray(row[headerIndex][0])
+                ? row[headerIndex][0].map((item, itemIndex) =>
+                    typeof item === "object" && React.isValidElement(item) ? (
+                      <div key={itemIndex} className="mt-2">
+                        {item}
+                      </div>
                     ) : (
-                      <span key={itemIndex} className="block">{item}</span>
-                    )
-                  ))
-                : row[headerIndex][0]
-              }
+                      <span key={itemIndex} className="block">
+                        {item}
+                      </span>
+                    ),
+                  )
+                : row[headerIndex][0]}
             </div>
           ))}
         </div>
