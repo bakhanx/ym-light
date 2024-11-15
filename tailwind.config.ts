@@ -9,6 +9,13 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      zIndex: {
+        "normal-button" : "20",
+        "floating-button": "30",
+        "navigation": "40",
+        "loader" : "50",
+      },
+
       keyframes: {
         gradient: {
           "0%": { backgroundPosition: "0% 50%" },
