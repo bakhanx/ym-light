@@ -26,7 +26,6 @@ const Contact = () => {
 
   return (
     <>
-      {/* Issue: items-center와 screen-h에 따른 pt 충돌 */}
       <div className="bg-black">
         <div className="Image-Wrap h-full w-full sm:h-screen">
           <div className="absolute h-full w-full">
@@ -43,8 +42,8 @@ const Contact = () => {
             </div>
           </div>
 
-          <div className="Content-Wrap h-f mx-auto flex max-w-screen-xl items-center pb-12 pt-32">
-            <div className="z-20 flex w-full px-5 pt-8 text-white sm:px-20">
+          <div className="Content-Wrap mx-auto flex max-w-screen-xl items-center px-2 pb-12 sm:pt-28 pt-24 sm:px-4 xl:px-0 ">
+            <div className="z-20 flex w-full pt-8 text-white gap-x-4  ">
               <div className="left flex w-[50%] flex-col items-center">
                 <div className="flex flex-col gap-y-10">
                   <div>
@@ -101,7 +100,7 @@ const Contact = () => {
               </div>
 
               <div className="right flex w-[50%] flex-col items-center ">
-                <div className="flex w-[80%] flex-col">
+                <div className="flex w-full flex-col sm:w-[80%]">
                   <p className="text-xl font-bold sm:text-3xl ">Contact Us</p>
                   <p>
                     <span className="text-red-500">* </span>
@@ -136,7 +135,7 @@ const Contact = () => {
                           label="연락처"
                           name="contact"
                           type="text"
-                          placeholder="전화번호 또는 이메일주소"
+                          placeholder="번호 또는 이메일"
                           error={state?.fieldErrors.contact}
                           required
                         />
@@ -144,7 +143,7 @@ const Contact = () => {
                           label="연락처 재확인"
                           name="contact_confirm"
                           type="text"
-                          placeholder="전화번호 또는 이메일주소"
+                          placeholder="번호 또는 이메일"
                           error={state?.fieldErrors.contact_confirm}
                           required
                           minLength={6}
