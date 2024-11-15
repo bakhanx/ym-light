@@ -193,7 +193,7 @@ const ProductContents = ({ product, userId }: ProductContentsProps) => {
             </div>
           </div>
           <div className="my-banner-func flex justify-center pt-5">
-            <div className="flex w-full justify-between gap-2">
+            <div className="flex w-full justify-center gap-2">
               {product.photos.map((photo, index) => (
                 <div
                   key={index}
@@ -298,8 +298,8 @@ const ProductContents = ({ product, userId }: ProductContentsProps) => {
 
                 <div className="flex items-end gap-x-5">
                   <div className="text-gray-500">총 금액</div>
-                  <span className="w-36 text-right text-xl font-bold">
-                    <span className="text-lg sm:text-2xl">
+                  <span className="text-right text-xl font-bold">
+                    <span className="text-lg sm:text-2xl whitespace-nowrap">
                       {product?.discount
                         ? formatPrice(
                             product?.price *
