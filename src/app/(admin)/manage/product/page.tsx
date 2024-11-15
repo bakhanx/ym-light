@@ -1,11 +1,14 @@
+"use client";
+
 import { revalidatePath, revalidateTag } from "next/cache";
 import Link from "next/link";
-
 import React from "react";
+import { revalidateProducts } from "./actions/revalidateProducts";
 
-const revalidateProducts = async () => {
-  "use server";
-  revalidateTag("product");
+
+
+const handleRevalidate = async () => {
+  await revalidateProducts();
   alert("갱신 완료");
 };
 
@@ -30,11 +33,12 @@ const Product = () => {
           </Link>
         ))}
 
-        <form action={revalidateProducts}>
-          <button className="boerder-sm w-40 border border-blue-500 bg-amber-200 p-4 hover:bg-amber-300">
-            상품 정보 갱신
-          </button>
-        </form>
+        <button
+          onClick={handleRevalidate}
+          className="boerder-sm w-40 border border-blue-500 bg-amber-200 p-4 hover:bg-amber-300"
+        >
+          상품 정보 갱신
+        </button>
       </div>
     </div>
   );
