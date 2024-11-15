@@ -20,7 +20,7 @@ const FormButton = ({ name, color }: FormButtonType) => {
       </button>
 
       {pending && (
-        <div className="fixed left-0 top-0 h-full w-full bg-black opacity-50">
+        <div className="fixed left-0 top-0 h-full w-full bg-black opacity-50 z-loader">
           <Loader />
           <PreventScroll />
         </div>
