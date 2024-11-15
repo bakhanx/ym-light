@@ -68,12 +68,12 @@ const TopNavigation = () => {
         isScrolled || isBgWhitePaths
           ? "bg-[#010315] bg-opacity-90"
           : "bg-transparent",
-        " fixed z-50 w-full items-center justify-between py-4 text-white duration-500 sm:flex sm:py-6 ",
+        "fixed z-navigation w-full items-center justify-between py-4 text-white duration-500 sm:flex sm:py-6",
       )}
     >
-      <div className="mx-auto flex w-full max-w-screen-xl flex-col xl:px-0 px-2 sm:flex-row ">
+      <div className="mx-auto flex w-full max-w-screen-xl flex-col px-2 sm:px-4 sm:flex-row xl:px-0">
         <div className="flex w-full justify-between">
-          <div className="flex  shrink-0 items-center bg-gradient-to-tr from-yellow-500 to-yellow-200 bg-clip-text text-xl font-bold text-transparent md:text-2xl">
+          <div className="flex shrink-0 items-center bg-gradient-to-tr from-yellow-500 to-yellow-200 bg-clip-text text-xl font-bold text-transparent md:text-2xl">
             <Link href="/">YM Light</Link>
           </div>
           <div className="flex items-center gap-x-1 text-gray-300 sm:pr-2">
@@ -96,7 +96,7 @@ const TopNavigation = () => {
           </div>
         </div>
 
-        <ul className="flex w-full items-center justify-between  pt-2 text-sm  sm:flex sm:w-auto  sm:shrink-0 sm:pt-0 md:divide-x-2 md:text-base [&>li]:flex [&>li]:h-8 [&>li]:items-center [&>li]:justify-center sm:[&>li]:border-none sm:[&>li]:px-2 ">
+        <ul className="flex w-full items-center justify-between pt-2 text-sm sm:flex sm:w-auto sm:shrink-0 sm:pt-0 md:divide-x-2 md:text-base [&>li]:flex [&>li]:h-8 [&>li]:items-center [&>li]:justify-center sm:[&>li]:border-none sm:[&>li]:px-2">
           <li>
             <Link href="/products">조명</Link>
           </li>
@@ -114,11 +114,10 @@ const TopNavigation = () => {
               <Link href="/manage">관리자</Link>
             </li>
           )}
-
           <li className="relative">
             <Link href="/cart">장바구니</Link>
             {user && (
-              <span className="text-bold absolute -right-2 -top-4 flex min-w-5 items-center justify-center rounded-full border-[1px] border-red-400 bg-red-400 px-[7px] pb-[1px] text-sm text-white">
+              <span className="text-bold absolute -right-2 -top-2 flex min-w-[1.25rem] max-w-[3rem] items-center justify-center overflow-hidden text-ellipsis rounded-full border border-red-400 bg-red-500 px-1.5 text-xs text-white">
                 {cartItemCount}
               </span>
             )}

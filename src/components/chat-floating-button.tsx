@@ -31,7 +31,7 @@ const ChatFloatingButton = ({ sessionId }: { sessionId: number }) => {
       {sessionId === 1 ? (
         <button
           onClick={navigateToChatsPage}
-          className="fixed bottom-10 right-10 z-40 flex h-20 w-20 items-center justify-center rounded-full bg-blue-900"
+          className="fixed bottom-10 right-10 z-floating-button flex h-20 w-20 items-center justify-center rounded-full bg-blue-900"
         >
           <ChatBubbleLeftEllipsisIcon className="h-10 w-10 text-white" />
         </button>

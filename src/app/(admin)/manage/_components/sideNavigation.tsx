@@ -12,7 +12,7 @@ const SideNavigation = () => {
   };
 
   return (
-    <div className="fixed right-0 pt-28 z-50">
+    <div className="fixed right-0 pt-28 z-navigation">
       <div className="flex w-full justify-end">
         <button onClick={handleToggle}>
           <Bars3Icon className="size-8 bg-black text-white" />
