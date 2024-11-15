@@ -93,7 +93,7 @@ const Gallery = async () => {
   const visitorCount = await logCount();
 
   return (
-    <div className="m-auto w-[100%-40px] max-w-screen-lg border-t-2 px-2 py-8 sm:px-4 xl:px-0">
+    <div className="m-auto w-[100%-40px] xl:max-w-screen-lg sm:max-w-screen-md border-t-2 px-2 py-8 sm:px-4 xl:px-0">
       <div className=" flex flex-col px-4 py-20">
         <div className="flex items-center gap-x-10 ">
 
