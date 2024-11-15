@@ -6,7 +6,7 @@ const User = async () => {
   const users = await getUsers();
 
   return (
-    <div className="min-h-screen px-2">
+    <div className="min-h-screen px-2 xl:px-0">
       <h1 className="pt-24">유저관리페이지</h1>
       <UserInfo users={users} />
     </div>

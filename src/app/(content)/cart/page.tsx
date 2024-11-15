@@ -154,7 +154,7 @@ const Cart = () => {
 
           {/* check */}
           <div className=" py-5 text-sm">
-            <div className="inner-content px-2 lg:max-w-screen-lg lg:px-0 xl:max-w-screen-xl">
+            <div className="inner-content px-2  sm:px-4 xl:px-0 max-w-screen-xl">
               <div className="flex gap-x-2 divide-x-2">
                 <div>
                   <CheckAllButton
@@ -172,7 +172,7 @@ const Cart = () => {
 
         {/* contents */}
         <div className="bg-gray-200 py-4 sm:py-10 ">
-          <div className="m-auto max-w-screen-lg rounded-md px-2 shadow-xl lg:px-0 xl:max-w-screen-xl">
+          <div className="m-auto  rounded-md px-2 shadow-xl sm:px-4 max-w-screen-xl xl:px-0">
             {/* header */}
             <ProductListHeader
               isSelect={isSelectAllClick}
