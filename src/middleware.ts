@@ -4,12 +4,12 @@ import getSession from "./utils/session";
 
 const publicPaths = new Set(["/login", "/register"]);
 const privatePaths = new Set(["/profile", "/manage"]);
-const adminPaths = new Set(["/manage"]);
+const adminPaths = "/manage"
 const middleware = async (req: NextRequest) => {
   const session = await getSession();
   const isPublicPath = publicPaths.has(req.nextUrl.pathname);
   const isPrivatePath = privatePaths.has(req.nextUrl.pathname);
-  const isAdminPath = adminPaths.has(req.nextUrl.pathname);
+  const isAdminPath = req.nextUrl.pathname.startsWith(adminPaths);
   // 비로그인 유저 접근 제한
   if (!session.id && isPrivatePath) {
     return NextResponse.redirect(new URL("/", req.url));
