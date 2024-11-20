@@ -29,7 +29,6 @@ const Login = () => {
     (result) => {
       if (result.success) {
         setUser({
-          id: result.data.id,
           username: result.data.username,
           cartItemCount: result.data.cartItemCount || 0,
         });
