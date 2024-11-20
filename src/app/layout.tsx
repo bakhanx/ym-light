@@ -4,6 +4,7 @@ import "../styles/globals.css";
 import Footer from "@/components/footer";
 import ChatFloatingButtonContainer from "@/components/chat-floating-button-container";
 import TopNavigation from "@/components/top-navigation";
+import getSession from "@/utils/session";
 
 // const inter = Inter({ subsets: ["latin"] });
 
@@ -22,24 +23,26 @@ export const metadata: Metadata = {
     "YM Lights are always made by experts with over 30 years of experience",
 };
 
-export default function RootLayout({
-  children,
-  modal,
-}: Readonly<{
+type RootLayoutProps = {
   children: React.ReactNode;
   modal: React.ReactNode;
-}>) {
+};
+
+export default async function RootLayout({
+  children,
+  modal,
+}: Readonly<RootLayoutProps>) {
+  const session = await getSession();
+  console.log("session Id : ", session.id);
+
   return (
     <html lang="en">
       <body className={`${noto_sans_kr.className}`}>
-        <TopNavigation />
+        <TopNavigation userId={session.id} />
         <div className="">
-          {/* <div className="pt-36  sm:pt-20"> */}
           {children} {modal}
         </div>
-
         <ChatFloatingButtonContainer />
-
         <Footer />
       </body>
     </html>
