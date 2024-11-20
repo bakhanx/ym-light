@@ -9,15 +9,9 @@ import React, { useEffect, useState } from "react";
 
 const whitePaths = ["/products", "/gallery", "/manage", "/cart", "/chats"];
 
-type UserType = {
-  id: number;
-  username: string;
-  cartItemCount: number;
-};
-
-const TopNavigation = () => {
+const TopNavigation = ({ userId }: { userId: number | null }) => {
+  console.log(userId);
   const [isScrolled, setIsScrolled] = useState(false);
-  // const [user, setUser] = useState<UserType | null>(null);
   const { user, setUser } = useUserStore();
   const [cartItemCount, setCartItemCount] = useState(
     user ? user.cartItemCount : 0,
@@ -71,7 +65,7 @@ const TopNavigation = () => {
         "fixed z-navigation w-full items-center justify-between py-4 text-white duration-500 sm:flex sm:py-6",
       )}
     >
-      <div className="mx-auto flex w-full max-w-screen-xl flex-col px-2 sm:px-4 sm:flex-row xl:px-0">
+      <div className="mx-auto flex w-full max-w-screen-xl flex-col px-2 sm:flex-row sm:px-4 xl:px-0">
         <div className="flex w-full justify-between">
           <div className="flex shrink-0 items-center bg-gradient-to-tr from-yellow-500 to-yellow-200 bg-clip-text text-xl font-bold text-transparent md:text-2xl">
             <Link href="/">YM Light</Link>
@@ -109,7 +103,7 @@ const TopNavigation = () => {
           <li>
             <Link href="/contact">문의</Link>
           </li>
-          {user?.id === 1 && (
+          {userId === 1 && (
             <li>
               <Link href="/manage">관리자</Link>
             </li>
