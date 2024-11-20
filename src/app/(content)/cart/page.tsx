@@ -81,7 +81,8 @@ const Cart = () => {
       if (!isDataLoaded && user) {
         setIsLoading(true);
         setDataLoaded();
-        const cartItems = await getCartItems(user.id);
+
+        const cartItems = await getCartItems();
         if (cartItems) {
           setInitData(cartItems);
           console.log("cart store init");
