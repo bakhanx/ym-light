@@ -2,7 +2,6 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 type User = {
-  id: number;
   username: string;
   cartItemCount: number;
 };
