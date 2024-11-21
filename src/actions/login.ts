@@ -35,7 +35,7 @@ const loginSchema = z.object({
   }),
 });
 
-type User = {
+type ActionStateType = {
   username: string;
   cartItemCount: number;
   jwtToken: string;
@@ -54,7 +54,7 @@ type FormState<T> = {
 export const login = async (
   prevState: any,
   formData: FormData,
-): Promise<FormState<User>> => {
+): Promise<FormState<ActionStateType>> => {
   const data = {
     loginId: formData.get("loginId"),
     password: formData.get("password"),
