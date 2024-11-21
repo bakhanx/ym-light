@@ -3,12 +3,10 @@
 import db from "@/utils/db";
 import getSession from "@/utils/session";
 
-const getCartItems = async () => {
-  const session = await getSession();
-  if (session.id) {
+const getCartItems = async (userId: number) => {
     const cartData = await db.cart.findUnique({
       where: {
-        userId: session.id,
+        userId,
       },
       select: {
         cartItems: {
@@ -25,6 +23,4 @@ const getCartItems = async () => {
     });
     return cartData;
   }
-};
-
 export default getCartItems;
