@@ -10,13 +10,10 @@ import {
 } from "@/utils/constants/loginConstants";
 import { z } from "zod";
 import validator from "validator";
-import { redirect } from "next/navigation";
 import db from "@/utils/db";
 import bcrypt from "bcrypt";
-import { getIronSession } from "iron-session";
-import { cookies } from "next/headers";
 import getSession from "@/utils/session";
-import { revalidatePath } from "next/cache";
+import { createToken } from "@/utils/jwt";
 
 const checkPassowrd = ({
   password,
@@ -25,10 +22,6 @@ const checkPassowrd = ({
   password: string;
   password_confirm: string;
 }) => password === password_confirm;
-
-type ActionStateType = {
-  token: boolean;
-};
 
 const checkLoginId = async (loginId: string) => {
   const user = await db.user.findUnique({
@@ -122,13 +115,37 @@ const registerSchema = z
   });
 
 type ActionState = {
-  token: boolean;
+  token: number;
+  jwtToken: string;
+};
+
+type ValidationError = {
+  fieldErrors: {
+    loginId?: string[];
+    password?: string[];
+    password_confirm?: string[];
+    username?: string[];
+    phone?: string[];
+    email?: string[];
+    // token?: string[];
+  };
+};
+
+type FormState<T> = {
+  data: T;
+  error: ValidationError | null;
+  success: boolean;
+};
+
+type ActionStateType = {
+  token: number;
+  jwtToken: string;
 };
 
 export const registerAction = async (
   prevState: ActionState,
   formData: FormData,
-) => {
+): Promise<FormState<ActionStateType>> => {
   const data = {
     loginId: formData.get("loginId"),
     password: formData.get("password"),
@@ -138,7 +155,8 @@ export const registerAction = async (
     email: formData.get("email"),
   };
 
-  const token = formData.get("token");
+  // const token = formData.get("token");
+  const token = parseInt(formData.get("token")?.toString() || "0", 10);
 
   if (!prevState?.token) {
     const result = await registerSchema.spa(data);
@@ -146,19 +164,28 @@ export const registerAction = async (
     // Form invalidate
     if (!result.success) {
       return {
-        token: false,
+        data: prevState,
         error: result.error.flatten(),
+        success: false,
       };
     } else {
-      return { token: true };
+      return {
+        data: {
+          token,
+          jwtToken: "",
+        },
+        error: null,
+        success: true,
+      };
     }
   } else {
     // Form validate
     const result = await registerSchema.spa({ token, ...data });
     if (!result.success) {
       return {
-        token: true,
+        data: prevState,
         error: result.error.flatten(),
+        success: false,
       };
     } else {
       const hashPassword = await bcrypt.hash(result.data.password, 10);
@@ -178,13 +205,22 @@ export const registerAction = async (
       const session = await getSession();
       session.id = user.id;
 
+      const jwtToken = createToken(user.id);
+
       await db.log.create({
         data: {
           userId: session.id,
         },
       });
 
-      redirect("/login");
+      return {
+        data: {
+          jwtToken,
+          token,
+        },
+        error: null,
+        success: true,
+      };
     }
   }
 };
