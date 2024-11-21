@@ -14,9 +14,9 @@ import { useRouter } from "next/navigation";
 import useCustomFormState from "@/hooks/useCustomFormState";
 
 type LoginForm = {
-  id: number;
   username: string;
   cartItemCount: number;
+  jwtToken:string;
 };
 
 const Login = () => {
@@ -24,7 +24,7 @@ const Login = () => {
   const router = useRouter();
   // const [state, dispatch] = useFormState(login, null);
   const [state, dispatch] = useCustomFormState<LoginForm>(
-    { id: Date.now(), username: "", cartItemCount: 0 },
+    {username: "", cartItemCount: 0, jwtToken:"" },
     login,
     (result) => {
       if (result.success) {
@@ -32,6 +32,7 @@ const Login = () => {
           username: result.data.username,
           cartItemCount: result.data.cartItemCount || 0,
         });
+        sessionStorage.setItem("auth_token", state.data.jwtToken);
         window.location.href = "/";
       } else {
         console.log("Error: 로그인 실패, ", result.error);
