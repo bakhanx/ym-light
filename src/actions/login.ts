@@ -9,6 +9,7 @@ import { z } from "zod";
 import bcrypt from "bcrypt";
 import getSession from "@/utils/session";
 import { revalidatePath } from "next/cache";
+import { createToken } from "@/utils/jwt";
 
 const checkLoginIdExists = async (loginId: string) => {
   const user = await db.user.findUnique({
@@ -35,10 +36,11 @@ const loginSchema = z.object({
 });
 
 type User = {
-  id: number;
   username: string;
   cartItemCount: number;
+  jwtToken: string;
 };
+
 
 type ValidationError = {
   fieldErrors: { loginId?: string[]; password?: string[] };
@@ -96,15 +98,17 @@ export const login = async (
     session.id = user.id;
     await session.save();
 
+    const jwtToken = createToken(user.id);
+
     await db.log.create({ data: { userId: session.id } });
 
     revalidatePath("/");
 
     return {
       data: {
-        id: user.id,
         username: user.username,
         cartItemCount: user.carts?.[0]?.cartItems?.length || 0,
+        jwtToken: jwtToken,
       },
       error: null,
       success: true,
