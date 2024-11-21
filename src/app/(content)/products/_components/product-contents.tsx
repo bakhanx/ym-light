@@ -19,6 +19,7 @@ import createDirectOrder from "../actions/createDirectOrder";
 import { useUserStore } from "@/store/useUserStore";
 import getCartItems from "../../cart/actions/getCartItems";
 import { cls } from "@/utils/cls";
+import { getUserIdFromToken } from "@/utils/jwt";
 
 type Options = {
   options: Option[];
@@ -80,6 +81,7 @@ const ProductContents = ({ product, userId }: ProductContentsProps) => {
 
     // 장바구니 데이터 초기화 server -> zustand
     const getCart = async () => {
+      const userId = getUserIdFromToken();
       if (!isDataLoaded && userId) {
         setDataLoaded();
         const cartItems = await getCartItems(userId);
@@ -299,7 +301,7 @@ const ProductContents = ({ product, userId }: ProductContentsProps) => {
                 <div className="flex items-end gap-x-5">
                   <div className="text-gray-500">총 금액</div>
                   <span className="text-right text-xl font-bold">
-                    <span className="text-lg sm:text-2xl whitespace-nowrap">
+                    <span className="whitespace-nowrap text-lg sm:text-2xl">
                       {product?.discount
                         ? formatPrice(
                             product?.price *
