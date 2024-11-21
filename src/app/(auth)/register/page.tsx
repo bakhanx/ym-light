@@ -9,7 +9,13 @@ import {
   PASSWORD_MIN_LENGTH,
   WORDS_MAX_LENGTH,
 } from "@/utils/constants/loginConstants";
+import useCustomFormState from "@/hooks/useCustomFormState";
 // import { } from '@/libs/db'
+
+type RegisterForm = {
+  token: number;
+  jwtToken: string;
+};
 
 const Register = () => {
   const [isClick, setIsClick] = useState(false);
@@ -24,7 +30,19 @@ const Register = () => {
     error: undefined,
   };
 
-  const [state, dispatch] = useFormState(registerAction, initFormState);
+  const [state, dispatch] = useCustomFormState<RegisterForm>(
+    { token: 0, jwtToken: "" },
+    registerAction,
+    (result) => {
+      if (result.success) {
+        sessionStorage.setItem("auth_token", state.data.jwtToken);
+        window.location.href = "/";
+      } else {
+        console.log("Error: 회원가입실패", result.error);
+      }
+    },
+  );
+  // const [state, dispatch] = useFormState(registerAction, initFormState);
 
   return (
     <div className=" bg-gray-800  text-white">
@@ -84,7 +102,7 @@ const Register = () => {
             />
 
             <div className="">
-              {state?.token && (
+              {state?.data.token && (
                 <FormInput
                   label="인증번호"
                   name="token"
