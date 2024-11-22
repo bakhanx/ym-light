@@ -10,7 +10,6 @@ import React, { useEffect, useState } from "react";
 const whitePaths = ["/products", "/gallery", "/manage", "/cart", "/chats"];
 
 const TopNavigation = ({ userId }: { userId: number | null }) => {
-  console.log(userId);
   const [isScrolled, setIsScrolled] = useState(false);
   const { user, setUser } = useUserStore();
   const [cartItemCount, setCartItemCount] = useState(
@@ -22,9 +21,12 @@ const TopNavigation = ({ userId }: { userId: number | null }) => {
   );
   const handleLogout = async () => {
     localStorage.removeItem("user-storage");
-    sessionStorage.removeItem("cart");
-    sessionStorage.removeItem("chat");
+
+    const sessionKeysToRemove = ["cart", "chat", "jwt_token"];
+    sessionKeysToRemove.forEach((key) => sessionStorage.removeItem(key));
+
     await logOut();
+
     window.location.href = "/";
   };
 
