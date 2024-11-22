@@ -15,6 +15,7 @@ import CartHeader from "./_components.tsx/cartHeader";
 import ProductList from "./_components.tsx/productList";
 import PriceSummary from "./_components.tsx/priceSummary";
 import ProductListHeader from "./_components.tsx/productListHeader";
+import { getUserIdFromToken } from "@/utils/jwt";
 
 // Issue
 // 0. 선택하지 않은 옵션이 장바구니에 모두 담김
@@ -78,11 +79,11 @@ const Cart = () => {
   // 장바구니 데이터 초기화 server -> zustand
   useEffect(() => {
     const getCart = async () => {
-      if (!isDataLoaded && user) {
+      const userId = getUserIdFromToken();
+      if (!isDataLoaded && userId) {
         setIsLoading(true);
         setDataLoaded();
-
-        const cartItems = await getCartItems();
+        const cartItems = await getCartItems(userId);
         if (cartItems) {
           setInitData(cartItems);
           console.log("cart store init");
@@ -155,7 +156,7 @@ const Cart = () => {
 
           {/* check */}
           <div className=" py-5 text-sm">
-            <div className="inner-content px-2  sm:px-4 xl:px-0 max-w-screen-xl">
+            <div className="inner-content max-w-screen-xl  px-2 sm:px-4 xl:px-0">
               <div className="flex gap-x-2 divide-x-2">
                 <div>
                   <CheckAllButton
@@ -173,7 +174,7 @@ const Cart = () => {
 
         {/* contents */}
         <div className="bg-gray-200 py-4 sm:py-10 ">
-          <div className="m-auto  rounded-md px-2 shadow-xl sm:px-4 max-w-screen-xl xl:px-0">
+          <div className="m-auto  max-w-screen-xl rounded-md px-2 shadow-xl sm:px-4 xl:px-0">
             {/* header */}
             <ProductListHeader
               isSelect={isSelectAllClick}
