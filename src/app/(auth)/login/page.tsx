@@ -21,8 +21,6 @@ type LoginForm = {
 
 const Login = () => {
   const setUser = useUserStore((state) => state.setUser);
-  const router = useRouter();
-  // const [state, dispatch] = useFormState(login, null);
   const [state, dispatch] = useCustomFormState<LoginForm>(
     { username: "", cartItemCount: 0, jwtToken: "" },
     login,
@@ -33,7 +31,7 @@ const Login = () => {
           cartItemCount: result.data.cartItemCount || 0,
         });
         sessionStorage.setItem("jwt_token", result.data.jwtToken);
-        // window.location.href = "/";
+        window.location.href = "/";
       } else {
         console.log("Error: 로그인 실패, ", result.error);
       }
