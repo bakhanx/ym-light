@@ -41,7 +41,6 @@ type ActionStateType = {
   jwtToken: string;
 };
 
-
 type ValidationError = {
   fieldErrors: { loginId?: string[]; password?: string[] };
 };
@@ -52,7 +51,7 @@ type FormState<T> = {
 };
 
 export const login = async (
-  prevState: any,
+  prevState: ActionStateType,
   formData: FormData,
 ): Promise<FormState<ActionStateType>> => {
   const data = {
