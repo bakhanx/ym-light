@@ -22,7 +22,7 @@ export const verifyToken = (token: string): TokenPayload | null => {
 };
 
 export const getUserIdFromToken = () => {
-  const token = sessionStorage.getItem("auth-token");
+  const token = sessionStorage.getItem("jwt-token");
   if (token) {
     const decodedToken = verifyToken(token);
     if (decodedToken) {
