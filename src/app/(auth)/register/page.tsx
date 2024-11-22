@@ -3,17 +3,18 @@
 import FormButton from "@/components/form-button";
 import FormInput from "@/components/form-input";
 import React, { useState } from "react";
-import { useFormState } from "react-dom";
 import { registerAction } from "../../../actions/register";
 import {
   PASSWORD_MIN_LENGTH,
   WORDS_MAX_LENGTH,
 } from "@/utils/constants/loginConstants";
 import useCustomFormState from "@/hooks/useCustomFormState";
-// import { } from '@/libs/db'
+import { useUserStore } from "@/store/useUserStore";
 
 type RegisterForm = {
-  token: number;
+  username: string;
+  cartItemCount: number;
+  token: boolean;
   jwtToken: string;
 };
 
@@ -30,12 +31,18 @@ const Register = () => {
     error: undefined,
   };
 
+  const { setUser } = useUserStore();
+
   const [state, dispatch] = useCustomFormState<RegisterForm>(
-    { token: 0, jwtToken: "" },
+    { token: false, jwtToken: "", username: "", cartItemCount: 0 },
     registerAction,
     (result) => {
       if (result.success) {
-        sessionStorage.setItem("auth_token", state.data.jwtToken);
+        setUser({
+          username: result.data.username,
+          cartItemCount: result.data.cartItemCount,
+        });
+        sessionStorage.setItem("jwt_token", result.data.jwtToken);
         window.location.href = "/";
       } else {
         console.log("Error: 회원가입실패", result.error);
