@@ -36,14 +36,15 @@ const Contact = () => {
                 fill
                 placeholder="blur"
                 blurDataURL={BLUR_DATA_CONTACT}
-                objectFit="cover"
+                sizes="1"
+                className="object-cover"
               />
               <div className="h-full w-full bg-black opacity-80" />
             </div>
           </div>
 
-          <div className="Content-Wrap mx-auto flex max-w-screen-xl items-center px-2 pb-12 sm:pt-28 pt-24 sm:px-4 xl:px-0 ">
-            <div className="z-20 flex w-full pt-8 text-white gap-x-4  ">
+          <div className="Content-Wrap mx-auto flex max-w-screen-xl items-center px-2 pb-12 pt-24 sm:px-4 sm:pt-28 xl:px-0 ">
+            <div className="z-20 flex w-full gap-x-4 pt-8 text-white  ">
               <div className="left flex w-[50%] flex-col items-center">
                 <div className="flex flex-col gap-y-10">
                   <div>

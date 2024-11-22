@@ -190,7 +190,9 @@ const ProductContents = ({ product, userId }: ProductContentsProps) => {
                 src={`${mainImage}/sharpen=1,fit=scale-down,w=640`}
                 fill
                 alt="temp"
-                objectFit="cover"
+                sizes="1"
+                priority
+                className="object-cover"
               />
             </div>
           </div>
@@ -210,6 +212,7 @@ const ProductContents = ({ product, userId }: ProductContentsProps) => {
                   <Image
                     src={`${photo}/sharpen=1,fit=scale-down,w=200`}
                     fill
+                    sizes="1"
                     alt={`추가사진${index}`}
                     className="object-cover"
                   />

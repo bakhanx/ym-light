@@ -27,7 +27,7 @@ const Product = async () => {
   const products = await getProducts();
 
   return (
-    <div className="mx-auto min-h-screen max-w-screen-xl xl:px-0 px-4 py-32 ">
+    <div className="mx-auto min-h-screen max-w-screen-xl px-4 py-32 xl:px-0 ">
       <div className=" text-lg font-semibold sm:text-2xl">등록된 상품</div>
 
       <div className="grid grid-cols-2 gap-5 pt-10 sm:grid-cols-4">
@@ -44,7 +44,8 @@ const Product = async () => {
                     alt={product.title}
                     src={`${product.photos[0]}/sharpen=1,fit=scale-down,w=640`}
                     fill
-                    objectFit="cover"
+                    sizes="1"
+                    className="object-cover"
                     placeholder="blur"
                     blurDataURL={BLUR_DATA_URL_GRAY}
                   />

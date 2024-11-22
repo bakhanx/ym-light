@@ -111,8 +111,9 @@ const Modal = async ({ params }: Props) => {
                       alt="gallery"
                       quality={90}
                       fill
-                      className="z-40"
-                      objectFit="contain"
+                      sizes="1"
+                      className="z-40 object-contain"
+                      
                     />
                   </>
                 ) : (

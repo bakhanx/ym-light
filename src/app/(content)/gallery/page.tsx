@@ -93,15 +93,17 @@ const Gallery = async () => {
   const visitorCount = await logCount();
 
   return (
-    <div className="m-auto w-[100%-40px] xl:max-w-screen-lg sm:max-w-screen-md border-t-2 px-2 py-8 sm:px-4 xl:px-0">
+    <div className="m-auto w-[100%-40px] border-t-2 px-2 py-8 sm:max-w-screen-md sm:px-4 xl:max-w-screen-lg xl:px-0">
       <div className=" flex flex-col px-4 py-20">
         <div className="flex items-center gap-x-10 ">
-
           <div className="fill relative h-24 w-24 shrink-0 sm:h-32 sm:w-32">
-            <Image alt="profile" src={profile} 
-            placeholder="blur"
-            blurDataURL={BLUR_DATA_PROFILE}
-            className="rounded-full" />
+            <Image
+              alt="profile"
+              src={profile}
+              placeholder="blur"
+              blurDataURL={BLUR_DATA_PROFILE}
+              className="rounded-full"
+            />
           </div>
 
           <div className="flex flex-col">

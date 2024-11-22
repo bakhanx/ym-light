@@ -62,11 +62,10 @@ const Card = ({ name, discount, photoURL }: CardProps) => {
           <Image
             src={`${photoURL}/fit=scale-down,w=480,sharpen=1`}
             fill
-            style={{ objectFit: "cover", objectPosition: "top" }}
             quality={100}
             alt="product2"
             sizes="1"
-            className="rounded-md"
+            className="rounded-md object-cover"
             placeholder="blur"
             blurDataURL={BLUR_DATA_URL_GRAY}
           />

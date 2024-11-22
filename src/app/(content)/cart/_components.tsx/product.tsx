@@ -107,6 +107,8 @@ const Product = ({ cartItem, index }: ProductProps) => {
                 <Image
                   alt={`${cartItem.product.title}`}
                   src={`${cartItem.product.photos[0]}/thumbnail`}
+                  sizes="1"
+                  className="object-cover"
                   fill
                 />
               </div>
@@ -199,7 +201,7 @@ const Product = ({ cartItem, index }: ProductProps) => {
               {formatPrice(_pureTotalPrice)}원
             </span>
           </div>
-          <div className="flex items-center justify-between gap-x-5 px-4 lg:hidden sm:px-10 lg:w-1/2 lg:justify-center lg:p-5">
+          <div className="flex items-center justify-between gap-x-5 px-4 sm:px-10 lg:hidden lg:w-1/2 lg:justify-center lg:p-5">
             <span className="text-gray-500 lg:hidden lg:text-black ">
               할인금액
             </span>
@@ -243,7 +245,7 @@ const Product = ({ cartItem, index }: ProductProps) => {
           <div className="hidden lg:block">=</div>
         </div>
 
-        <div className="flex items-center justify-between gap-x-5 px-4 text-center lg:w-[30%] sm:px-10 lg:flex-col lg:justify-center">
+        <div className="flex items-center justify-between gap-x-5 px-4 text-center sm:px-10 lg:w-[30%] lg:flex-col lg:justify-center">
           <span className="font-bold">주문금액</span>
           <span className="font-bold text-amber-500">
             {formatPrice(_TotalPrice)}원

@@ -1,8 +1,6 @@
 "use client";
 
-import {
-  HandThumbUpIcon,
-} from "@heroicons/react/16/solid";
+import { HandThumbUpIcon } from "@heroicons/react/16/solid";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
@@ -64,6 +62,7 @@ const GalleryList = ({ initialGalleryList }: GalleryListProps) => {
                 alt={String(gallery.id)}
                 src={`${gallery.photo}/hvga`}
                 fill
+                sizes="1"
                 quality={90}
                 className="object-cover"
                 placeholder="blur"
@@ -72,17 +71,17 @@ const GalleryList = ({ initialGalleryList }: GalleryListProps) => {
               <div className="group absolute  h-full w-full">
                 <div className="invisible h-full w-full group-hover:visible">
                   <div
-                    className="flex h-full w-full items-center justify-center sm:gap-x-10 gap-x-4 sm:text-base text-sm text-white"
+                    className="flex h-full w-full items-center justify-center gap-x-4 text-sm text-white sm:gap-x-10 sm:text-base"
                     style={{
                       backgroundColor: `rgba(0,0,0,0.5)`,
                     }}
                   >
-                    <div className="flex items-center sm:gap-x-2 gap-x-1">
-                      <EyeIcon className="sm:size-5 size-4" />
+                    <div className="flex items-center gap-x-1 sm:gap-x-2">
+                      <EyeIcon className="size-4 sm:size-5" />
                       <span>{gallery.views}</span>
                     </div>
-                    <div className="flex items-center sm:gap-x-2 gap-x-1">
-                      <HandThumbUpIcon className="sm:size-5 size-4" />
+                    <div className="flex items-center gap-x-1 sm:gap-x-2">
+                      <HandThumbUpIcon className="size-4 sm:size-5" />
                       {/* count of hearts */}
                       <span>{gallery._count.likes}</span>
                     </div>
