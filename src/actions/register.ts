@@ -14,8 +14,9 @@ import db from "@/utils/db";
 import bcrypt from "bcrypt";
 import getSession from "@/utils/session";
 import { createToken } from "@/utils/jwt";
+import { revalidatePath } from "next/cache";
 
-const checkPassowrd = ({
+const checkPassword = ({
   password,
   password_confirm,
 }: {
@@ -32,7 +33,7 @@ const checkLoginId = async (loginId: string) => {
       id: true,
     },
   });
-  return !Boolean(user);
+  return !user;
 };
 const checkPhone = async (phone: string) => {
   const user = await db.user.findUnique({
@@ -43,7 +44,7 @@ const checkPhone = async (phone: string) => {
       id: true,
     },
   });
-  return Boolean(user);
+  return !!user;
 };
 const checkEmail = async (email: string) => {
   const user = await db.user.findUnique({
@@ -54,7 +55,7 @@ const checkEmail = async (email: string) => {
       id: true,
     },
   });
-  return !Boolean(user);
+  return !user;
 };
 
 const registerSchema = z
@@ -83,21 +84,9 @@ const registerSchema = z
           if (!validator.isMobilePhone(phone || "", "ko-KR")) {
             return false;
           }
-          return true;
+          return !(await checkPhone(phone));
         },
-        { message: "유효하지 않은 번호입니다." },
-      )
-      .refine(
-        async (phone) => {
-          if (phone === "") {
-            return true;
-          }
-          if (await checkPhone(phone)) {
-            return false;
-          }
-          return true;
-        },
-        { message: "이미 가입된 번호입니다." },
+        { message: "유효하지 않은 번호이거나 이미 가입된 번호입니다." },
       ),
 
     email: z.string().refine(checkEmail, "이미 가입된 이메일입니다."),
@@ -109,15 +98,10 @@ const registerSchema = z
       .max(99999, "5자리 입력해주세요")
       .optional(),
   })
-  .refine(checkPassowrd, {
+  .refine(checkPassword, {
     message: PASSWORD_CONFIRM_ERROR,
     path: ["password_confirm"],
   });
-
-type ActionState = {
-  token: number;
-  jwtToken: string;
-};
 
 type ValidationError = {
   fieldErrors: {
@@ -127,7 +111,6 @@ type ValidationError = {
     username?: string[];
     phone?: string[];
     email?: string[];
-    // token?: string[];
   };
 };
 
@@ -138,12 +121,14 @@ type FormState<T> = {
 };
 
 type ActionStateType = {
-  token: number;
+  username: string;
+  cartItemCount: number;
   jwtToken: string;
+  token: boolean;
 };
 
 export const registerAction = async (
-  prevState: ActionState,
+  prevState: ActionStateType,
   formData: FormData,
 ): Promise<FormState<ActionStateType>> => {
   const data = {
@@ -155,7 +140,6 @@ export const registerAction = async (
     email: formData.get("email"),
   };
 
-  // const token = formData.get("token");
   const token = parseInt(formData.get("token")?.toString() || "0", 10);
 
   if (!prevState?.token) {
@@ -164,18 +148,21 @@ export const registerAction = async (
     // Form invalidate
     if (!result.success) {
       return {
-        data: prevState,
+        data: {
+          ...prevState,
+          token: false,
+        },
         error: result.error.flatten(),
         success: false,
       };
     } else {
       return {
         data: {
-          token,
-          jwtToken: "",
+          ...prevState,
+          token: true,
         },
         error: null,
-        success: true,
+        success: false,
       };
     }
   } else {
@@ -183,7 +170,10 @@ export const registerAction = async (
     const result = await registerSchema.spa({ token, ...data });
     if (!result.success) {
       return {
-        data: prevState,
+        data: {
+          ...prevState,
+          token: true,
+        },
         error: result.error.flatten(),
         success: false,
       };
@@ -199,11 +189,22 @@ export const registerAction = async (
         },
         select: {
           id: true,
+          username: true,
+          carts: {
+            select: {
+              cartItems: {
+                select: {
+                  _count: true,
+                },
+              },
+            },
+          },
         },
       });
 
       const session = await getSession();
       session.id = user.id;
+      session.save();
 
       const jwtToken = createToken(user.id);
 
@@ -212,11 +213,13 @@ export const registerAction = async (
           userId: session.id,
         },
       });
-
+      revalidatePath("/");
       return {
         data: {
-          jwtToken,
-          token,
+          username: user.username,
+          cartItemCount: user.carts?.[0]?.cartItems?.length || 0,
+          jwtToken: jwtToken,
+          token: true,
         },
         error: null,
         success: true,
