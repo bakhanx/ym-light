@@ -3,11 +3,9 @@ import SideNavigation from "./_components/sideNavigation";
 
 const HomeLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div>
+    <div className="flex">
       <SideNavigation />
-      <div className="max-w-screen-xl mx-auto">
-      {children}  
-      </div>
+      <div className="p-4 max-w-screen-xl">{children}</div>
     </div>
   );
 };
