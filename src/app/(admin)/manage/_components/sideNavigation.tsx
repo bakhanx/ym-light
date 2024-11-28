@@ -18,7 +18,7 @@ const SideNavigation = () => {
   return (
     <>
       {/* Desktop */}
-      <div className="mt-20 h-screen min-w-48 md:w-[calc((100%-1280px)/2)]  bg-slate-800 text-white">
+      <div className="mt-20 min-h-screen min-w-48 md:w-[calc((100%-1280px)/2)]  bg-slate-800 text-white">
         <div className="p-3 text-center font-bold italic border-b-2">관리자 페이지</div>
         <nav className="mt-4">
           {sideNavLinks.map((link) => {
