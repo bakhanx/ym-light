@@ -10,8 +10,11 @@ import {
   Title,
   Tooltip,
   Legend,
+  scales,
 } from "chart.js";
 import getVisitCount from "./action/getVisitCount";
+import SelectDate from "./selectDate";
+import useChartData from "./action/useChartData";
 
 ChartJS.register(
   CategoryScale,
@@ -33,42 +36,31 @@ const options = {
       },
       position: "top" as const,
     },
-    // title: {
-    //   display: true,
-    //   text: "유저 통계",
-    // },
+    title: {
+      display: true,
+      text: "유저 통계",
+    },
+  },
+  scales: {
+    y: {
+      ticks: {
+        stepSize: 2,
+      },
+      min: 0,
+    },
   },
 };
-type UserVisitChartProps = {
-  fetchData: {
-    date: string;
-    count: number;
-  }[];
-};
+
 const UserVisitChart = () => {
-  const [year, setYear] = useState(new Date().getFullYear());
-  const [month, setMonth] = useState(new Date().getMonth() + 1);
-  const [visitCountData, setVisitCountData] = useState<
-    { date: number; count: number }[]
-  >([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await getVisitCount(year, month);
-      console.log("fetch");
-      const processedData = data.map((item) => {
-        return {
-          ...item,
-          date: new Date(item.date).getDate(),
-        };
-      });
-      setVisitCountData(processedData);
-    };
-    fetchData();
-  }, [year, month]);
-  const handleDateChange = (newYear: number, newMonth: number) => {
-    setYear(newYear);
-    setMonth(newMonth);
-  };
+  const initialYear = new Date().getFullYear();
+  const initialMonth = new Date().getMonth() + 1;
+  const {
+    data: visitCountData,
+    error,
+    handleDateChange,
+    month,
+    year,
+  } = useChartData(getVisitCount, initialYear, initialMonth);
 
   const data = {
     labels: visitCountData.map((data) => data.date), // 날짜 데이터
@@ -86,31 +78,8 @@ const UserVisitChart = () => {
 
   return (
     <div>
-      <div>
-        <label>Year: </label>
-        <select
-          value={year}
-          onChange={(e) => handleDateChange(parseInt(e.target.value), month)}
-        >
-          {[2023, 2024].map((_year) => (
-            <option key={_year} value={_year}>
-              {_year}
-            </option>
-          ))}
-        </select>
-        <label>Month: </label>
-        <select
-          value={month}
-          onChange={(e) => handleDateChange(year, parseInt(e.target.value))}
-        >
-          {Array.from({ length: 12 }, (_, i) => i + 1).map((_month) => (
-            <option key={_month} value={_month}>
-              {_month}
-            </option>
-          ))}
-        </select>
-      </div>
-      <Line data={data} options={options} />
+      <SelectDate year={year} month={month} onDateChange={handleDateChange} />
+      {!error ? <Line data={data} options={options} /> : <p>{error}</p>}
     </div>
   );
 };
