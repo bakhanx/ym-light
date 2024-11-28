@@ -2,13 +2,15 @@
 
 import Input from "@/app/(admin)/_components/Input";
 import { PhotoIcon, XMarkIcon } from "@heroicons/react/16/solid";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { uploadProduct } from "../actions/uploadProduct";
 import { useFormState } from "react-dom";
 import getUploadUrl from "@/app/(admin)/actions/getUploadUrl";
 import FormButton from "@/components/form-button";
 import { Option } from "@prisma/client";
 import useImagePreviews from "@/hooks/useImagePreviews";
+
+const MAX_COUNT = 3;
 
 type ProductType = {
   id: number;
@@ -36,7 +38,16 @@ export const Upload = ({
   product: ProductType;
   isEdit?: boolean;
 }) => {
-  const [optionCnt, setOptionCnt] = useState(product?.options.length || 0);
+
+  const [productState, setProductState] = useState(product);
+  const [optionCnt, setOptionCnt] = useState(productState?.options.length || 0);
+
+  const imageUploader = useImagePreviews(
+    isEdit ? productState?.photos : undefined,
+  );
+  const detailImageUploader = useImagePreviews(
+    isEdit ? productState?.detailPhotos : undefined,
+  );
 
   const handleIncreaseOption = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -48,20 +59,28 @@ export const Upload = ({
     setOptionCnt((prev) => prev - 1);
   };
 
-  const imageUploader = useImagePreviews();
-  const detailImageUploader = useImagePreviews();
-
+  const handleDeleteImageClick = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    index: number,
+  ) => {
+    event.preventDefault();
+    imageUploader.handleDeleteImage(index);
+  };
   const interceptAction = async (_: any, formData: FormData) => {
-    const uploadImage = async (imageKey: string) => {
+    const uploadImage = async (imageKey: string, existingUrl: string) => {
       const file = formData.get(imageKey) as File;
-      const isExistsFile = file.size > 0;
+      const isExistsFile = file && file.size > 0;
+
+      if (!isExistsFile && existingUrl) {
+        formData.set(imageKey, existingUrl); // 변경되지 않은 Img URL
+        return;
+      }
 
       if (!isExistsFile) {
         console.log("not found file");
+        formData.delete(imageKey); // 빈 파일 키 삭제
         return;
       }
-      console.log(imageKey);
-      console.log(file);
 
       const { result, success } = await getUploadUrl();
       if (!success) {
@@ -84,16 +103,43 @@ export const Upload = ({
       formData.set(imageKey, photoURL);
     };
     let photoIndex = 0;
-    while (formData.has(`photo${photoIndex}`)) {
-      await uploadImage(`photo${photoIndex}`);
+    while (photoIndex < MAX_COUNT) {
+      let existingPhotoUrl = "";
+      if (imageUploader.previews[photoIndex]) {
+        if ((imageUploader.previews[photoIndex] as string).includes("blob")) {
+          existingPhotoUrl = "";
+        } else {
+          existingPhotoUrl = (
+            imageUploader.previews[photoIndex] as string
+          ).replace("/w=200", "");
+        }
+      }
+      if (formData.has(`photo${photoIndex}`) || existingPhotoUrl) {
+        await uploadImage(`photo${photoIndex}`, existingPhotoUrl);
+      }
       photoIndex++;
     }
-    let detailPhotoIndex = 0;
-    while (formData.has(`detailPhoto${detailPhotoIndex}`)) {
-      await uploadImage(`detailPhoto${detailPhotoIndex}`);
-      detailPhotoIndex++;
-    }
-    return uploadProduct(formData, product?.id, optionCnt);
+    // let detailPhotoIndex = 0;
+    // while (detailPhotoIndex < MAX_COUNT) {
+    //   const existingDetailPhotoUrl = detailImageUploader.previews[
+    //     detailPhotoIndex
+    //   ]
+    //     ? detailImageUploader.previews[detailPhotoIndex].includes("blob")
+    //       ? ""
+    //       : detailImageUploader.previews[detailPhotoIndex].replace("/w=200", "")
+    //     : "";
+    //   if (
+    //     formData.has(`detailPhoto${detailPhotoIndex}`) ||
+    //     existingDetailPhotoUrl
+    //   ) {
+    //     await uploadImage(
+    //       `detailPhoto${detailPhotoIndex}`,
+    //       existingDetailPhotoUrl,
+    //     );
+    //   }
+    //   detailPhotoIndex++;
+    // }
+    return uploadProduct(formData, productState?.id, optionCnt);
   };
 
   const [state, action] = useFormState(interceptAction, null);
@@ -113,7 +159,7 @@ export const Upload = ({
                   <div className="my-banner-image">
                     <label
                       htmlFor="photo0"
-                      className="flex aspect-square w-full cursor-pointer flex-col items-center justify-center border-2 border-dashed border-gray-400 text-gray-500 relative"
+                      className="relative flex aspect-square w-full cursor-pointer flex-col items-center justify-center border-2 border-dashed border-gray-400 text-gray-500"
                       style={{
                         backgroundImage: `url(${imageUploader.previews[0]})`,
                         backgroundSize: "contain",
@@ -124,10 +170,10 @@ export const Upload = ({
                       {imageUploader.previews[0] ? (
                         <button
                           id="0"
-                          onClick={() => imageUploader.handleDeleteImage(0)}
+                          onClick={(e) => handleDeleteImageClick(e, 0)}
                           className="absolute right-0 top-0 z-20 rounded-sm bg-red-500 p-[2px] hover:bg-red-600"
                         >
-                          <XMarkIcon className="size-7 md:size-10 text-white " />
+                          <XMarkIcon className="size-7 text-white md:size-10 " />
                         </button>
                       ) : (
                         <>
@@ -165,10 +211,10 @@ export const Upload = ({
                         {imageUploader.previews[0] ? (
                           <button
                             id="0"
-                            onClick={() => imageUploader.handleDeleteImage(0)}
+                            onClick={(e) => handleDeleteImageClick(e, 0)}
                             className="absolute right-0 top-0 z-20 rounded-sm bg-red-500 p-[2px] hover:bg-red-600"
                           >
-                            <XMarkIcon className="size-4 md:size-5 text-white " />
+                            <XMarkIcon className="size-4 text-white md:size-5 " />
                           </button>
                         ) : (
                           <>
@@ -193,8 +239,8 @@ export const Upload = ({
                           {imageUploader.previews[index + 1] ? (
                             <button
                               id={String(index + 1)}
-                              onClick={() =>
-                                imageUploader.handleDeleteImage(index + 1)
+                              onClick={(e) =>
+                                handleDeleteImageClick(e, index + 1)
                               }
                               className="absolute right-0 top-0 z-20 rounded-sm bg-red-500 p-[2px] hover:bg-red-600"
                             >
@@ -238,61 +284,63 @@ export const Upload = ({
                               name="name"
                               required
                               error={state?.fieldErrors.name}
-                              defaultValue={product?.title}
+                              defaultValue={productState?.title}
                             />
                             <Input
                               label="가격"
                               name="price"
                               required
                               error={state?.fieldErrors.price}
-                              defaultValue={product?.price}
+                              defaultValue={productState?.price}
                             />
                             <Input
                               label="재고"
                               name="stock"
                               required
                               error={state?.fieldErrors.stock}
-                              defaultValue={product?.stock}
+                              defaultValue={productState?.stock}
                             />
                             <Input
                               label="할인율"
                               name="discount"
-                              defaultValue={product?.discount || ""}
+                              defaultValue={productState?.discount || ""}
                             />
                             <Input
                               label="색상"
                               name="color"
-                              defaultValue={product?.color}
+                              defaultValue={productState?.color}
                             />
                             <Input
                               label="재질"
                               name="material"
-                              defaultValue={product?.material}
+                              defaultValue={productState?.material}
                             />
                             <Input
                               label="사이즈"
                               name="size"
-                              defaultValue={product?.size}
+                              defaultValue={productState?.size}
                             />
                             <Input
                               label="전구규격"
                               name="bulb"
                               required
                               error={state?.fieldErrors.bulb}
-                              defaultValue={product?.bulb}
+                              defaultValue={productState?.bulb}
                             />
                             <Input
                               label="제조사"
                               name="manufacturer"
                               required
                               error={state?.fieldErrors.manufacturer}
-                              defaultValue={product?.manufacturer || "YM Light"}
+                              defaultValue={
+                                productState?.manufacturer || "YM Light"
+                              }
                             />
                             <Input
                               label="설명"
                               name="description"
                               textarea
-                              defaultValue={product?.description}
+                              defaultValue={productState?.description}
                             />
 
                             {/* Options */}
@@ -338,14 +386,16 @@ export const Upload = ({
                                         label="옵션명"
                                         name={`nameOfOption${index}`}
                                         defaultValue={
-                                          product?.options[index]?.name || ""
+                                          productState?.options[index]?.name ||
+                                          ""
                                         }
                                       />
                                       <Input
                                         label="옵션가격"
                                         name={`priceOfOption${index}`}
                                         defaultValue={
-                                          product?.options[index]?.price || ""
+                                          productState?.options[index]?.price ||
+                                          ""
                                         }
                                       />
                                       <Input
@@ -353,7 +403,8 @@ export const Upload = ({
                                         name={`stockOfOption${index}`}
                                         placeholder="99"
                                         defaultValue={
-                                          product?.options[index]?.stock || ""
+                                          productState?.options[index]?.stock ||
+                                          ""
                                         }
                                         error={state?.fieldErrors.options}
                                       />
