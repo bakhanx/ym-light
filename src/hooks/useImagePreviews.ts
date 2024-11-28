@@ -1,10 +1,16 @@
 import { useState } from "react";
 
 const MAX_COUNT = 3;
-const initail_previews = [...Array(MAX_COUNT).fill("")];
+const initial_previews = [...Array(MAX_COUNT).fill(null)];
 
-const useImagePreviews = () => {
-  const [previews, setPreviews] = useState(initail_previews);
+const useImagePreviews = (initialImages = initial_previews) => {
+  const [previews, setPreviews] = useState(() => {
+    const filledImages = [
+      ...initialImages.slice(0, MAX_COUNT),
+      ...Array(Math.max(0, MAX_COUNT - initialImages.length)).fill(null),
+    ];
+    return filledImages.map((url) => (url ? `${url}/w=200` : null));
+  }); // cf image url 전처리
 
   const handleChangeImage = async (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -12,24 +18,30 @@ const useImagePreviews = () => {
     const {
       target: { files, id },
     } = event;
+    event.preventDefault();
 
-    if (files) {
-      const index = +id.charAt(id.length - 1);
-      const file = files[0];
-      const url = URL.createObjectURL(file);
+    if (files && files[0]) {
+      const index = previews.findIndex((preview) => preview === null);
+      if (index !== -1) {
+        const file = files[0];
+        const url = URL.createObjectURL(file);
 
-      setPreviews((prev) => {
-        const temp = [...prev];
-        temp[index] = url;
-        return temp;
-      });
+        setPreviews((prev) => {
+          const temp = [...prev];
+          temp[index] = url;
+          return temp;
+        });
+      }
     }
   };
 
   const handleDeleteImage = (index: number) => {
     setPreviews((prev) => {
       const temp = [...prev];
-      temp[index] = "";
+      for (let i = index; i < temp.length - 1; i++) {
+        temp[i] = temp[i + 1];
+      }
+      temp[temp.length - 1] = null;
       return temp;
     });
   };
