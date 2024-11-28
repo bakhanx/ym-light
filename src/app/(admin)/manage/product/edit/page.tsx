@@ -17,6 +17,7 @@ const getProducts = async () => {
       photos: true,
       price: true,
       discount: true,
+      stock:true,
       created_at: true,
       updated_at: true,
     },
@@ -37,6 +38,7 @@ const Edit = async () => {
     "상품명",
     "할인율",
     "가격",
+    "재고",
     "최근 수정일",
     "등록일",
     "",
@@ -49,6 +51,7 @@ const Edit = async () => {
       [product.title, "text-left"],
       [`${product.discount || 0}%`, "text-center"],
       [`${formatPrice(product.price)}원`, "text-left whitespace-nowrap"],
+      [product.stock, "text-left"],
       [formatDate(product.updated_at), "text-left"],
       [formatDate(product.created_at), "text-left"],
       [
