@@ -14,6 +14,7 @@ import {
 import getOrder from "./action/getOrder";
 import SelectDate from "./selectDate";
 import useChartData from "./action/useChartData";
+import { maxScale } from "./utils";
 
 ChartJS.register(
   CategoryScale,
@@ -23,28 +24,6 @@ ChartJS.register(
   Tooltip,
   Legend,
 );
-
-const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: "top" as const,
-    },
-    title: {
-      display: true,
-      text: "주문 통계",
-    },
-  },
-
-  scales: {
-    y: {
-      ticks: {
-        stepSize: 1,
-      },
-      min: 0,
-    },
-  },
-};
 
 const OrdersChart = () => {
   const initialYear = new Date().getFullYear();
@@ -56,6 +35,32 @@ const OrdersChart = () => {
     handleDateChange,
     error,
   } = useChartData(getOrder, initialYear, initialMonth);
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top" as const,
+      },
+      title: {
+        display: true,
+        text: "주문 통계",
+      },
+    },
+
+    scales: {
+      y: {
+        ticks: {
+          stepSize: 1,
+        },
+        min: 0,
+        max: maxScale({
+          data: orderCountData.map((data) => data.count),
+          multiple: 1,
+        }),
+      },
+    },
+  };
 
   const data = {
     labels: orderCountData.map((data) => data.date), // 날짜 데이터
