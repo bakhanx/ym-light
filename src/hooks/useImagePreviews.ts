@@ -1,15 +1,18 @@
 import { useState } from "react";
 
-const MAX_COUNT = 3;
-const initial_previews = [...Array(MAX_COUNT).fill(null)];
+type ImagePreviewsType = {
+  initialImages : string[] | undefined,
+  maxCount : number
+}
+const initial_previews = [...Array(3).fill(null)];
 
-const useImagePreviews = (initialImages = initial_previews) => {
+const useImagePreviews = ({initialImages = initial_previews, maxCount} : ImagePreviewsType) => {
   const [previews, setPreviews] = useState(() => {
     const filledImages = [
-      ...initialImages.slice(0, MAX_COUNT),
-      ...Array(Math.max(0, MAX_COUNT - initialImages.length)).fill(null),
+      ...initialImages.slice(0, maxCount),
+      ...Array(Math.max(0, maxCount - initialImages.length)).fill(null),
     ];
-    return filledImages.map((url) => (url ? `${url}/w=200` : null));
+    return filledImages.map((url) => (url ? `${url}/w=512` : null));
   }); // cf image url 전처리
 
   const handleChangeImage = async (
