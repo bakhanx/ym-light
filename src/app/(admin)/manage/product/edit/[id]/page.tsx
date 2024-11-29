@@ -2,11 +2,14 @@
 
 import Upload from "../../upload/page";
 import { useEffect, useState } from "react";
-import getProduct from "@/app/(content)/products/actions/getProduct";
+import getProduct, {
+  UploadProductType,
+} from "@/app/(content)/products/actions/getProduct";
 
 const EditProduct = ({ params }: { params: { id: string } }) => {
   const { id } = params;
-  const [product, setProduct] = useState<any>(null);
+  const [product, setProduct] = useState<UploadProductType>(null);
+
   useEffect(() => {
     const fetchProduct = async () => {
       const fetchedProduct = await getProduct(+id);

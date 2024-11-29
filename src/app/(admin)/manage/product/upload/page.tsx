@@ -7,33 +7,14 @@ import { uploadProduct } from "../actions/uploadProduct";
 import { useFormState } from "react-dom";
 import getUploadUrl from "@/app/(admin)/actions/getUploadUrl";
 import FormButton from "@/components/form-button";
-import { Option } from "@prisma/client";
 import useImagePreviews from "@/hooks/useImagePreviews";
-
-type ProductType = {
-  id: number;
-  title: string;
-  price: number;
-  stock: number;
-  discount: number | null;
-  photos: string[];
-  detailPhotos: string[];
-  color: string;
-  material: string;
-  size: string;
-  bulb: string;
-  manufacturer: string;
-  description: string;
-  created_at: Date;
-  updated_at: Date;
-  options: Option[];
-} | null;
+import { UploadProductType } from "@/app/(content)/products/actions/getProduct";
 
 const Upload = ({
   product,
   isEdit = false,
 }: {
-  product: ProductType;
+  product: UploadProductType;
   isEdit?: boolean;
 }) => {
   const [productState, setProductState] = useState(product);
