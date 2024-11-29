@@ -12,6 +12,7 @@ import {
   Legend,
 } from "chart.js";
 import getStockOfProducts from "./action/getStock";
+import { maxScale } from "./utils";
 
 ChartJS.register(
   CategoryScale,
@@ -21,36 +22,6 @@ ChartJS.register(
   Tooltip,
   Legend,
 );
-
-const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: "top" as const,
-      
-      labels: {
-        boxWidth: 20,
-        generateLabels: () => [
-          {
-            text: "부족",
-            fillStyle: "rgba(255, 99, 132, 0.2)",
-            strokeStyle: "rgba(255, 99, 132, 1)",
-          },
-          {
-            text: "여유",
-            fillStyle: "rgba(54, 162, 235, 0.2)",
-            strokeStyle: "rgba(54, 162, 235, 1)",
-          },
-        ],
-      },
-      onClick: () => {},
-    },
-    title: {
-      display: true,
-      text: "재고 부족 제품",
-    },
-  },
-};
 
 type StockOfProductsType = {
   title: string;
@@ -69,6 +40,46 @@ const StockChart = () => {
     };
     getStocks();
   }, []);
+
+  const options = {
+    responsive: true,
+    indexAxis: "y" as const,
+    plugins: {
+      legend: {
+        position: "top" as const,
+
+        labels: {
+          boxWidth: 20,
+          generateLabels: () => [
+            {
+              text: "부족",
+              fillStyle: "rgba(255, 99, 132, 0.2)",
+              strokeStyle: "rgba(255, 99, 132, 1)",
+            },
+            {
+              text: "여유",
+              fillStyle: "rgba(54, 162, 235, 0.2)",
+              strokeStyle: "rgba(54, 162, 235, 1)",
+            },
+          ],
+        },
+        onClick: () => {},
+      },
+      title: {
+        display: true,
+        text: "재고 부족 제품",
+      },
+    },
+    scales: {
+      x: {
+        min: 0,
+        max: maxScale({
+          data: products.map((product) => product.stock),
+          multiple: 2,
+        }),
+      },
+    },
+  };
 
   const data = {
     labels: products.map((product) => product.title), // 제품 이름
