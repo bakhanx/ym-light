@@ -12,6 +12,7 @@ const getStockOfProducts = async () => {
     orderBy: {
       stock: "asc",
     },
+    take:10,
   });
 
   return stock;
