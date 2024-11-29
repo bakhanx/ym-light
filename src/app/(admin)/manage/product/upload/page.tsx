@@ -29,7 +29,7 @@ type ProductType = {
   options: Option[];
 } | null;
 
-export const Upload = ({
+const Upload = ({
   product,
   isEdit = false,
 }: {
