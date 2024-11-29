@@ -138,11 +138,8 @@ export const uploadProduct = async (
             id: true,
           },
         });
-    console.log("product result : ", product);
     // Options
     const options = result.data.options;
-
-    console.log("options : ", options);
 
     // 옵션 모두 삭제
     if (!options && product) {
