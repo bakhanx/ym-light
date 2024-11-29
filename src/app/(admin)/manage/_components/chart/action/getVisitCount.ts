@@ -3,7 +3,7 @@
 import db from "@/utils/db";
 
 const getVisitCount = async (year: number, month: number) => {
-  const startDate = new Date(year, month - 1, 1 ) // 선택한 년월의 첫날
+  const startDate = new Date(year, month - 1, 1); // 선택한 년월의 첫날
   const endDate = new Date(year, month, 0); // 선택한 년월의 마지막 날
 
   const logs = await db.log.findMany({
@@ -27,10 +27,11 @@ const getVisitCount = async (year: number, month: number) => {
   const visitCountData: VisitCountData[] = [];
 
   for (let day = 1; day <= daysInMonth; day++) {
-    const date = new Date(Date.UTC(year, month - 1, day)).toISOString().split("T")[0];
+    const date = new Date(Date.UTC(year, month - 1, day))
+      .toISOString()
+      .split("T")[0];
     visitCountData.push({ date, count: 0 });
   }
-  console.log(visitCountData);
 
   // 로그 데이터를 해당 날짜에 반영
   logs.forEach((log) => {
