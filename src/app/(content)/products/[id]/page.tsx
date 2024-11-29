@@ -3,6 +3,8 @@ import db from "@/utils/db";
 import { unstable_cache as nextCache } from "next/cache";
 import ProductContents from "../_components/product-contents";
 import getSession from "@/utils/session";
+import Image from "next/image";
+import { getImageData, getImageSize } from "@/utils/imageSize";
 
 type Props = {
   params: {
@@ -46,12 +48,22 @@ export const dynamic = "force-dynamic";
 const ProductDetail = async ({ params }: Props) => {
   const product = await getCahcedProduct(params.id);
   const session = await getSession();
+
+  const detailPhotosWithSize = await Promise.all(
+    product!.detailPhotos.map(async (photo) => {
+      const imageUrl = `${photo}/w=1024`;
+      const { width, height } = await getImageSize(imageUrl);
+      const imageData = await getImageData(imageUrl);
+      return { src: imageData, width, height };
+    }),
+  );
+
   return (
     <>
       {/* <ScrollTop/> */}
       {product ? (
         <div className="my-container">
-          <div className="my-content m-auto max-w-screen-xl pb-28 pt-32 xl:px-0 px-2 sm:px-4 ">
+          <div className="my-content m-auto max-w-screen-xl px-2 pb-28 pt-32 sm:px-4 xl:px-0 ">
             {/* 상품 내용 */}
             <ProductContents product={product} userId={session.id} />
 
@@ -80,7 +92,25 @@ const ProductDetail = async ({ params }: Props) => {
                     <div>상품 상세정보</div>
                   </div>
                   <div className="my-item-content p-10 text-center text-sm text-slate-500 sm:text-base">
-                    <p>표시할 게시물이 없습니다.</p>
+                    {product.detailPhotos ? (
+                      <div className="flex flex-col">
+                        {product.detailPhotos.map((photo, index) => (
+                          <div
+                            key={index}
+                            className="relative h-auto w-full  object-contain flex justify-center"
+                          >
+                            <Image
+                              src={`${photo}/w=1024`}
+                              alt={`Image${index}`}
+                              width={detailPhotosWithSize[index].width}
+                              height={detailPhotosWithSize[index].height}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p>표시할 게시물이 없습니다.</p>
+                    )}
                   </div>
                 </div>
 
