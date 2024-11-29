@@ -2,15 +2,13 @@
 
 import Input from "@/app/(admin)/_components/Input";
 import { PhotoIcon, XMarkIcon } from "@heroicons/react/16/solid";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { uploadProduct } from "../actions/uploadProduct";
 import { useFormState } from "react-dom";
 import getUploadUrl from "@/app/(admin)/actions/getUploadUrl";
 import FormButton from "@/components/form-button";
 import { Option } from "@prisma/client";
 import useImagePreviews from "@/hooks/useImagePreviews";
-
-const MAX_COUNT = 3;
 
 type ProductType = {
   id: number;
@@ -38,16 +36,17 @@ export const Upload = ({
   product: ProductType;
   isEdit?: boolean;
 }) => {
-
   const [productState, setProductState] = useState(product);
   const [optionCnt, setOptionCnt] = useState(productState?.options.length || 0);
 
-  const imageUploader = useImagePreviews(
-    isEdit ? productState?.photos : undefined,
-  );
-  const detailImageUploader = useImagePreviews(
-    isEdit ? productState?.detailPhotos : undefined,
-  );
+  const imageUploader = useImagePreviews({
+    initialImages: isEdit ? productState?.photos : undefined,
+    maxCount: 3,
+  });
+  const detailImageUploader = useImagePreviews({
+    initialImages: isEdit ? productState?.detailPhotos : undefined,
+    maxCount: 2,
+  });
 
   const handleIncreaseOption = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -62,83 +61,89 @@ export const Upload = ({
   const handleDeleteImageClick = (
     event: React.MouseEvent<HTMLButtonElement>,
     index: number,
+    type: "main" | "detail",
   ) => {
     event.preventDefault();
-    imageUploader.handleDeleteImage(index);
+    switch (type) {
+      case "main":
+        imageUploader.handleDeleteImage(index);
+        break;
+      case "detail":
+        detailImageUploader.handleDeleteImage(index);
+        break;
+      default:
+        break;
+    }
   };
-  const interceptAction = async (_: any, formData: FormData) => {
-    const uploadImage = async (imageKey: string, existingUrl: string) => {
-      const file = formData.get(imageKey) as File;
-      const isExistsFile = file && file.size > 0;
 
-      if (!isExistsFile && existingUrl) {
-        formData.set(imageKey, existingUrl); // 변경되지 않은 Img URL
-        return;
-      }
-
-      if (!isExistsFile) {
-        console.log("not found file");
-        formData.delete(imageKey); // 빈 파일 키 삭제
-        return;
-      }
-
-      const { result, success } = await getUploadUrl();
-      if (!success) {
-        console.log("Failed to get upload URL");
-        return;
-      }
-      const { id: cfUrlId, uploadURL: cfUrl } = result;
-
-      const cloudflareForm = new FormData();
-      cloudflareForm.append("file", file);
-      const response = await fetch(cfUrl, {
-        method: "post",
-        body: cloudflareForm,
-      });
-      if (response.status !== 200) {
-        console.log("Error!!");
-        return;
-      }
-      const photoURL = `https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${cfUrlId}`;
-      formData.set(imageKey, photoURL);
-    };
-    let photoIndex = 0;
-    while (photoIndex < MAX_COUNT) {
+  const processPreviews = async (
+    previews: (string | null)[],
+    formData: FormData,
+    keyPrefix: string,
+  ) => {
+    for (let index = 0; index < previews.length; index++) {
       let existingPhotoUrl = "";
-      if (imageUploader.previews[photoIndex]) {
-        if ((imageUploader.previews[photoIndex] as string).includes("blob")) {
+      if (previews[index]) {
+        if ((previews[index] as string).includes("blob")) {
           existingPhotoUrl = "";
         } else {
-          existingPhotoUrl = (
-            imageUploader.previews[photoIndex] as string
-          ).replace("/w=200", "");
+          existingPhotoUrl = (previews[index] as string).replace("/w=512", "");
         }
       }
-      if (formData.has(`photo${photoIndex}`) || existingPhotoUrl) {
-        await uploadImage(`photo${photoIndex}`, existingPhotoUrl);
+      if (formData.has(`${keyPrefix}${index}`) || existingPhotoUrl) {
+        await uploadImage(`${keyPrefix}${index}`, existingPhotoUrl, formData);
       }
-      photoIndex++;
     }
-    // let detailPhotoIndex = 0;
-    // while (detailPhotoIndex < MAX_COUNT) {
-    //   const existingDetailPhotoUrl = detailImageUploader.previews[
-    //     detailPhotoIndex
-    //   ]
-    //     ? detailImageUploader.previews[detailPhotoIndex].includes("blob")
-    //       ? ""
-    //       : detailImageUploader.previews[detailPhotoIndex].replace("/w=200", "")
-    //     : "";
-    //   if (
-    //     formData.has(`detailPhoto${detailPhotoIndex}`) ||
-    //     existingDetailPhotoUrl
-    //   ) {
-    //     await uploadImage(
-    //       `detailPhoto${detailPhotoIndex}`,
-    //       existingDetailPhotoUrl,
-    //     );
-    //   }
-    //   detailPhotoIndex++;
-    // }
+  };
+
+  const uploadImage = async (
+    imageKey: string,
+    existingUrl: string,
+    formData: FormData,
+  ) => {
+    const file = formData.get(imageKey) as File;
+    const isExistsFile = file && file.size > 0;
+
+    if (!isExistsFile && existingUrl) {
+      console.log("not change file");
+      formData.set(imageKey, existingUrl); // 변경되지 않은 Img URL
+      return;
+    }
+
+    if (!isExistsFile) {
+      console.log("not found file");
+      formData.delete(imageKey); // 빈 파일 키 삭제
+      return;
+    }
+
+    const { result, success } = await getUploadUrl();
+    if (!success) {
+      console.log("Failed to get upload URL");
+      return;
+    }
+    const { id: cfUrlId, uploadURL: cfUrl } = result;
+
+    const cloudflareForm = new FormData();
+    cloudflareForm.append("file", file);
+    const response = await fetch(cfUrl, {
+      method: "post",
+      body: cloudflareForm,
+    });
+    if (response.status !== 200) {
+      console.log("Error!!");
+      return;
+    }
+    const photoURL = `https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${cfUrlId}`;
+    formData.set(imageKey, photoURL);
+  };
+
+  const interceptAction = async (_: any, formData: FormData) => {
+    await processPreviews(imageUploader.previews, formData, "photo");
+    await processPreviews(
+      detailImageUploader.previews,
+      formData,
+      "detailPhoto",
+    );
     return uploadProduct(formData, productState?.id, optionCnt);
   };
 
@@ -170,7 +175,7 @@ export const Upload = ({
                       {imageUploader.previews[0] ? (
                         <button
                           id="0"
-                          onClick={(e) => handleDeleteImageClick(e, 0)}
+                          onClick={(e) => handleDeleteImageClick(e, 0, "main")}
                           className="absolute right-0 top-0 z-20 rounded-sm bg-red-500 p-[2px] hover:bg-red-600"
                         >
                           <XMarkIcon className="size-7 text-white md:size-10 " />
@@ -211,7 +216,9 @@ export const Upload = ({
                         {imageUploader.previews[0] ? (
                           <button
                             id="0"
-                            onClick={(e) => handleDeleteImageClick(e, 0)}
+                            onClick={(e) =>
+                              handleDeleteImageClick(e, 0, "main")
+                            }
                             className="absolute right-0 top-0 z-20 rounded-sm bg-red-500 p-[2px] hover:bg-red-600"
                           >
                             <XMarkIcon className="size-4 text-white md:size-5 " />
@@ -240,7 +247,7 @@ export const Upload = ({
                             <button
                               id={String(index + 1)}
                               onClick={(e) =>
-                                handleDeleteImageClick(e, index + 1)
+                                handleDeleteImageClick(e, index + 1, "main")
                               }
                               className="absolute right-0 top-0 z-20 rounded-sm bg-red-500 p-[2px] hover:bg-red-600"
                             >
@@ -426,74 +433,118 @@ export const Upload = ({
                 </div>
               </div>
             </div>
-          </form>
 
-          <div className="my-product-detail-content mt-14 ">
-            <div className="my-product-detail-tap-wrap">
-              <div className="my-product-detail-tab flex justify-between border-b-2 border-t-2 border-b-[#010315] px-4 py-5 text-sm sm:px-8 md:px-16 md:text-base">
-                <div>관련 상품</div>
-                <div>상품평</div>
-                <div>상품 문의</div>
-                <div>교환 및 반품</div>
-              </div>
-            </div>
-
-            <div className="my-product-detail-item-wrap divide-y-[1px] ">
-              <div className="my-product-detail-item item-notice pt-6 ">
-                <div className="my-item-title text-lg font-bold">
-                  <p>판매자 공지사항</p>
-                </div>
-                <div className="my-item-content p-10 text-center text-slate-500">
-                  <p>표시할 게시물이 없습니다.</p>
-                </div>
-              </div>
-
-              <div className="my-product-detail-item item-detail pt-6">
-                <div className="my-item-title text-lg font-bold">
-                  <div>상품 상세정보</div>
-                </div>
-                <div className="my-item-content p-10 text-center text-slate-500">
-                  <p>표시할 게시물이 없습니다.</p>
-                </div>
-              </div>
-
-              <div className="my-product-detail-item item-recommend pt-6">
-                <div className="my-item-title text-lg font-bold">
-                  <div>상품평</div>
-                </div>
-                <div className="my-item-content p-10 text-center text-slate-500">
-                  <p>표시할 게시물이 없습니다.</p>
-                </div>
-              </div>
-              <div className="my-product-detail-item item-recommend pt-6">
-                <div className="my-item-title text-lg font-bold">
-                  <div>상품 문의</div>
-                </div>
-                <div className="my-item-content p-10 text-center text-slate-500">
-                  <p>교환 및 반품</p>
-                </div>
-              </div>
-              <div className="my-product-detail-item item-recommend pt-6">
-                <div className="my-item-title text-lg font-bold">
-                  <div>추천 상품</div>
-                </div>
-                <div className="my-item-content p-10 text-center text-slate-500">
-                  <p>표시할 게시물이 없습니다.</p>
-                </div>
-              </div>
-
-              <div className="my-product-detail-item item-relative pt-6">
-                <div className="my-item-title text-lg font-bold">
+            <div className="my-product-detail-content mt-14 ">
+              <div className="my-product-detail-tap-wrap">
+                <div className="my-product-detail-tab flex justify-between border-b-2 border-t-2 border-b-[#010315] px-4 py-5 text-sm sm:px-8 md:px-16 md:text-base">
                   <div>관련 상품</div>
-                </div>
-                <div className="my-item-content p-10 text-center text-slate-500">
-                  <p>표시할 게시물이 없습니다.</p>
+                  <div>상품평</div>
+                  <div>상품 문의</div>
+                  <div>교환 및 반품</div>
                 </div>
               </div>
-            </div>
 
-            <div className="pt-10"></div>
-          </div>
+              <div className="my-product-detail-item-wrap divide-y-[1px] ">
+                <div className="my-product-detail-item item-notice pt-6 ">
+                  <div className="my-item-title text-lg font-bold">
+                    <p>판매자 공지사항</p>
+                  </div>
+                  <div className="my-item-content p-10 text-center text-slate-500">
+                    <p>표시할 게시물이 없습니다.</p>
+                  </div>
+                </div>
+
+                <div className="my-product-detail-item item-detail pt-6">
+                  <div className="my-item-title">
+                    <div className="text-lg font-bold">상품 상세정보</div>
+                    <span className="text-gray-500">
+                      이미지들은 세로로 이어 등록됩니다.
+                    </span>
+                    <div className="flex pt-4">
+                      {[...Array(2)].map((_, index) => (
+                        <label
+                          key={index}
+                          htmlFor={`detailPhoto${index}`}
+                          className="relative flex aspect-square w-1/2 cursor-pointer flex-col items-center justify-center border-2 border-dashed border-gray-400 text-gray-500"
+                          style={{
+                            backgroundImage: `url(${detailImageUploader.previews[index]})`,
+                            backgroundSize: "contain",
+                            backgroundRepeat: "no-repeat",
+                            backgroundPosition: "50% 50%",
+                          }}
+                        >
+                          {detailImageUploader.previews[index] ? (
+                            <button
+                              id={String(index)}
+                              onClick={(e) =>
+                                handleDeleteImageClick(e, index, "detail")
+                              }
+                              className="absolute right-0 top-0 z-20 rounded-sm bg-red-500 p-[2px] hover:bg-red-600"
+                            >
+                              <XMarkIcon className="size-5 text-white " />
+                            </button>
+                          ) : (
+                            <>
+                              <PhotoIcon className="w-1/3" />
+                              <div>상세사진{index + 1}</div>
+                            </>
+                          )}
+
+                          <input
+                            onChange={detailImageUploader.handleChangeImage}
+                            type="file"
+                            className="hidden"
+                            id={`detailPhoto${index}`}
+                            name={`detailPhoto${index}`}
+                            accept="image/*"
+                          />
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="my-item-content p-10 text-center text-slate-500">
+                    <div className="my-detail-image flex w-full items-start justify-center"></div>
+                  </div>
+                </div>
+
+                <div className="my-product-detail-item item-recommend pt-6">
+                  <div className="my-item-title text-lg font-bold">
+                    <div>상품평</div>
+                  </div>
+                  <div className="my-item-content p-10 text-center text-slate-500">
+                    <p>표시할 게시물이 없습니다.</p>
+                  </div>
+                </div>
+                <div className="my-product-detail-item item-recommend pt-6">
+                  <div className="my-item-title text-lg font-bold">
+                    <div>상품 문의</div>
+                  </div>
+                  <div className="my-item-content p-10 text-center text-slate-500">
+                    <p>교환 및 반품</p>
+                  </div>
+                </div>
+                <div className="my-product-detail-item item-recommend pt-6">
+                  <div className="my-item-title text-lg font-bold">
+                    <div>추천 상품</div>
+                  </div>
+                  <div className="my-item-content p-10 text-center text-slate-500">
+                    <p>표시할 게시물이 없습니다.</p>
+                  </div>
+                </div>
+
+                <div className="my-product-detail-item item-relative pt-6">
+                  <div className="my-item-title text-lg font-bold">
+                    <div>관련 상품</div>
+                  </div>
+                  <div className="my-item-content p-10 text-center text-slate-500">
+                    <p>표시할 게시물이 없습니다.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-10"></div>
+            </div>
+          </form>
         </div>
       </div>
     </div>
