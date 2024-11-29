@@ -10,11 +10,11 @@ import {
   Title,
   Tooltip,
   Legend,
-  scales,
 } from "chart.js";
 import getVisitCount from "./action/getVisitCount";
 import SelectDate from "./selectDate";
 import useChartData from "./action/useChartData";
+import { maxScale } from "./utils";
 
 ChartJS.register(
   CategoryScale,
@@ -26,31 +26,6 @@ ChartJS.register(
   Legend,
 );
 
-const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      // display:false,
-      labels: {
-        usePointStyle: true,
-      },
-      position: "top" as const,
-    },
-    title: {
-      display: true,
-      text: "유저 통계",
-    },
-  },
-  scales: {
-    y: {
-      ticks: {
-        stepSize: 2,
-      },
-      min: 0,
-    },
-  },
-};
-
 const UserVisitChart = () => {
   const initialYear = new Date().getFullYear();
   const initialMonth = new Date().getMonth() + 1;
@@ -61,7 +36,31 @@ const UserVisitChart = () => {
     month,
     year,
   } = useChartData(getVisitCount, initialYear, initialMonth);
-
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        // display:false,
+        labels: {
+          usePointStyle: true,
+        },
+        position: "top" as const,
+      },
+      title: {
+        display: true,
+        text: "유저 통계",
+      },
+    },
+    scales: {
+      y: {
+        min: 0,
+        max: maxScale({
+          data: visitCountData.map((data) => data.count),
+          multiple: 2,
+        }),
+      },
+    },
+  };
   const data = {
     labels: visitCountData.map((data) => data.date), // 날짜 데이터
     datasets: [
@@ -70,8 +69,8 @@ const UserVisitChart = () => {
         data: visitCountData.map((data) => data.count), // 로그인 수 데이터
         fill: false,
         pointStyle: "line",
-        borderColor: "rgb(75, 192, 192)",
-        tension: 0.1,
+        borderColor: "skyblue",
+        tension: 0.1
       },
     ],
   };
