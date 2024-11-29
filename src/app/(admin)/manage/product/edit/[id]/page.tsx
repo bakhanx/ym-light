@@ -1,23 +1,8 @@
-"use client";
-
 import Upload from "../../upload/page";
-import { useEffect, useState } from "react";
-import getProduct, {
-  UploadProductType,
-} from "@/app/(content)/products/actions/getProduct";
+import getProduct from "@/app/(content)/products/actions/getProduct";
 
-const EditProduct = ({ params }: { params: { id: string } }) => {
-  const { id } = params;
-  const [product, setProduct] = useState<UploadProductType>(null);
-
-  useEffect(() => {
-    const fetchProduct = async () => {
-      const fetchedProduct = await getProduct(+id);
-      console.log("fetch");
-      setProduct(fetchedProduct);
-    };
-    fetchProduct();
-  }, [id]);
+const EditProduct = async ({ params }: { params: { id: string } }) => {
+  const product = await getProduct(+params.id);
 
   if (!product) return <div>Loading...</div>;
   return (
