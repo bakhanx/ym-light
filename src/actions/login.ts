@@ -58,59 +58,74 @@ export const login = async (
     loginId: formData.get("loginId"),
     password: formData.get("password"),
   };
-  const result = await loginSchema.spa(data);
 
-  if (!result.success) {
-    return { data: prevState, error: result.error.flatten(), success: false };
-  } else {
-    const user = await db.user.findUnique({
-      where: {
-        loginId: result.data.loginId,
-      },
-      select: {
-        id: true,
-        username: true,
-        password: true,
+  try {
+    const result = await loginSchema.spa(data);
 
-        carts: {
-          select: {
-            cartItems: {
-              select: {
-                _count: true,
+    if (!result.success) {
+      return { data: prevState, error: result.error.flatten(), success: false };
+    } else {
+      const user = await db.user.findUnique({
+        where: {
+          loginId: result.data.loginId,
+        },
+        select: {
+          id: true,
+          username: true,
+          password: true,
+
+          carts: {
+            select: {
+              cartItems: {
+                select: {
+                  _count: true,
+                },
               },
             },
           },
         },
-      },
-    });
+      });
 
-    if (!user || !(await bcrypt.compare(result.data.password, user.password))) {
+      if (
+        !user ||
+        !(await bcrypt.compare(result.data.password, user.password))
+      ) {
+        return {
+          data: prevState,
+          error: {
+            fieldErrors: { loginId: [], password: ["잘못된 비밀번호 입니다."] },
+          },
+          success: false,
+        };
+      }
+      const session = await getSession();
+      session.id = user.id;
+      await session.save();
+
+      const jwtToken = createToken(user.id);
+
+      await db.log.create({ data: { userId: session.id } });
+
+      revalidatePath("/");
+
       return {
-        data: prevState,
-        error: {
-          fieldErrors: { loginId: [], password: ["잘못된 비밀번호 입니다."] },
+        data: {
+          username: user.username,
+          cartItemCount: user.carts?.[0]?.cartItems?.length || 0,
+          jwtToken: jwtToken,
         },
-        success: false,
+        error: null,
+        success: true,
       };
     }
-    const session = await getSession();
-    session.id = user.id;
-    await session.save();
-
-    const jwtToken = createToken(user.id);
-
-    await db.log.create({ data: { userId: session.id } });
-
-    revalidatePath("/");
-
+  } catch (error) {
+    console.log("로그인 에러", error);
     return {
-      data: {
-        username: user.username,
-        cartItemCount: user.carts?.[0]?.cartItems?.length || 0,
-        jwtToken: jwtToken,
+      data: prevState,
+      success: false,
+      error: {
+        fieldErrors: {},
       },
-      error: null,
-      success: true,
     };
   }
 };
