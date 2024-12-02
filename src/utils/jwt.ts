@@ -7,8 +7,13 @@ type TokenPayload = {
 };
 
 export const createToken = (userId: number) => {
-  const token = jwt.sign({ userId }, JWT_SECERT, { expiresIn: "1h" });
-  return token;
+  try {
+    const token = jwt.sign({ userId }, JWT_SECERT, { expiresIn: "1h" });
+    return token;
+  } catch (error) {
+    console.log("토큰생성 에러", error);
+    throw error;
+  }
 };
 
 export const verifyToken = (token: string): TokenPayload | null => {
