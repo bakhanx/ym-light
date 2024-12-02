@@ -26,13 +26,13 @@ const Login = () => {
     login,
     async (result) => {
       if (result.success) {
-        // await Promise.all([
-        //   setUser({
-        //     username: result.data.username,
-        //     cartItemCount: result.data.cartItemCount || 0,
-        //   }),
-        //   sessionStorage.setItem("jwt_token", result.data.jwtToken),
-        // ]);
+        await Promise.all([
+          setUser({
+            username: result.data.username,
+            cartItemCount: result.data.cartItemCount || 0,
+          }),
+          sessionStorage.setItem("jwt_token", result.data.jwtToken),
+        ]);
         window.location.href = "/";
       } else {
         console.log("Error: 로그인 실패, ", result.error);
