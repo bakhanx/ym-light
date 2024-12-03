@@ -409,7 +409,9 @@ const Upload = ({
 
                   {/* Button */}
                   <div className="pt-10">
-                    <FormButton name="상품 등록하기" isEdit={isEdit} />
+                    <FormButton
+                      name={`상품 ${isEdit ? "수정하기" : "등록하기"}`}
+                    />
                   </div>
                 </div>
               </div>
