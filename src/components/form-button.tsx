@@ -6,7 +6,6 @@ import PreventScroll from "../utils/preventScroll";
 type FormButtonType = {
   name?: string;
   color?: string;
-  isEdit?: boolean;
 };
 const FormButton = ({ name, color }: FormButtonType) => {
   const { pending } = useFormStatus();
