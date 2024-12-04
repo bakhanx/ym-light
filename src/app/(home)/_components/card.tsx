@@ -19,20 +19,24 @@ const Card = ({ name, discount, photoURL }: CardProps) => {
 
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
-    let x = event.nativeEvent.offsetX;
-    let y = event.nativeEvent.offsetY;
-    setRotateY((-1 / 5) * x + 20);
-    setRotateX((4 / 30) * y - 20);
-    setBgPosition(`${x / 5 + y / 5}%`);
-    setBgOpacity(x / 200);
+    if (window.innerWidth >= 1024) {
+      let x = event.nativeEvent.offsetX;
+      let y = event.nativeEvent.offsetY;
+      setRotateY((-1 / 5) * x + 20);
+      setRotateX((4 / 30) * y - 20);
+      setBgPosition(`${x / 5 + y / 5}%`);
+      setBgOpacity(x / 200);
+    }
   };
 
   const handleMouseOut = (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
-    setRotateY(0);
-    setRotateX(0);
-    setBgOpacity(0);
-    setBgPosition(`100%`);
+    if (window.innerWidth >= 1024) {
+      setRotateY(0);
+      setRotateX(0);
+      setBgOpacity(0);
+      setBgPosition(`100%`);
+    }
   };
 
   const cardStyle = {
