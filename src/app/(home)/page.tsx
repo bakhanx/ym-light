@@ -8,6 +8,7 @@ import Card from "./_components/card";
 import Link from "next/link";
 import Image from "next/image";
 import description from "@/../public/images/text/description.webp";
+import { BLUR_DATA_URL_GRAY } from "../../../public/images/base64/blur-gray-skeleton";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -67,7 +68,7 @@ export default async function Home() {
           {/* <div className={lightFlicker.light_container} /> */}
 
           {/* Text */}
-          <div className="absolute z-10 flex h-full w-full flex-col justify-center px-2 pt-24 xl:px-0 text-white sm:px-4 max-w-screen-xl">
+          <div className="absolute z-10 flex h-full w-full max-w-screen-xl flex-col justify-center px-2 pt-24 text-white sm:px-4 xl:px-0">
             {/* <NeonText /> */}
             <div className="w-full ">
               {/* <div className={textFlicker.light_container} /> */}
@@ -75,7 +76,7 @@ export default async function Home() {
                 className="h-[60px] w-full  bg-no-repeat "
                 style={{
                   backgroundImage: `url(${description.src})`,
-                  backgroundSize: 'contain'
+                  backgroundSize: "contain",
                 }}
               />
             </div>
@@ -93,12 +94,18 @@ export default async function Home() {
               <div className="grid  gap-8 px-4  pt-4 min-[320px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4">
                 {allProducts?.map((product) => (
                   <Link key={product.id} href={`/products/${product.id}`}>
-                    <Card
-                      key={product.id}
-                      name={product.title}
-                      photoURL={product.photos[0]}
-                      discount={product.discount || undefined}
-                    />
+                    <div className="size-80 relative">
+                      <Image
+                        src={`${product.photos[0]}/fit=scale-down,w=480,sharpen=1`}
+                        fill
+                        quality={100}
+                        alt={product.id + ""}
+                        sizes="1"
+                        className="rounded-md object-cover"
+                        placeholder="blur"
+                        blurDataURL={BLUR_DATA_URL_GRAY}
+                      />
+                    </div>
                   </Link>
                 ))}
               </div>
@@ -111,12 +118,18 @@ export default async function Home() {
               <div className="grid gap-2 gap-y-8 pt-4 min-[320px]:grid-cols-2 sm:gap-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 xl:gap-2">
                 {discountedProducts.map((product) => (
                   <Link key={product.id} href={`/products/${product.id}`}>
-                    <Card
-                      key={product.id}
-                      name={product.title}
-                      photoURL={product.photos[0]}
-                      discount={product.discount || undefined}
+                    <div className="size-80 relative">
+                    <Image
+                      src={`${product.photos[0]}/fit=scale-down,w=480,sharpen=1`}
+                      fill
+                      quality={100}
+                      alt="product2"
+                      sizes="1"
+                      className="rounded-md object-cover"
+                      placeholder="blur"
+                      blurDataURL={BLUR_DATA_URL_GRAY}
                     />
+                    </div>
                   </Link>
                 ))}
               </div>
