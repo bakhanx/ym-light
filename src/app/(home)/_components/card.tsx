@@ -40,14 +40,14 @@ const Card = ({ name, discount, photoURL }: CardProps) => {
   //   transform: `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
   // };
 
-  const overlayStyle = {
-    background:
-      "linear-gradient(105deg, transparent 30%, rgba(255,219,112,0.4) 45%, rgba(230, 158, 51, 0.3)50%, transparent 80%)",
-    backgroundSize: "150% 150%",
-    // backgroundPosition: bgPosition,
-    // filter: `brightness(1.2) opacity(${bgOpacity})`,
-    mixBlendMode: "color-dodge" as const,
-  };
+  // const overlayStyle = {
+  //   background:
+  //     "linear-gradient(105deg, transparent 30%, rgba(255,219,112,0.4) 45%, rgba(230, 158, 51, 0.3)50%, transparent 80%)",
+  //   backgroundSize: "150% 150%",
+  //   // backgroundPosition: bgPosition,
+  //   // filter: `brightness(1.2) opacity(${bgOpacity})`,
+  //   mixBlendMode: "color-dodge" as const,
+  // };
 
   return (
     <div
@@ -71,7 +71,7 @@ const Card = ({ name, discount, photoURL }: CardProps) => {
           />
 
           {/* Light overlay */}
-          <div className="absolute z-30 h-full w-full" style={overlayStyle} />
+          <div className="absolute z-30 h-full w-full"  />
 
           <div className="absolute bottom-0 z-20 flex w-full items-center justify-center rounded-b-md border-t bg-black bg-opacity-50 p-5 text-xs text-white sm:p-5 sm:text-base">
             <p className="truncate">{name}</p>
