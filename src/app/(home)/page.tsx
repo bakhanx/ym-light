@@ -64,13 +64,13 @@ export default async function Home() {
       <div className="h-screen ">
         <div className="relative flex h-full w-full justify-center ">
           {/* Background */}
-          <div className={lightFlicker.light_container} />
+          {/* <div className={lightFlicker.light_container} /> */}
 
           {/* Text */}
           <div className="absolute z-10 flex h-full w-full flex-col justify-center px-2 pt-24 xl:px-0 text-white sm:px-4 max-w-screen-xl">
             {/* <NeonText /> */}
             <div className="w-full ">
-              <div className={textFlicker.light_container} />
+              {/* <div className={textFlicker.light_container} /> */}
               <div
                 className="h-[60px] w-full  bg-no-repeat "
                 style={{
@@ -91,7 +91,7 @@ export default async function Home() {
                 새로 등록된 상품
               </div>
               <div className="grid  gap-8 px-4  pt-4 min-[320px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4">
-                {allProducts.map((product) => (
+                {allProducts?.map((product) => (
                   <Link key={product.id} href={`/products/${product.id}`}>
                     <Card
                       key={product.id}
