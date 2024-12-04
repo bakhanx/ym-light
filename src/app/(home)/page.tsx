@@ -93,12 +93,12 @@ export default async function Home() {
               <div className="grid  gap-8 px-4  pt-4 min-[320px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4">
                 {allProducts?.map((product) => (
                   <Link key={product.id} href={`/products/${product.id}`}>
-                    {/* <Card
+                    <Card
                       key={product.id}
                       name={product.title}
                       photoURL={product.photos[0]}
                       discount={product.discount || undefined}
-                    /> */}
+                    />
                   </Link>
                 ))}
               </div>
@@ -111,12 +111,12 @@ export default async function Home() {
               <div className="grid gap-2 gap-y-8 pt-4 min-[320px]:grid-cols-2 sm:gap-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 xl:gap-2">
                 {discountedProducts.map((product) => (
                   <Link key={product.id} href={`/products/${product.id}`}>
-                    {/* <Card
+                    <Card
                       key={product.id}
                       name={product.title}
                       photoURL={product.photos[0]}
                       discount={product.discount || undefined}
-                    /> */}
+                    />
                   </Link>
                 ))}
               </div>
