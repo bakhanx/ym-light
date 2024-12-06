@@ -32,7 +32,7 @@ const getProducts = async () => {
     db.product.findMany({
       where: {
         discount: {
-          not: null,
+          not: 0,
         },
       },
       select: {
