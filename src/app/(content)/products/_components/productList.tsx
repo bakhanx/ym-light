@@ -8,58 +8,52 @@ import { BLUR_DATA_URL_GRAY } from "../../../../../public/images/base64/blur-gra
 import { formatPrice } from "@/utils/formatPrice";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
 import SortButton from "./sortButton";
+import { ProductListType } from "../page";
 
 const sortOptions = [
-  { value: "latest", label: "최신등록순" },
   { value: "popularity", label: "인기순" },
-  { value: "lowToHigh", label: "판매량낮은순" },
-  { value: "highToLow", label: "판매량높은순" },
+  { value: "latest", label: "최신등록순" },
+  { value: "lowToHigh", label: "낮은가격순" },
+  { value: "highToLow", label: "높은가격순" },
+  { value: "highRate", label: "할인율순" },
 ];
 
-const ProductList = ({ products }: { products: Product[] }) => {
-  const [filteredProducts, setFilterdProducts] = useState<Product[]>(products);
-  const [sortType, setSortType] = useState<string>("latest");
+type sortType = (typeof sortOptions)[number]["value"];
 
-  useEffect(() => {
-    let sortedProducts = [...products];
-    switch (sortType) {
-      case "latest":
-        sortedProducts.sort(
-          (a, b) =>
-            new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
-        );
-        break;
-      case "popularity":
-        sortedProducts.sort((a, b) => a.stock - b.stock);
-        break;
-      case "lowToHigh":
-        sortedProducts.sort((a, b) => a.price - b.price);
-        break;
-      case "highToLow":
-        sortedProducts.sort((a, b) => b.price - a.price);
-        break;
-      default:
-        break;
-    }
-    setFilterdProducts(sortedProducts);
-  }, [sortType, products]);
+const ProductList = ({ products }: { products: ProductListType[] }) => {
+  const [filteredProducts, setFilterdProducts] =
+    useState<ProductListType[]>(products);
+  const [sortType, setSortType] = useState<sortType>("latest");
+
+  // client측 정렬
+  // useEffect(() => {
+  //   let sortedProducts = [...products];
+  //   switch (sortType) {
+  //     case "latest":
+  //       sortedProducts.sort(
+  //         (a, b) =>
+  //           new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+  //       );
+  //       break;
+  //     case "popularity":
+  //       sortedProducts.sort((a, b) => a.stock - b.stock);
+  //       break;
+  //     case "lowToHigh":
+  //       sortedProducts.sort((a, b) => a.price - b.price);
+  //       break;
+  //     case "highToLow":
+  //       sortedProducts.sort((a, b) => b.price - a.price);
+  //       break;
+  //     case "highRate":
+  //       sortedProducts.sort((a, b) => (b.discount || 0) - (a.discount || 0));
+  //     default:
+  //       break;
+  //   }
+  //   setFilterdProducts(sortedProducts);
+  // }, [sortType, products]);
   return (
     <>
-      <div className="flex items-center justify-end sm:justify-between">
-        <div className="hidden sm:block">
-          <div className="flex gap-2">
-            {sortOptions.map((option) => (
-              <SortButton
-                key={option.value}
-                sortType={sortType}
-                setSortType={setSortType}
-                type={option.value}
-              >
-                {option.label}
-              </SortButton>
-            ))}
-          </div>
-        </div>
+      <div className="flex items-center justify-end sm:flex-col sm:items-baseline sm:justify-between">
         <div className="relative pr-2 sm:hidden">
           <select
             value={sortType}
@@ -76,7 +70,7 @@ const ProductList = ({ products }: { products: Product[] }) => {
       </div>
 
       <div className="grid grid-cols-2 gap-5 pt-10 sm:grid-cols-4">
-        {filteredProducts.map((product) => (
+        {products.map((product) => (
           <Link
             key={product.id}
             href={`products/${product.id}`}
