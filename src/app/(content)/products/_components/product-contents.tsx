@@ -234,7 +234,7 @@ const ProductContents = ({ product, userId }: ProductContentsProps) => {
               </div>
 
               <div className="gap-x-2 pt-5 font-semibold">
-                {product?.discount && (
+                {product?.discount > 0 && (
                   <div className="flex gap-x-2">
                     <span className="text-lg text-red-600 sm:text-xl">
                       {product?.discount}%
