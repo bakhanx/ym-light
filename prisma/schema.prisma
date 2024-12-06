@@ -48,7 +48,7 @@ model Product {
   id           Int        @id @default(autoincrement())
   title        String     @unique
   price        Float
-  discount     Float?
+  discount     Float      @default(0)
   photos       String[]   @default([])
   detailPhotos String[]   @default([])
   color        String
@@ -57,6 +57,7 @@ model Product {
   bulb         String
   manufacturer String
   description  String
+  category     String     @default("etc")
   stock        Int        @default(99)
   created_at   DateTime   @default(now())
   updated_at   DateTime   @updatedAt
