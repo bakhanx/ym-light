@@ -26,6 +26,7 @@ const getProduct = async (id: number) => {
       detailPhotos: true,
       color: true,
       material: true,
+      category:true,
       size: true,
       stock: true,
       bulb: true,
