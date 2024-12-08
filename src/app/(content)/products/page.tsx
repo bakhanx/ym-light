@@ -8,6 +8,7 @@ import ProductList from "./_components/productList";
 import Pagination from "./_components/pagination";
 import getProducts from "./actions/getProducts";
 import { categoryMap, LIMIT_COUNT } from "./utils/constants";
+import Loading from "./loading";
 
 export type ProductListType = {
   category: string;
@@ -68,14 +69,20 @@ const ProductsLayout = () => {
   };
 
   return (
-    <div className="mx-auto min-h-screen max-w-screen-xl px-4 py-32 xl:px-0">
+    <div className="mx-auto min-h-screen max-w-screen-xl px-4 py-28 sm:py-32 xl:px-0">
       <CategoryNav />
-      <div className="px-2 pt-8 text-xl font-bold">{categoryMap[category]}</div>
-      <SortOptionNav
-        sortType={sortType}
-        handleSortTypeChange={handleSortTypeChange}
-      />
-      <ProductList products={products} />
+      <div className="flex items-center justify-between pt-2 sm:flex-col sm:pt-8">
+        <div className="px-2 text-xl font-bold w-full">{categoryMap[category]}</div>
+        <SortOptionNav
+          sortType={sortType}
+          handleSortTypeChange={handleSortTypeChange}
+        />
+      </div>
+      {products.length === 0 ? (
+        <Loading />
+      ) : (
+        <ProductList products={products} />
+      )}
 
       <div className="pt-8">
         {totalPages > 1 && (
