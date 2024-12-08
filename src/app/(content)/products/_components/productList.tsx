@@ -53,21 +53,7 @@ const ProductList = ({ products }: { products: ProductListType[] }) => {
   // }, [sortType, products]);
   return (
     <>
-      <div className="flex items-center justify-end sm:flex-col sm:items-baseline sm:justify-between">
-        <div className="relative pr-2 sm:hidden">
-          <select
-            value={sortType}
-            onChange={(e) => setSortType(e.target.value)}
-            className="block w-full appearance-none rounded-md bg-transparent py-2 pr-6 text-end text-sm"
-          >
-            <option value="latest">최신등록순</option>
-            <option value="popularity">인기순</option>
-            <option value="lowToHigh">판매량낮은순</option>
-            <option value="highToLow">판매량높은순</option>
-          </select>
-          <ChevronDownIcon className="pointer-events-none absolute right-1 top-1/2 size-5 -translate-y-1/2 transform text-gray-500" />
-        </div>
-      </div>
+
 
       <div className="grid grid-cols-2 gap-5 pt-10 sm:grid-cols-4">
         {products.map((product) => (
