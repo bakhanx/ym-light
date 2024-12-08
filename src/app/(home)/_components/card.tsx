@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import neoncard from "@/styles/NeonCard.module.css";
 import { BLUR_DATA_URL_GRAY } from "../../../../public/images/base64/blur-gray-skeleton";
 
@@ -61,7 +61,7 @@ const Card = ({ name, discount, photoURL }: CardProps) => {
     >
       {/* 카드 황금비율 1:1.58 */}
       <div
-        className={`h-[237px] w-[150px] rounded-xl  border-gray-300 bg-gray-800 min-[480px]:h-[316px] min-[480px]:w-[200px]  xl:h-[474px] xl:w-[300px] ${neoncard.container}`}
+        className={`h-[190px] w-[120px] rounded-xl border-gray-300 bg-gray-800 min-[480px]:h-[284px] min-[480px]:w-[180px] sm:h-[316px] sm:w-[200px] md:h-[221px] md:w-[140px] lg:h-[316px] lg:w-[200px] xl:h-[379px] xl:w-[240px] ${neoncard.container}`}
       >
         <div
           className={`relative h-full rounded-xl border-orange-50 bg-slate-200 ${neoncard.card} `}
@@ -80,7 +80,7 @@ const Card = ({ name, discount, photoURL }: CardProps) => {
           {/* Light overlay */}
           <div className="absolute z-30 h-full w-full " style={overlayStyle} />
 
-          <div className="absolute bottom-0 z-20 flex w-full items-center justify-center rounded-b-md border-t bg-black bg-opacity-50 p-5 text-xs text-white sm:p-5 sm:text-base">
+          <div className="absolute bottom-0 z-20 flex w-full items-center justify-center rounded-b-md bg-black bg-opacity-50 px-2 py-3 text-xs text-white min-[480px]:py-5 sm:py-5 md:py-4 lg:py-7 lg:text-sm xl:text-base">
             <p className="truncate">{name}</p>
           </div>
           {discount && (
