@@ -26,7 +26,7 @@ const getProduct = async (id: number) => {
       detailPhotos: true,
       color: true,
       material: true,
-      category:true,
+      category: true,
       size: true,
       stock: true,
       bulb: true,
@@ -71,7 +71,7 @@ const ProductDetail = async ({ params }: Props) => {
             {/* 상품 정보 디테일 */}
             <div className="my-product-detail-content mt-14 ">
               <div className="my-product-detail-tap-wrap">
-                <div className="my-product-detail-tab flex justify-between gap-x-4 border-b-2 border-t-2 border-b-[#010315] px-8 py-5 text-sm sm:gap-x-36 sm:px-16 sm:text-base">
+                <div className="my-product-detail-tab flex justify-between gap-x-4 border-b-2 border-t-2 border-b-[#010315] px-8 py-5 text-sm sm:gap-x-16 sm:px-16 sm:text-base md:gap-x-28 xl:gap-x-36">
                   <div>관련 상품</div>
                   <div>상품평</div>
                   <div>상품 문의</div>
@@ -98,7 +98,7 @@ const ProductDetail = async ({ params }: Props) => {
                         {product.detailPhotos.map((photo, index) => (
                           <div
                             key={index}
-                            className="relative h-auto w-full  object-contain flex justify-center"
+                            className="relative flex h-auto  w-full justify-center object-contain"
                           >
                             <Image
                               src={`${photo}/w=1024`}
