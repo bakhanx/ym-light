@@ -20,7 +20,7 @@ export const CategoryNav = () => {
 
   return (
     <div className="w-full border-y-2">
-      <div className="flex gap-x-8 px-2 py-4">
+      <div className="flex sm:text-base sm:gap-x-8 px-2 py-4 gap-x-4 text-sm overflow-x-auto whitespace-nowrap">
         {categories.map((cat) => (
           <button
             key={cat.value}
