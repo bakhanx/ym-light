@@ -1,3 +1,4 @@
+import { cls } from "@/utils/cls";
 import React from "react";
 
 type Pagination = {
@@ -14,10 +15,18 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination) => {
 
   return (
     <nav>
-      <ul className="flex gap-2">
+      <ul className="flex justify-center gap-2 ">
         {pages.map((page) => (
-          <li key={page} className={page === currentPage ? "font-bold" : ""}>
-            <button onClick={() => onPageChange(page)}>{page}</button>
+          <li
+            key={page}
+            className={cls(
+              page === currentPage ? "bg-[#181a2a] font-bold text-white border-transparent" : "",
+              "rounded-md border-2 ",
+            )}
+          >
+            <button onClick={() => onPageChange(page)} className="p-3 aspect-square flex justify-center items-center">
+              {page}
+            </button>
           </li>
         ))}
       </ul>
