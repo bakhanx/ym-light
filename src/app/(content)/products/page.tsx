@@ -3,7 +3,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useSearchParams, usePathname } from "next/navigation";
 import { CategoryNav } from "./_components/categoryNav";
-import { SortOptionNav } from "./_components/SortOptions";
+import { SortOptionNav } from "./_components/sortOptionNav";
 import ProductList from "./_components/productList";
 import Pagination from "./_components/pagination";
 import getProducts from "./actions/getProducts";
@@ -70,19 +70,22 @@ const ProductsLayout = () => {
   return (
     <div className="mx-auto min-h-screen max-w-screen-xl px-4 py-32 xl:px-0">
       <CategoryNav />
-      <div className="text-xl font-bold px-2 pt-8">{categoryMap[category]}</div>
+      <div className="px-2 pt-8 text-xl font-bold">{categoryMap[category]}</div>
       <SortOptionNav
         sortType={sortType}
         handleSortTypeChange={handleSortTypeChange}
       />
       <ProductList products={products} />
-      {totalPages > 1 && (
-        <Pagination
-          currentPage={page}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-        />
-      )}
+
+      <div className="pt-8">
+        {totalPages > 1 && (
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        )}
+      </div>
     </div>
   );
 };
