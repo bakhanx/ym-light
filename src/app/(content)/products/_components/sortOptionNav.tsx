@@ -39,7 +39,7 @@ export const SortOptionNav = ({
       </div>
 
       {/* mobile */}
-      <div className="flex items-center justify-end sm:flex-col sm:items-baseline sm:justify-between">
+      <div className="flex items-center justify-end sm:flex-col sm:items-baseline sm:justify-between w-full">
         <div className="relative pr-2 sm:hidden">
           <select
             value={sortType}
