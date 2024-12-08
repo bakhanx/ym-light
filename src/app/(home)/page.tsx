@@ -67,7 +67,7 @@ export default async function Home() {
           <div className={lightFlicker.light_container} />
 
           {/* Text */}
-          <div className="absolute z-10 flex h-full w-full flex-col justify-center px-2 pt-24 xl:px-0 text-white sm:px-4 max-w-screen-xl">
+          <div className="absolute z-10 flex h-full w-full max-w-screen-xl flex-col justify-center px-2 pt-24 text-white sm:px-4 xl:px-0">
             {/* <NeonText /> */}
             <div className="w-full ">
               <div className={textFlicker.light_container} />
@@ -75,7 +75,7 @@ export default async function Home() {
                 className="h-[60px] w-full  bg-no-repeat "
                 style={{
                   backgroundImage: `url(${description.src})`,
-                  backgroundSize: 'contain'
+                  backgroundSize: "contain",
                 }}
               />
             </div>
@@ -90,7 +90,7 @@ export default async function Home() {
               <div className=" text-lg font-semibold sm:text-2xl">
                 새로 등록된 상품
               </div>
-              <div className="grid  gap-8 px-4  pt-4 min-[320px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4">
+              <div className="grid grid-cols-2 gap-y-8 pt-4 min-[480px]:grid-cols-2 sm:grid-cols-2 sm:gap-y-16 md:grid-cols-4 xl:gap-16">
                 {allProducts?.map((product) => (
                   <Link key={product.id} href={`/products/${product.id}`}>
                     <Card
@@ -108,7 +108,7 @@ export default async function Home() {
               <div className="pt-6 text-lg font-semibold sm:text-2xl">
                 할인 상품
               </div>
-              <div className="grid gap-2 gap-y-8 pt-4 min-[320px]:grid-cols-2 sm:gap-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 xl:gap-2">
+              <div className="grid grid-cols-2 gap-y-8 pt-4 min-[480px]:grid-cols-2 sm:grid-cols-2 sm:gap-y-16 md:grid-cols-4 xl:gap-16">
                 {discountedProducts.map((product) => (
                   <Link key={product.id} href={`/products/${product.id}`}>
                     <Card
