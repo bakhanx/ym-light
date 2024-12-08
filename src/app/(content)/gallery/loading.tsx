@@ -5,7 +5,7 @@ import React from "react";
 
 const Loading = () => {
   return (
-    <div className="m-auto w-[100%-40px] max-w-screen-lg border-t-2 px-4 py-8 sm:px-10 md:px-20">
+    <div className="m-auto w-[100%-40px] border-t-2 px-2 py-8 sm:max-w-screen-md sm:px-4 xl:max-w-screen-lg xl:px-0">
       <div className=" flex flex-col px-4  py-20">
         <div className="flex items-center gap-x-10 ">
           <div className="fill relative h-24 w-24 shrink-0 rounded-full bg-slate-500 sm:h-32 sm:w-32"></div>
