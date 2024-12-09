@@ -13,7 +13,7 @@ type State = {
 type Actions = {
   setUser: (user: User) => void;
   addToCartItemCount: () => void;
-  substractToCartItemCount: () => void;
+  substractToCartItemCount: (quantity?: number) => void;
   removeUser: () => void;
 };
 
@@ -30,7 +30,7 @@ export const useUserStore = create<State & Actions>()(
       addToCartItemCount: () =>
         set((state) => {
           if (state.user) {
-            console.log("state user : ", state.user)
+            console.log("state user : ", state.user);
             return {
               user: {
                 ...state.user,
@@ -40,13 +40,13 @@ export const useUserStore = create<State & Actions>()(
           }
           return state;
         }),
-      substractToCartItemCount: () =>
+      substractToCartItemCount: (quantity: number = 1) =>
         set((state) => {
           if (state.user) {
             return {
               user: {
                 ...state.user,
-                cartItemCount: state.user.cartItemCount - 1,
+                cartItemCount: state.user.cartItemCount - quantity,
               },
             };
           }
