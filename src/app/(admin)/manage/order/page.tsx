@@ -21,6 +21,9 @@ const Order = async () => {
         },
       },
     },
+    orderBy:{
+      created_at:"desc"
+    }
   });
 
   const headers = ["주문 ID", "고객명", "상품 정보", "주문일자"];
@@ -32,46 +35,69 @@ const Order = async () => {
             [order.id, "text-center"],
             [order.user.username, "text-center"],
             [
-              order.cartItems.map((item) => (
-                <div key={item.id} className="flex items-center gap-2 py-4">
-                  <div className="relative flex flex-col">
-                    <Image
-                      src={`${item.product.photos[0]}/w=200`}
-                      alt={item.product.title}
-                      className="size-24 object-cover"
-                      width={64}
-                      height={64}
-                    />
-                    <span className="absolute -top-5 left-0 text-sm">
-                      [id:{item.productId}]
-                    </span>
-                  </div>
+              order.cartItems.map((item) => {
+                const discountPrice =
+                  (item.product.price * (100 - item.product.discount)) / 100;
 
-                  <div>
-                    <div className="block overflow-hidden text-ellipsis whitespace-nowrap">
-                      <span className="font-semibold">상품명: </span>{" "}
-                      {item.product.title}
+                const totalPrice =
+                  discountPrice * item.quantity +
+                  item.options
+                    .map(
+                      (optionInfo) =>
+                        (discountPrice + (optionInfo.option.price || 0)) *
+                        optionInfo.quantity,
+                    )
+                    .reduce((acc, cur) => acc + cur, 0);
+
+                return (
+                  <div key={item.id} className="flex items-center gap-2 py-4">
+                    <div className="relative flex flex-col">
+                      <Image
+                        src={`${item.product.photos[0]}/w=200`}
+                        alt={item.product.title}
+                        className="size-24 object-cover"
+                        width={64}
+                        height={64}
+                      />
+                      <span className="absolute -top-5 left-0 text-sm">
+                        [id:{item.productId}]
+                      </span>
                     </div>
-                    {item.options.map((optionInfo) => (
-                      <div key={optionInfo.optionId} className="text-gray-500">
-                        {optionInfo.option.name}
+
+                    <div>
+                      <div className="block overflow-hidden text-ellipsis whitespace-nowrap">
+                        <span className="font-semibold">상품명: </span>{" "}
+                        {item.product.title}
                       </div>
-                    ))}
-                    <div>
-                      <span className="font-semibold">가격: </span>
-                      {`${formatPrice(item.product.price)}원`}
-                    </div>
-                    <div>
-                      <span className="font-semibold">할인율: </span>
-                      {`${item.product.discount || 0}%`}
-                    </div>
-                    <div>
-                      <span className="font-semibold">수량: </span>
-                      {item.quantity}
+                      <div>
+                        <span className="font-semibold">가격: </span>
+                        {`${formatPrice(item.product.price)}원`}
+                      </div>
+                      <div>
+                        <span className="font-semibold">할인율: </span>
+                        {`${item.product.discount || 0}%`}
+                      </div>
+                      {item.options.map((optionInfo, index) => (
+                        <div key={optionInfo.optionId} className="text-sm">
+                          옵션{index + 1}: {optionInfo.option.name} | (+{" "}
+                          {formatPrice(optionInfo.option.price!)}원) |{" "}
+                          {optionInfo.quantity}개
+                        </div>
+                      ))}
+                      {item.quantity > 0 && (
+                        <div>
+                          <span className="font-semibold">수량: </span>
+                          {item.quantity}
+                        </div>
+                      )}
+                      <div className="pt-2">
+                        <span className="font-semibold text-lg">총 가격 :</span>
+                        {formatPrice(totalPrice)}원
+                      </div>
                     </div>
                   </div>
-                </div>
-              )),
+                );
+              }),
               "",
             ],
             [formatDate(order.created_at), ""],
