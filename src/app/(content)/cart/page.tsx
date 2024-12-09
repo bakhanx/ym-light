@@ -128,6 +128,7 @@ const Cart = () => {
           alert("주문이 완료되었습니다.");
           checkedCarts.forEach((item) => {
             removeFromCart({ productId: item.productId });
+            substractToCartItemCount();
           });
           router.push("/");
         } else {
@@ -138,7 +139,7 @@ const Cart = () => {
         console.log("Error : ", error);
       }
     },
-    [checkedCarts, removeFromCart, router],
+    [checkedCarts, removeFromCart, router, substractToCartItemCount],
   );
 
   const handleBackButton = () => {
