@@ -26,7 +26,7 @@ const getUsers = async () => {
       },
     },
     orderBy: {
-      id: "asc",
+      id: "desc",
     },
   });
   return users;

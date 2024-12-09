@@ -28,6 +28,9 @@ const getGalleryList = async () => {
         },
       },
     },
+    orderBy:{
+      created_at:"desc"
+    }
   });
 
   return gallery;
