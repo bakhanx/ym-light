@@ -20,14 +20,18 @@ const TopNavigation = ({ userId }: { userId: number | null }) => {
     pathname.startsWith(whitePath),
   );
   const handleLogout = async () => {
-    localStorage.removeItem("user-storage");
+    try {
+      localStorage.removeItem("user-storage");
 
-    const sessionKeysToRemove = ["cart", "chat", "jwt_token"];
-    sessionKeysToRemove.forEach((key) => sessionStorage.removeItem(key));
+      const sessionKeysToRemove = ["cart", "chat", "jwt_token"];
+      sessionKeysToRemove.forEach((key) => sessionStorage.removeItem(key));
 
-    await logOut();
+      await logOut();
 
-    window.location.href = "/";
+      window.location.href = "/";
+    } catch (error) {
+      console.error("error log out:", error);
+    }
   };
 
   useEffect(() => {
