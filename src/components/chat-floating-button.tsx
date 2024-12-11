@@ -9,23 +9,36 @@ import { useChatStore } from "@/store/useChatStore";
 
 const ChatFloatingButton = ({ sessionId }: { sessionId: number }) => {
   const router = useRouter();
-  const [isShowModal, setIsShowModal] = useState(false);
-  const setIsChatVisible = useChatStore((state) => state.setIsChatVisible);
+  const { chatroomId, setChatroomId, setIsChatVisible } = useChatStore();
 
-  const EnterChatRoom = () => {
-    setIsShowModal(true);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const EnterChatRoom = async () => {
+    if (chatroomId) {
+      router.push(`/chats/${chatroomId}`, { scroll: false });
+      setIsChatVisible(true);
+      return;
+    }
+
+    setIsLoading(true);
     setIsChatVisible(true);
-    createChatRoom().then((res) => {
+
+    try {
+      const res = await createChatRoom();
+      setChatroomId(res.roomId);
       router.push(`/chats/${res.roomId}`, { scroll: false });
-      //깜빡임 방지
+    } catch (error) {
+      console.error("채팅방 생성 에러: ", error);
+    } finally {
       setTimeout(() => {
-        setIsShowModal(false);
-      }, 300);
-    });
+        setIsLoading(false);
+      }, 1000);
+    }
   };
-  const navigateToChatsPage = ()=>{
-    router.push("/manage/chats")
-  }
+  const navigateToChatsPage = () => {
+    router.push("/manage/chats");
+  };
+
   return (
     <>
       {sessionId === 1 ? (
@@ -45,8 +58,8 @@ const ChatFloatingButton = ({ sessionId }: { sessionId: number }) => {
           </button>
           {/* 아래를 다른 컴포넌트로 분리할 예정 */}
 
-          {isShowModal && (
-            <div className="fixed bottom-10 right-10 z-50 flex h-96 w-96 flex-col items-center justify-center rounded-lg border-4 border-amber-300 bg-white p-5">
+          {isLoading && (
+            <div className="fixed bottom-10 right-10 z-50 flex h-96 w-96 flex-col items-center justify-center rounded-lg border-4 border-amber-300 bg-white p-5 transition-opacity duration-500">
               <Loader />
               채팅방 요청중...
             </div>
