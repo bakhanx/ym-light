@@ -2,13 +2,11 @@
 
 import { initialMessages } from "@/app/(content)/chats/[id]/page";
 import { cls } from "@/utils/cls";
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { createClient, RealtimeChannel } from "@supabase/supabase-js";
+import React, { useEffect, useRef, useState } from "react";
+import { RealtimeChannel } from "@supabase/supabase-js";
 import { saveChatMessages } from "@/app/(content)/chats/action";
 import { PaperAirplaneIcon } from "@heroicons/react/16/solid";
-
-const SUPABASE_URL = "https://qtxacjywgtbrwupngvuh.supabase.co";
-const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_KEY!;
+import supabaseClient from "@/utils/supabaseClient";
 
 type ChatMessagesProps = {
   initialMessages: initialMessages;
@@ -30,7 +28,6 @@ const ChatMessages = ({
 
   const channelA = useRef<RealtimeChannel>();
   useEffect(() => {
-    const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
     channelA.current = supabaseClient.channel(`room-${chatRoomId}`);
     channelA.current
       .on("broadcast", { event: "message" }, (payload) => {
