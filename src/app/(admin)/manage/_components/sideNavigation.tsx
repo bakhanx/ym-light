@@ -18,12 +18,14 @@ const SideNavigation = () => {
   return (
     <>
       {/* Desktop */}
-      <div className="mt-20 min-h-screen min-w-48 md:w-[calc((100%-1280px)/2)]  bg-slate-800 text-white">
-        <div className="p-3 text-center font-bold italic border-b-2">관리자 페이지</div>
+      <div className="mt-20 hidden min-h-screen min-w-48 bg-slate-800 text-white sm:block md:w-[calc((100%-1280px)/2)]">
+        <div className="border-b-2 p-3 text-center font-bold italic">
+          관리자 페이지
+        </div>
         <nav className="mt-4">
           {sideNavLinks.map((link) => {
             const Icon = link.icon;
-            const isActive = pathname === link.href
+            const isActive = pathname === link.href;
             return (
               <Link href={link.href} key={link.key} className=" ">
                 <div
@@ -45,7 +47,7 @@ const SideNavigation = () => {
       <div className="fixed right-0 z-navigation pt-28 sm:hidden">
         <div className="flex w-full justify-end">
           <button onClick={handleToggle}>
-            <Bars3Icon className="size-8 bg-black " />
+            <Bars3Icon className="size-8 bg-black text-white" />
           </button>
         </div>
 
