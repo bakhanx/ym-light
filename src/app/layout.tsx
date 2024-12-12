@@ -33,7 +33,6 @@ export default async function RootLayout({
   modal,
 }: Readonly<RootLayoutProps>) {
   const session = await getSession();
-  console.log("session Id : ", session.id);
 
   return (
     <html lang="en">
