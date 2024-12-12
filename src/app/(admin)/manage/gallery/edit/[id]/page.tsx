@@ -18,7 +18,7 @@ const EditProduct = async ({ params }: { params: { id: string } }) => {
   return (
     <div className="">
       <div className="[&>div]:pt-0">
-        <Upload gallery={gallery} isEdit={true} />;
+        <Upload gallery={gallery} isEdit={true} />
       </div>
     </div>
   );
