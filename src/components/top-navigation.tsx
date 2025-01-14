@@ -7,7 +7,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-const whitePaths = ["/products", "/gallery", "/manage", "/cart", "/chats"];
+const whitePaths = ["/products", "/gallery", "/manage", "/my", "/chats"];
 
 const TopNavigation = ({ userId }: { userId: number | null }) => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -114,6 +114,9 @@ const TopNavigation = ({ userId }: { userId: number | null }) => {
               <Link href="/manage">관리자</Link>
             </li>
           )}
+          <li>
+            <Link href="">주문내역</Link>
+          </li>
           <li className="relative">
             <Link href="/cart">장바구니</Link>
             {user && (
