@@ -17,9 +17,10 @@ import updateCart from "../actions/updateCart";
 import Loader from "@/components/loader";
 import createDirectOrder from "../actions/createDirectOrder";
 import { useUserStore } from "@/store/useUserStore";
-import getCartItems from "../../cart/actions/getCartItems";
+
 import { cls } from "@/utils/cls";
 import { getUserIdFromToken } from "@/utils/jwt";
+import getCartItems from "../../my/cart/actions/getCartItems";
 
 type Options = {
   options: Option[];
