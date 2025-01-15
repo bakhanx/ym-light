@@ -152,14 +152,15 @@ const Cart = () => {
 
   return (
     <>
-      <div className="wrapper pt-24">
-        <div className="divide-y-[1px] shadow-xl ">
+      <div className="bg-white rounded-md">
+        <div className="divide-y-[1px]">
+          
           <CartHeader itemsCount={cart.length} />
-
+          
           {/* check */}
           <div className=" py-5 text-sm">
             <div className="inner-content max-w-screen-xl  px-2 sm:px-4 xl:px-0">
-              <div className="flex gap-x-2 divide-x-2">
+              <div className="flex gap-x-2 divide-x-2 px-2">
                 <div>
                   <CheckAllButton
                     onClick={handleSelectAllClick}
@@ -175,8 +176,8 @@ const Cart = () => {
         </div>
 
         {/* contents */}
-        <div className="bg-gray-200 py-4 sm:py-10 ">
-          <div className="m-auto  max-w-screen-xl rounded-md px-2 shadow-xl sm:px-4 xl:px-0">
+        <div className=" py-4 sm:py-10 ">
+          <div className="m-auto  max-w-screen-xl rounded-md px-2 sm:px-4 xl:px-0">
             {/* header */}
             <ProductListHeader
               isSelect={isSelectAllClick}
