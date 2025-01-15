@@ -32,7 +32,7 @@ const ProductList = ({
               </div>
             ))
           ) : (
-            <div className="w-full bg-white p-10 text-center">
+            <div className="w-full flex items-center justify-center h-[400px] bg-white p-10 text-center text-lg">
               장바구니에 담긴 상품이 없습니다.
             </div>
           )}
