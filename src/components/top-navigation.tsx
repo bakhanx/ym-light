@@ -115,10 +115,10 @@ const TopNavigation = ({ userId }: { userId: number | null }) => {
             </li>
           )}
           <li>
-            <Link href="">주문내역</Link>
+            <Link href="/my/order">주문내역</Link>
           </li>
           <li className="relative">
-            <Link href="/cart">장바구니</Link>
+            <Link href="/my/cart">장바구니</Link>
             {user && (
               <span className="text-bold absolute -right-2 -top-2 flex min-w-[1.25rem] max-w-[3rem] items-center justify-center overflow-hidden text-ellipsis rounded-full border border-red-400 bg-red-500 px-1.5 text-xs text-white">
                 {cartItemCount}
