@@ -7,7 +7,7 @@ type RootLayoutProps = {
 const Layout = ({ children }: Readonly<RootLayoutProps>) => {
   return (
     <div className="wrapper min-h-screen bg-gray-200">
-      <div className="m-auto flex max-w-screen-xl gap-x-4 pt-24">
+      <div className="m-auto flex max-w-screen-xl gap-x-4 pt-24 px-4 xl:px-0 py-4">
         <Sidebar />
         <div className="right flex w-full flex-col gap-y-4">{children}</div>
       </div>
