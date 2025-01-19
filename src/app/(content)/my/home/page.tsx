@@ -1,4 +1,6 @@
+import db from "@/utils/db";
 import { formatPrice } from "@/utils/formatPrice";
+import getSession from "@/utils/session";
 import {
   ChatBubbleLeftRightIcon,
   EnvelopeIcon,
@@ -7,7 +9,43 @@ import {
 } from "@heroicons/react/24/outline";
 import React from "react";
 
-const Home = () => {
+const getUserCount = async () => {
+  const { id } = await getSession();
+  const [orderCount, cartCount, chatCount, contactCount] = await Promise.all([
+    db.order.count({
+      where: {
+        userId: id,
+      },
+    }),
+    db.cartItem.count({
+      where: {
+        cart: {
+          userId: id,
+        },
+      },
+    }),
+    db.chatRoom.count({
+      where: {
+        users: {
+          some: {
+            id,
+          },
+        },
+      },
+    }),
+    db.order.count({
+      where: {
+        userId: id,
+      },
+    }),
+  ]);
+  return { orderCount, cartCount, chatCount, contactCount };
+};
+
+const Home = async () => {
+  const { orderCount, cartCount, chatCount, contactCount } =
+    await getUserCount();
+  console.log(orderCount, cartCount, chatCount, contactCount);
   return (
     <div className="wrapper flex flex-col gap-y-4">
       {/* Profile */}
@@ -21,7 +59,7 @@ const Home = () => {
           </div>
           <div className="flex flex-col">
             <div>주문배송</div>
-            <div className="font-bold text-orange-500">0</div>
+            <div className="font-bold text-orange-500">{orderCount}</div>
           </div>
         </div>
         <div className="flex gap-x-2">
@@ -30,7 +68,7 @@ const Home = () => {
           </div>
           <div className="flex flex-col">
             <div>장바구니</div>
-            <div className="font-bold text-orange-500">0</div>
+            <div className="font-bold text-orange-500">{cartCount}</div>
           </div>
         </div>
         <div className="flex gap-x-2">
@@ -39,7 +77,7 @@ const Home = () => {
           </div>
           <div className="flex flex-col">
             <div>대화내역</div>
-            <div className="font-bold text-orange-500">0</div>
+            <div className="font-bold text-orange-500">{chatCount}</div>
           </div>
         </div>
         <div className="flex gap-x-2">
@@ -48,7 +86,7 @@ const Home = () => {
           </div>
           <div className="flex flex-col">
             <div>문의내역</div>
-            <div className="font-bold text-orange-500">0</div>
+            <div className="font-bold text-orange-500">{contactCount}</div>
           </div>
         </div>
       </div>
@@ -82,7 +120,7 @@ const Home = () => {
         <div className="grid grid-cols-2 gap-y-4 pt-8 md:grid-cols-4">
           {[...Array(4)].map((_, i) => (
             <div key={i} className="m-auto">
-              <div className="size-32 bg-gray-200 rounded-md" />
+              <div className="size-32 rounded-md bg-gray-200" />
               <div className="pt-2">
                 <div>샹들리에24구</div>
                 <div>{formatPrice(12000000)}원</div>
