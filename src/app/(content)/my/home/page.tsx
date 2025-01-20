@@ -7,43 +7,63 @@ import {
   ShoppingCartIcon,
   TruckIcon,
 } from "@heroicons/react/24/outline";
+import Link from "next/link";
 import React from "react";
 
 const getUserCount = async () => {
   const { id } = await getSession();
-  const [orderCount, cartCount, chatCount, contactCount] = await Promise.all([
-    db.order.count({
-      where: {
-        userId: id,
-      },
-    }),
-    db.cartItem.count({
-      where: {
-        cart: {
+  const [orderCount, cartCount, chatCount, contactCount, cartItems] =
+    await Promise.all([
+      db.order.count({
+        where: {
           userId: id,
         },
-      },
-    }),
-    db.chatRoom.count({
-      where: {
-        users: {
-          some: {
-            id,
+      }),
+      db.cartItem.count({
+        where: {
+          cart: {
+            userId: id,
           },
         },
-      },
-    }),
-    db.order.count({
-      where: {
-        userId: id,
-      },
-    }),
-  ]);
-  return { orderCount, cartCount, chatCount, contactCount };
+      }),
+      db.chatRoom.count({
+        where: {
+          users: {
+            some: {
+              id,
+            },
+          },
+        },
+      }),
+      db.order.count({
+        where: {
+          userId: id,
+        },
+      }),
+      db.cartItem.findMany({
+        where: {
+          cart: {
+            userId: id,
+          },
+        },
+        select: {
+          quantity: true,
+          product: {
+            select: {
+              price: true,
+            },
+          },
+        },
+      }),
+    ]);
+  const totalOrderPrice = cartItems.reduce((acc, item) => {
+    return acc + item.product.price * item.quantity;
+  }, 0);
+  return { orderCount, cartCount, chatCount, contactCount, totalOrderPrice };
 };
 
 const Home = async () => {
-  const { orderCount, cartCount, chatCount, contactCount } =
+  const { orderCount, cartCount, chatCount, contactCount, totalOrderPrice } =
     await getUserCount();
   console.log(orderCount, cartCount, chatCount, contactCount);
   return (
@@ -53,42 +73,50 @@ const Home = async () => {
 
       {/* History */}
       <div className="flex justify-between rounded-md bg-white px-4 py-8">
-        <div className="flex gap-x-2">
-          <div className="flex size-12 items-center justify-center rounded-full bg-gray-200">
-            <TruckIcon className="size-6" />
+        <Link href="/my/order">
+          <div className="flex gap-x-2 hover:cursor-pointer">
+            <div className="flex size-12 items-center justify-center rounded-full bg-gray-200">
+              <TruckIcon className="size-6" />
+            </div>
+            <div className="flex flex-col">
+              <div>주문배송</div>
+              <div className="font-bold text-orange-500">{orderCount}</div>
+            </div>
           </div>
-          <div className="flex flex-col">
-            <div>주문배송</div>
-            <div className="font-bold text-orange-500">{orderCount}</div>
+        </Link>
+        <Link href="/my/cart">
+          <div className="flex gap-x-2 hover:cursor-pointer">
+            <div className="flex size-12 items-center justify-center rounded-full bg-gray-200">
+              <ShoppingCartIcon className="size-6" />
+            </div>
+            <div className="flex flex-col">
+              <div>장바구니</div>
+              <div className="font-bold text-orange-500">{cartCount}</div>
+            </div>
           </div>
-        </div>
-        <div className="flex gap-x-2">
-          <div className="flex size-12 items-center justify-center rounded-full bg-gray-200">
-            <ShoppingCartIcon className="size-6" />
+        </Link>
+        <Link href="/my/chat">
+          <div className="flex gap-x-2 hover:cursor-pointer">
+            <div className="flex size-12 items-center justify-center rounded-full bg-gray-200">
+              <ChatBubbleLeftRightIcon className="size-6" />
+            </div>
+            <div className="flex flex-col">
+              <div>대화내역</div>
+              <div className="font-bold text-orange-500">{chatCount}</div>
+            </div>
           </div>
-          <div className="flex flex-col">
-            <div>장바구니</div>
-            <div className="font-bold text-orange-500">{cartCount}</div>
+        </Link>
+        <Link href="/my/contact">
+          <div className="flex gap-x-2 hover:cursor-pointer">
+            <div className="flex size-12 items-center justify-center rounded-full bg-gray-200">
+              <EnvelopeIcon className="size-6" />
+            </div>
+            <div className="flex flex-col">
+              <div>문의내역</div>
+              <div className="font-bold text-orange-500">{contactCount}</div>
+            </div>
           </div>
-        </div>
-        <div className="flex gap-x-2">
-          <div className="flex size-12 items-center justify-center rounded-full bg-gray-200">
-            <ChatBubbleLeftRightIcon className="size-6" />
-          </div>
-          <div className="flex flex-col">
-            <div>대화내역</div>
-            <div className="font-bold text-orange-500">{chatCount}</div>
-          </div>
-        </div>
-        <div className="flex gap-x-2">
-          <div className="flex size-12 items-center justify-center rounded-full bg-gray-200">
-            <EnvelopeIcon className="size-6" />
-          </div>
-          <div className="flex flex-col">
-            <div>문의내역</div>
-            <div className="font-bold text-orange-500">{contactCount}</div>
-          </div>
-        </div>
+        </Link>
       </div>
 
       {/* Statistics */}
@@ -96,7 +124,7 @@ const Home = async () => {
         <div className="flex w-1/3 min-w-64 shrink-0 flex-col gap-y-4 rounded-md bg-white p-4">
           <div>
             총 구매 금액 :{" "}
-            <span className="font-bold">{formatPrice(13200000)}원</span>{" "}
+            <span className="font-bold">{formatPrice(totalOrderPrice)}원</span>{" "}
           </div>
           <div>
             총 구매 개수 : <span className="font-bold">10</span>
