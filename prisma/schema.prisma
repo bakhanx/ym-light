@@ -70,7 +70,7 @@ model Option {
   id             Int              @id @default(autoincrement())
   index          Int
   name           String
-  price          Int?
+  price          Int?             @default(0)
   stock          Int              @default(99)
   product        Product          @relation(fields: [productId], references: [id], onDelete: Cascade)
   CartItemOption CartItemOption[]
@@ -90,7 +90,7 @@ model CartItem {
   cart      Cart?            @relation(fields: [cartId], references: [id], onDelete: Cascade)
   Order     Order?           @relation(fields: [orderId], references: [id])
   options   CartItemOption[]
-  quantity  Int
+  quantity  Int              @default(1)
   productId Int
   cartId    Int?
   orderId   Int?
@@ -107,11 +107,19 @@ model CartItemOption {
 }
 
 model Order {
-  id         Int        @id @default(autoincrement())
-  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id         Int         @id @default(autoincrement())
+  status     OrderStatus @default(PENDING)
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     Int
   cartItems  CartItem[]
-  created_at DateTime   @default(now())
+  created_at DateTime    @default(now())
+}
+
+enum OrderStatus {
+  PENDING
+  COMPLETED
+  CANCELED
+  SHIPPED
 }
 
 model Gallery {
