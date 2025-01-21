@@ -6,7 +6,7 @@ import {
   ShoppingBagIcon,
   TruckIcon,
 } from "@heroicons/react/16/solid";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import Options, { selectedItemType } from "./options";
 import ProductInfo from "./product-Info";
 import Image from "next/image";
@@ -35,19 +35,20 @@ type ProductContentsProps = ProductWithOptions & {
 
 const ProductContents = ({ product, userId }: ProductContentsProps) => {
   const [isLoading, setIsLoading] = useState(false);
-  const { addToCart, isDataLoaded, setDataLoaded, setInitData } =
-    useCartStore();
-  const { addToCartItemCount } = useUserStore();
   const [selectedOptionList, setSelectedOptionList] = useState<
     selectedItemType[]
   >([]);
-  const [quantity, setQuantity] = useState(product.options.length > 0 ? 0 : 1);
-
+  const [quantity, setQuantity] = useState(1);
   const [mainImage, setMainImage] = useState(product.photos[0]);
   const [selectedThumbnail, setSelectedThumbnail] = useState(0);
 
+  const { addToCart, isDataLoaded, setDataLoaded, setInitData } =
+    useCartStore();
+  const { addToCartItemCount } = useUserStore();
+
   const router = useRouter();
   const tempId = Date.now();
+
   const createCartItem = () => ({
     id: tempId,
     product: product,
@@ -61,48 +62,40 @@ const ProductContents = ({ product, userId }: ProductContentsProps) => {
       cartItemId: tempId,
       id: tempId,
       option: {
-        id: selectedOption.option.id,
+        ...selectedOption.option,
         index,
-        name: selectedOption.option.name,
-        price: selectedOption.price,
         productId: product.id,
-        stock: selectedOption.option.stock,
       },
     })),
   });
 
   const handleAddtoCart = async () => {
-    // local State
     if (product.options.length > 0 && selectedOptionList.length === 0) {
       alert("상품옵션을 선택해주세요.");
       return;
     }
-    const cartItem = createCartItem();
+
     setIsLoading(true);
+    const cartItem = createCartItem();
 
     // 장바구니 데이터 초기화 server -> zustand
-    const getCart = async () => {
+    if (!isDataLoaded) {
       const userId = getUserIdFromToken();
-      if (!isDataLoaded && userId) {
+      if (userId) {
         setDataLoaded();
         const cartItems = await getCartItems(userId);
         if (cartItems) {
           setInitData(cartItems);
-          console.log("cart store init");
         }
       }
-    };
-    await getCart();
+    }
 
-    // z-store
-    const addToCartPromise = addToCart({ ...cartItem, checked: true });
-    // prisma
-    const updateCartPromise = updateCart(cartItem);
+    await Promise.all([
+      addToCart({ ...cartItem, checked: true }), // client
+      updateCart(cartItem), // server
+    ]);
 
-    await Promise.all([addToCartPromise, updateCartPromise]);
-
-    const isExist = useCartStore.getState().isExist;
-    if (!isExist) {
+    if (!useCartStore.getState().isExist) {
       addToCartItemCount();
     }
 
@@ -113,36 +106,6 @@ const ProductContents = ({ product, userId }: ProductContentsProps) => {
       )
     ) {
       router.push("/my/cart");
-    }
-  };
-
-  // Option Props
-  const parentFunc = (item: selectedItemType[]) => {
-    setSelectedOptionList(item);
-  };
-
-  // Quantity Button
-  const handleQuantityClick = (
-    event: React.MouseEvent<HTMLButtonElement>,
-    buttonType: "add" | "substract",
-  ) => {
-    event.preventDefault();
-
-    if (buttonType === "add") {
-      setQuantity((prev) => prev + 1);
-    } else if (buttonType === "substract") {
-      if (quantity === 1) return;
-      setQuantity((prev) => prev - 1);
-    }
-  };
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuantity(+event.target.value);
-  };
-  const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
-    if (quantity < 1) {
-      setQuantity(1);
-    } else {
-      setQuantity(+event.target.value);
     }
   };
 
@@ -178,6 +141,20 @@ const ProductContents = ({ product, userId }: ProductContentsProps) => {
   const handleImageSelect = (photo: string, index: number) => {
     setMainImage(photo);
     setSelectedThumbnail(index);
+  };
+
+  // Option Props
+  const parentFunc = useCallback((item: selectedItemType[]) => {
+    setSelectedOptionList(item);
+  }, []);
+
+  // Quantity Button
+  const handleQuantityButton = (type: "add" | "substract") => {
+    setQuantity((prev) => (type === "add" ? prev + 1 : Math.max(1, prev - 1)));
+  };
+
+  const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuantity(+event.target.value);
   };
 
   return (
@@ -282,7 +259,7 @@ const ProductContents = ({ product, userId }: ProductContentsProps) => {
                 <div className="count-btn flex text-black">
                   <button
                     className="flex h-6 w-6 items-center justify-center border p-2 hover:bg-orange-50"
-                    onClick={(e) => handleQuantityClick(e, "substract")}
+                    onClick={() => handleQuantityButton("substract")}
                   >
                     -
                   </button>
@@ -291,12 +268,11 @@ const ProductContents = ({ product, userId }: ProductContentsProps) => {
                     className="flex h-6 w-10 items-center justify-center border text-center"
                     type="number"
                     value={quantity}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
+                    onChange={handleQuantityChange}
                   />
                   <button
                     className="flex h-6 w-6 items-center justify-center border p-2 hover:bg-orange-50"
-                    onClick={(e) => handleQuantityClick(e, "add")}
+                    onClick={() => handleQuantityButton("add")}
                   >
                     +
                   </button>
