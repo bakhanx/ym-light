@@ -3,7 +3,7 @@
 import { cls } from "@/utils/cls";
 import { formatPrice } from "@/utils/formatPrice";
 import { Option } from "@prisma/client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 export type selectedItemType = {
   option: Option;
@@ -45,7 +45,7 @@ const Options = ({ options, price, discount, parentFunc }: OptionsType) => {
     temp[index]++;
     setQuantity(temp);
 
-    const clickedItem = options.find((option) => option.index === index)!;
+    const clickedItem = options[index];
     const isExistItemInList = selectedItemList.find(
       (selectedItem) => selectedItem.option.index === clickedItem.index,
     );
@@ -57,17 +57,21 @@ const Options = ({ options, price, discount, parentFunc }: OptionsType) => {
         quantity: 1,
         totalPrice: calcPrice(price as number) + (clickedItem.price || 0),
       };
+
       setSelectedItemList((prev) => [...prev, newClickedItem]);
     } else {
-      const newSelectedItemList = [...selectedItemList];
-      const foundItem = newSelectedItemList.find(
-        (selectedItem) => selectedItem.option.index === clickedItem.index,
+      const newSelectedItemList = selectedItemList.map((selectedItem) =>
+        selectedItem.option.index === clickedItem.index
+          ? {
+              ...selectedItem,
+              quantity: selectedItem.quantity + 1,
+              totalPrice:
+                selectedItem.totalPrice +
+                calcPrice(price) +
+                (clickedItem.price || 0),
+            }
+          : selectedItem,
       );
-      if (foundItem) {
-        foundItem.quantity++;
-        foundItem.totalPrice +=
-          calcPrice(price) + (foundItem.option.price || 0) * foundItem.quantity;
-      }
       setSelectedItemList(newSelectedItemList);
     }
     setIsOpenOption(false);
@@ -78,20 +82,23 @@ const Options = ({ options, price, discount, parentFunc }: OptionsType) => {
     event: React.MouseEvent<HTMLButtonElement>,
   ) => {
     const selectedItemIndex = selectedItemList.findIndex(
-      (item) => index === item.option.id,
+      (item) => item.option.id === options[index].id,
     );
     console.log(selectedItemIndex);
-    setSelectedItemList((prev) => {
-      const temp = [...prev];
-      temp.splice(selectedItemIndex, 1);
-      return temp;
-    });
 
-    setQuantity((prev) => {
-      const temp = [...prev];
-      temp[index] = 0;
-      return temp;
-    });
+    if (selectedItemIndex !== -1) {
+      setSelectedItemList((prev) => {
+        const temp = [...prev];
+        temp.splice(selectedItemIndex, 1);
+        return temp;
+      });
+
+      setQuantity((prev) => {
+        const temp = [...prev];
+        temp[index] = 0;
+        return temp;
+      });
+    }
   };
 
   const handleButtonClick = (
@@ -177,7 +184,7 @@ const Options = ({ options, price, discount, parentFunc }: OptionsType) => {
 
   useEffect(() => {
     parentFunc(selectedItemList);
-  }, [selectedItemList, parentFunc]);
+  }, [selectedItemList]);
 
   return (
     <div className="option pt-10">
@@ -212,8 +219,9 @@ const Options = ({ options, price, discount, parentFunc }: OptionsType) => {
                 className="p-2 hover:cursor-pointer hover:bg-orange-50"
                 onClick={(e) => handleSelectOption(option.index, e)}
               >
-                {` ${option.index+1} : ${option.name}`}{" "}
-                {option.price ? `(+${formatPrice(option.price)}원)` : ``} {` | `}
+                {` ${option.index + 1} : ${option.name}`}{" "}
+                {option.price ? `(+${formatPrice(option.price)}원)` : ``}{" "}
+                {` | `}
                 {`${option.stock}개 남음`}
               </li>
             ))}
