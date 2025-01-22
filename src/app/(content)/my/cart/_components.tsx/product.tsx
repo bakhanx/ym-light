@@ -1,4 +1,3 @@
-
 import { CartItemDetail, useCartStore } from "@/store/useCartStore";
 import { useUserStore } from "@/store/useUserStore";
 import { cls } from "@/utils/cls";
@@ -29,10 +28,9 @@ const Product = ({ cartItem, index }: ProductProps) => {
     _originProductPrice * cartItem.quantity;
 
   const _productQuantity =
-    cartItem.quantity +
-    cartItem.options
-      .map((option) => option.quantity)
-      .reduce((acc, cur) => acc + cur, 0);
+    cartItem.options.length > 0
+      ? cartItem.options.reduce((acc, option) => acc + option.quantity, 0)
+      : cartItem.quantity;
 
   const _discountRate = cartItem?.product.discount || 0;
   const _discountPrice = _originProductPrice * (_discountRate / 100);
