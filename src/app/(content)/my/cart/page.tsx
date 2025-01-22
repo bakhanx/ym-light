@@ -35,11 +35,14 @@ const Cart = () => {
   const checkedCarts = useMemo(() => {
     return cart.filter((cartItem) => cartItem.checked);
   }, [cart]);
+
   const totalOriginalPrice = useMemo(() => {
     return checkedCarts
       .map((cartItem) => {
-        console.log(cartItem);
-        const productTotalPrice = cartItem.product.price * cartItem.quantity;
+        const productTotalPrice =
+          cartItem.options.length > 0
+            ? 0
+            : cartItem.product.price * cartItem.quantity;
         const optionTotalPrice =
           cartItem.options.length > 0
             ? cartItem.options
@@ -58,12 +61,16 @@ const Cart = () => {
   const totalDiscountPrice = useMemo(() => {
     return checkedCarts
       .map((cartItem) => {
+        const totalQuantity =
+          cartItem.options.length > 0
+            ? cartItem.options
+                .map((option) => option.quantity)
+                .reduce((acc, cur) => acc + cur, 0)
+            : cartItem.quantity;
+
         return (
           ((cartItem.product.price * (cartItem.product.discount || 0)) / 100) *
-          (cartItem.quantity +
-            cartItem.options
-              .map((option) => option.quantity)
-              .reduce((acc, cur) => acc + cur, 0))
+          totalQuantity
         );
       })
       .reduce((acc, cur) => acc + cur, 0);
@@ -152,11 +159,10 @@ const Cart = () => {
 
   return (
     <>
-      <div className="bg-white rounded-md">
+      <div className="rounded-md bg-white">
         <div className="divide-y-[1px]">
-          
           <CartHeader itemsCount={cart.length} />
-          
+
           {/* check */}
           <div className=" py-5 text-sm">
             <div className="inner-content max-w-screen-xl  px-2 sm:px-4 xl:px-0">
