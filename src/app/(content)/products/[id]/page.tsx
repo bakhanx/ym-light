@@ -13,7 +13,7 @@ import QnA from "./_components/qna";
 import RelatedProducts from "./_components/relatedProducts";
 import ExchangeReturn from "./_components/exchangeReturn";
 import ProductInfo from "./_components/productInfo";
-import Tabs from "./_components/Tabs";
+import Tabs from "./_components/tabs";
 
 type Props = {
   params: {
