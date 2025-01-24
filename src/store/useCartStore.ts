@@ -39,6 +39,7 @@ export const useCartStore = create<State & Actions>()(
       cart: INITIAL_STATE.cart,
       isDataLoaded: INITIAL_STATE.isDataLoaded,
       isExist: INITIAL_STATE.isExist,
+
       addToCart: (cartItem) => {
         const cart = get().cart;
         const indexExistedProduct = cart.findIndex(
@@ -46,13 +47,13 @@ export const useCartStore = create<State & Actions>()(
         );
 
         const isExist = indexExistedProduct !== -1;
-        console.log(isExist);
         set({ isExist });
 
         // 장바구니에 없으면
         if (!isExist) {
           cart.push({ ...cartItem, checked: true });
         }
+        
         // 이미 장바구니에 있으면
         else {
           //  no option
