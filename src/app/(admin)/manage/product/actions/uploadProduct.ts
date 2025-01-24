@@ -2,7 +2,7 @@
 
 import db from "@/utils/db";
 import { revalidatePath, revalidateTag } from "next/cache";
-import { redirect } from "next/navigation";
+import { redirect, RedirectType } from "next/navigation";
 import { z } from "zod";
 
 const productSchema = z.object({
@@ -206,10 +206,6 @@ export const uploadProduct = async (
     }
     console.log("Create success");
     revalidateTag("products");
-    // 1.옵션 connect 끝나기전에 revalidate 되는 버그 수정
-
-    revalidatePath(`/products/${product.id}`);
-    // revalidateTag("product");
-    redirect(`/products/${product.id}`);
+    redirect(`/products/${product.id}`,);
   }
 };
