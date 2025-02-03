@@ -12,8 +12,9 @@ import Notice from "./_components/notice";
 import QnA from "./_components/qna";
 import RelatedProducts from "./_components/relatedProducts";
 import ExchangeReturn from "./_components/exchangeReturn";
-import ProductInfo from "./_components/productInfo";
 import Tabs from "./_components/tabs";
+import React, { Suspense } from "react";
+import dynamic from "next/dynamic";
 
 type Props = {
   params: {
@@ -34,7 +35,7 @@ const getInfoPhotosWithSize = async (
   );
 };
 
-export const dynamic = "force-dynamic";
+const ProductInfo = dynamic(() => import("./_components/productInfo"), {loading:()=><div>사진 로딩중...</div>});
 
 const ProductDetail = async ({ params }: Props) => {
   const product = await getCachedProduct(params.id);
@@ -51,11 +52,15 @@ const ProductDetail = async ({ params }: Props) => {
         <ProductContents product={product} userId={session.id} />
 
         {/* 상품 정보 디테일 */}
+
         <div className="my-product-detail-content mt-14 ">
           <Tabs />
 
           <Notice />
-          <ProductInfo InfoPhotosWithSize={InfoPhotosWithSize} />
+
+          <Suspense fallback={<div>사진 로딩중...</div>}>
+            <ProductInfo InfoPhotosWithSize={InfoPhotosWithSize} />
+          </Suspense>
 
           <QnA />
           <RelatedProducts />
