@@ -94,7 +94,6 @@ export default async function Home() {
                 {allProducts?.map((product) => (
                   <Link key={product.id} href={`/products/${product.id}`}>
                     <Card
-                      key={product.id}
                       name={product.title}
                       photoURL={product.photos[0]}
                       discount={product.discount || undefined}
@@ -112,7 +111,6 @@ export default async function Home() {
                 {discountedProducts.map((product) => (
                   <Link key={product.id} href={`/products/${product.id}`}>
                     <Card
-                      key={product.id}
                       name={product.title}
                       photoURL={product.photos[0]}
                       discount={product.discount || undefined}
