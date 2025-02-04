@@ -3,11 +3,14 @@ import textFlicker from "@/styles/textFlicker.module.css";
 import db from "@/utils/db";
 import { Metadata } from "next";
 import { unstable_cache as nextCache } from "next/cache";
-import { Suspense } from "react";
+import { memo, Suspense } from "react";
 import Card from "./_components/card";
 import Link from "next/link";
 import Image from "next/image";
 import description from "@/../public/images/text/description.webp";
+import CardSkeleton from "./_components/card-skeleton";
+
+const PRODUCTS_LIMIT = 4;
 
 export const metadata: Metadata = {
   title: "Home",
@@ -27,7 +30,7 @@ const getProducts = async () => {
       orderBy: {
         updated_at: "desc",
       },
-      take: 4,
+      take: PRODUCTS_LIMIT,
     }),
     db.product.findMany({
       where: {
@@ -47,7 +50,7 @@ const getProducts = async () => {
       orderBy: {
         updated_at: "desc",
       },
-      take: 4,
+      take: PRODUCTS_LIMIT,
     }),
   ]);
   return { allProducts, discountedProducts };
@@ -57,6 +60,14 @@ const getCachedProducts = nextCache(getProducts, ["home-products"], {
   tags: ["products", "product"],
 });
 
+const LightFlicker = memo(() => (
+  <div className={lightFlicker.light_container} />
+));
+LightFlicker.displayName = "LightFlicker";
+
+const TextFlicker = memo(() => <div className={textFlicker.light_container} />);
+TextFlicker.displayName = "TextFlicker";
+
 export default async function Home() {
   const { allProducts, discountedProducts } = await getCachedProducts();
   return (
@@ -64,13 +75,13 @@ export default async function Home() {
       <div className="h-screen ">
         <div className="relative flex h-full w-full justify-center ">
           {/* Background */}
-          <div className={lightFlicker.light_container} />
+          <LightFlicker />
 
           {/* Text */}
           <div className="absolute z-10 flex h-full w-full max-w-screen-xl flex-col justify-center px-2 pt-24 text-white sm:px-4 xl:px-0">
             {/* <NeonText /> */}
             <div className="w-full ">
-              <div className={textFlicker.light_container} />
+              <TextFlicker />
               <div
                 className="h-[60px] w-full  bg-no-repeat "
                 style={{
@@ -83,14 +94,14 @@ export default async function Home() {
         </div>
       </div>
 
-      <Suspense fallback="Loading...">
-        <div className="mx-auto max-w-screen-xl px-2 py-5 text-white sm:px-4 sm:py-10 xl:px-0">
-          <div className="flex flex-col gap-y-10 divide-y-2">
-            <div className="my-product-wrap">
-              <div className=" text-lg font-semibold sm:text-2xl">
-                새로 등록된 상품
-              </div>
-              <div className="grid grid-cols-2 gap-y-8 pt-4 min-[480px]:grid-cols-2 sm:grid-cols-2 sm:gap-y-16 md:grid-cols-4 xl:gap-16">
+      <div className="mx-auto max-w-screen-xl px-2 py-5 text-white sm:px-4 sm:py-10 xl:px-0">
+        <div className="flex flex-col gap-y-10 divide-y-2">
+          <div className="my-product-wrap">
+            <div className=" text-lg font-semibold sm:text-2xl">
+              새로 등록된 상품
+            </div>
+            <div className="grid grid-cols-2 gap-y-8 pt-4 min-[480px]:grid-cols-2 sm:grid-cols-2 sm:gap-y-16 md:grid-cols-4 xl:gap-16">
+              <Suspense fallback={<CardSkeleton count={PRODUCTS_LIMIT} />}>
                 {allProducts?.map((product) => (
                   <Link key={product.id} href={`/products/${product.id}`}>
                     <Card
@@ -100,14 +111,16 @@ export default async function Home() {
                     />
                   </Link>
                 ))}
-              </div>
+              </Suspense>
             </div>
+          </div>
 
-            <div className="my-product-wrap">
-              <div className="pt-6 text-lg font-semibold sm:text-2xl">
-                할인 상품
-              </div>
-              <div className="grid grid-cols-2 gap-y-8 pt-4 min-[480px]:grid-cols-2 sm:grid-cols-2 sm:gap-y-16 md:grid-cols-4 xl:gap-16">
+          <div className="my-product-wrap">
+            <div className="pt-6 text-lg font-semibold sm:text-2xl">
+              할인 상품
+            </div>
+            <div className="grid grid-cols-2 gap-y-8 pt-4 min-[480px]:grid-cols-2 sm:grid-cols-2 sm:gap-y-16 md:grid-cols-4 xl:gap-16">
+              <Suspense fallback={<CardSkeleton count={PRODUCTS_LIMIT} />}>
                 {discountedProducts.map((product) => (
                   <Link key={product.id} href={`/products/${product.id}`}>
                     <Card
@@ -117,11 +130,11 @@ export default async function Home() {
                     />
                   </Link>
                 ))}
-              </div>
+              </Suspense>
             </div>
           </div>
         </div>
-      </Suspense>
+      </div>
     </div>
   );
 }
