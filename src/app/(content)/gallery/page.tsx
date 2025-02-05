@@ -9,14 +9,12 @@ import { unstable_cache as nextCache } from "next/cache";
 import getSession from "@/utils/session";
 import { useEffect } from "react";
 import { BLUR_DATA_PROFILE } from "../../../../public/images/base64/blur-profile";
+import { headers } from "next/headers";
+import { addLog } from "./actions/addLog";
 
-const getGallery = async () => {
-  const gallery = await db.gallery.findMany({
-    select: {
-      id: true,
-    },
-  });
-  return gallery;
+const getGalleryCount = async () => {
+  const galleryCount = await db.gallery.count();
+  return galleryCount;
 };
 
 const getInitialGalleryList = async () => {
@@ -48,35 +46,6 @@ const getCachedGalleryList = nextCache(
   },
 );
 
-const addLog = async () => {
-  const session = await getSession();
-  try {
-    const lastLogTime = await db.log.findFirst({
-      where: {
-        userId: session.id,
-      },
-      orderBy: {
-        created_at: "desc",
-      },
-      select: {
-        created_at: true,
-      },
-    });
-
-    if (
-      Number(new Date()) - Number(lastLogTime?.created_at) > 3600000 ||
-      lastLogTime === null
-    ) {
-      await db.log.create({
-        data: {
-          userId: session.id,
-        },
-      });
-    }
-  } catch (e) {
-    console.log(e);
-  }
-};
 
 const logCount = async () => {
   return await db.log.count();
@@ -87,9 +56,9 @@ export type InitialGalleryListType = Prisma.PromiseReturnType<
 >;
 
 const Gallery = async () => {
-  const gallery = await getGallery();
+  const galleryCount = await getGalleryCount();
   const initialGalleryList = await getCachedGalleryList();
-  addLog();
+  await addLog();
   const visitorCount = await logCount();
 
   return (
@@ -103,6 +72,7 @@ const Gallery = async () => {
               placeholder="blur"
               blurDataURL={BLUR_DATA_PROFILE}
               className="rounded-full"
+              priority
             />
           </div>
 
@@ -122,7 +92,7 @@ const Gallery = async () => {
             <div className="flex gap-x-10 pt-8 text-sm sm:text-base">
               <div>
                 게시물
-                <span className="font-semibold">{gallery.length}</span>
+                <span className="font-semibold">{galleryCount}</span>
               </div>
               <div>
                 방문자
