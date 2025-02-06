@@ -1,11 +1,8 @@
 import NotFound from "@/app/not-found";
 import db from "@/utils/db";
-
 import ProductContents from "../_components/product-contents";
 import getSession from "@/utils/session";
-
 import { getImageData, getImageSize } from "@/utils/imageSize";
-
 import { getCachedProduct } from "./actions/getProduct";
 
 import Notice from "./_components/notice";
@@ -13,9 +10,8 @@ import QnA from "./_components/qna";
 import RelatedProducts from "./_components/relatedProducts";
 import ExchangeReturn from "./_components/exchangeReturn";
 import Tabs from "./_components/tabs";
-import React, { Suspense } from "react";
+import React from "react";
 import dynamic from "next/dynamic";
-import ProductInfo from "./_components/productInfo";
 
 type Props = {
   params: {
@@ -35,6 +31,11 @@ const getInfoPhotosWithSize = async (
     }),
   );
 };
+
+const ProductInfo = dynamic(() => import("./_components/productInfo"), {
+  ssr: false,
+  loading: () => <div>사진 불러오는중...</div>,
+});
 
 const ProductDetail = async ({ params }: Props) => {
   const product = await getCachedProduct(params.id);
@@ -56,7 +57,6 @@ const ProductDetail = async ({ params }: Props) => {
           <Tabs />
 
           <Notice />
-
           <ProductInfo InfoPhotosWithSize={InfoPhotosWithSize} />
 
           <QnA />
