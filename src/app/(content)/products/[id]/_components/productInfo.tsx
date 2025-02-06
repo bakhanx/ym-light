@@ -1,11 +1,15 @@
+"use client";
+
+import { Suspense } from "react";
 import Item from "./item";
 import Photos from "./photos";
 
 const ProductInfo = ({
-    InfoPhotosWithSize,
-  }: {
-    InfoPhotosWithSize: { src: string; width: number; height: number }[];
-  }) => (
+  InfoPhotosWithSize,
+}: {
+  InfoPhotosWithSize: { src: string; width: number; height: number }[];
+}) => (
+  <Suspense fallback="loading...">
     <Item
       title="상품 상세정보"
       content={
@@ -16,6 +20,7 @@ const ProductInfo = ({
         )
       }
     />
-  );
+  </Suspense>
+);
 
-  export default ProductInfo
+export default ProductInfo;
