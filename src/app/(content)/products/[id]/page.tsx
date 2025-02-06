@@ -15,6 +15,7 @@ import ExchangeReturn from "./_components/exchangeReturn";
 import Tabs from "./_components/tabs";
 import React, { Suspense } from "react";
 import dynamic from "next/dynamic";
+import ProductInfo from "./_components/productInfo";
 
 type Props = {
   params: {
@@ -34,8 +35,6 @@ const getInfoPhotosWithSize = async (
     }),
   );
 };
-
-const ProductInfo = dynamic(() => import("./_components/productInfo"), {loading:()=><div>사진 로딩중...</div>});
 
 const ProductDetail = async ({ params }: Props) => {
   const product = await getCachedProduct(params.id);
@@ -58,9 +57,7 @@ const ProductDetail = async ({ params }: Props) => {
 
           <Notice />
 
-          <Suspense fallback={<div>사진 로딩중...</div>}>
-            <ProductInfo InfoPhotosWithSize={InfoPhotosWithSize} />
-          </Suspense>
+          <ProductInfo InfoPhotosWithSize={InfoPhotosWithSize} />
 
           <QnA />
           <RelatedProducts />
