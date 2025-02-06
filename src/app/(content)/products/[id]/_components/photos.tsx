@@ -16,6 +16,7 @@ const Photos = ({
           alt={`Product Detail Image`}
           width={photo.width}
           height={photo.height}
+          loading="lazy"
         />
       </div>
     ))}
