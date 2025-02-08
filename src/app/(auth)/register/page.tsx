@@ -19,18 +19,6 @@ type RegisterForm = {
 };
 
 const Register = () => {
-  const [isClick, setIsClick] = useState(false);
-
-  const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    setIsClick(true);
-  };
-
-  const initFormState = {
-    token: false,
-    error: undefined,
-  };
-
   const { setUser } = useUserStore();
 
   const [state, dispatch] = useCustomFormState<RegisterForm>(
@@ -49,64 +37,73 @@ const Register = () => {
       }
     },
   );
-  // const [state, dispatch] = useFormState(registerAction, initFormState);
+  const inputs = [
+    {
+      label: "아이디",
+      name: "loginId",
+      type: "text",
+      placeholder: "ymlight123",
+      maxLength: WORDS_MAX_LENGTH,
+      required: true,
+    },
+    {
+      label: "비밀번호",
+      name: "password",
+      type: "password",
+      placeholder: "****",
+      minLength: PASSWORD_MIN_LENGTH,
+      required: true,
+    },
+    {
+      label: "비밀번호 재확인",
+      name: "password_confirm",
+      type: "password",
+      placeholder: "****",
+      minLength: PASSWORD_MIN_LENGTH,
+      required: true,
+    },
+    {
+      label: "이름",
+      name: "username",
+      type: "text",
+      placeholder: "홍길동",
+      maxLength: WORDS_MAX_LENGTH,
+      required: true,
+    },
+    {
+      label: "전화번호 (선택)",
+      name: "phone",
+      type: "text",
+      placeholder: "01012345678",
+      required: false,
+    },
+    {
+      label: "이메일",
+      name: "email",
+      type: "email",
+      placeholder: "ymlight@ym.com",
+      required: true,
+    },
+  ];
 
   return (
     <div className=" bg-gray-800  text-white">
       <div className="mx-auto flex h-full max-w-screen-lg items-center justify-center pb-12 pt-32">
         <form action={dispatch} className="w-80">
           <div className="flex flex-col gap-y-5">
-            <FormInput
-              label="아이디"
-              name="loginId"
-              type="text"
-              placeholder="ymlight123"
-              error={state?.error?.fieldErrors.loginId}
-              required
-              maxLength={WORDS_MAX_LENGTH}
-            />
-            <FormInput
-              label="비밀번호"
-              name="password"
-              type="password"
-              placeholder="****"
-              error={state?.error?.fieldErrors.password}
-              required
-              minLength={PASSWORD_MIN_LENGTH}
-            />
-            <FormInput
-              label="비밀번호 재확인"
-              name="password_confirm"
-              type="password"
-              placeholder="****"
-              error={state?.error?.fieldErrors.password_confirm}
-              required
-              minLength={PASSWORD_MIN_LENGTH}
-            />
-            <FormInput
-              label="이름"
-              name="username"
-              type="text"
-              placeholder="홍길동"
-              error={state?.error?.fieldErrors.username}
-              maxLength={WORDS_MAX_LENGTH}
-              required
-            />
-            <FormInput
-              label="전화번호 (선택)"
-              name="phone"
-              type="text"
-              placeholder="01012345678"
-              error={state?.error?.fieldErrors.phone}
-            />
-            <FormInput
-              label="이메일"
-              name="email"
-              type="email"
-              placeholder="ymlight@ym.com"
-              error={state?.error?.fieldErrors.email}
-              required
-            />
+            {inputs.map((input) => (
+              <FormInput
+                key={input.name}
+                label={input.label}
+                name={input.name}
+                type={input.type}
+                placeholder={input.placeholder}
+                error={state?.error?.fieldErrors[input.name]}
+                required={input.required}
+                maxLength={input.maxLength}
+                minLength={input.minLength}
+              />
+            ))}
 
             <div className="">
               {state?.data.token && (
