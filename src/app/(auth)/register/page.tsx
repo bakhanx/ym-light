@@ -119,31 +119,31 @@ const Register = () => {
               )}
 
               <div className="flex gap-x-5">
-                <div>
+                <div className="group">
                   <input
                     id="tokenMail"
-                    className="peer/tokenMail"
+                    className="peer/group"
                     type="radio"
                     name="tokenType"
                     defaultChecked
                   />
                   <label
                     htmlFor="tokenMail"
-                    className="peer-checked/tokenMail:text-sky-500"
+                    className="group-checked/text-sky-500"
                   >
                     이메일
                   </label>
                 </div>
-                <div>
+                <div className="group">
                   <input
                     id="tokenPhone"
-                    className="peer/tokenPhone"
+                    className="peer/group"
                     type="radio"
                     name="tokenType"
                   />
                   <label
                     htmlFor="tokenPhone"
-                    className="peer-checked/tokenPhone:text-sky-500"
+                    className="group-checked/text-sky-500"
                   >
                     전화번호
                   </label>
