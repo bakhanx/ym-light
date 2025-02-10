@@ -9,6 +9,13 @@ import { useFormState } from "react-dom";
 import { handleForm } from "./handlers/handleForm";
 import { BLUR_DATA_CONTACT } from "../../../../public/images/base64/blur_contact";
 
+const InfoBlock = ({ title, desc }: { title: string; desc: string }) => (
+  <div>
+    <p className="font-bold">{title}</p>
+    <p className="text-sm opacity-70">{desc}</p>
+  </div>
+);
+
 const Contact = () => {
   const [state, dispatch] = useFormState(handleForm, null);
 
@@ -81,56 +88,43 @@ const Contact = () => {
             <div className="z-20 flex w-full gap-x-4 pt-8 text-white  ">
               <div className="left flex w-[50%] flex-col items-center">
                 <div className="flex flex-col gap-y-10">
-                  <div>
-                    <p className="text-xl font-bold sm:text-3xl">
+                  <section>
+                    <h2 className="text-xl font-bold sm:text-3xl">
                       Ask how we can help you
-                    </p>
+                    </h2>
                     <div className="flex flex-col gap-y-10 pt-6">
-                      <div>
-                        <p className="font-bold">부담없는 1:1 친절 상담</p>
-                        <p className="text-sm opacity-70">
-                          오직 사장님과 다이렉트로 상담이 이루어집니다.
-                        </p>
-                      </div>
-                      <div>
-                        <p className="font-bold">24시간 이내 빠른 연락</p>
-                        <p className="text-sm opacity-70">
-                          퇴근 후에도 연락이 가능합니다. (새벽 제외)
-                        </p>
-                      </div>
-                      <div>
-                        <p className="font-bold">간단한 양식 제출</p>
-                        <p className="text-sm opacity-70">
-                          우측 양식을 간단하게 적어주셔도 좋습니다.
-                        </p>
-                      </div>
+                      <InfoBlock
+                        title="부담없는 1:1 친절 상담"
+                        desc="오직 사장님과 다이렉트로 상담이 이루어집니다."
+                      />
+                      <InfoBlock
+                        title="24시간 이내 빠른 연락"
+                        desc="퇴근 후에도 연락이 가능합니다. (새벽 제외)"
+                      />
+                      <InfoBlock
+                        title="간단한 양식 제출"
+                        desc="우측 양식을 간단하게 적어주셔도 좋습니다."
+                      />
                     </div>
-                  </div>
-                  <div>
-                    <p className="text-xl font-bold sm:text-3xl">
+                  </section>
+
+                  <section>
+                    <h2 className="text-xl font-bold sm:text-3xl">
                       Points of Contact
-                    </p>
+                    </h2>
                     <div className="flex flex-col gap-y-3 pt-6">
-                      <div>
-                        <p className="font-bold">Address | South Korea.</p>
-                        <p className="text-sm opacity-70">
-                          서울특별시 도봉구 길동로 123 1층
-                        </p>
-                      </div>
-                      <div>
-                        <p className="font-bold">FAX</p>
-                        <p className="text-sm opacity-70">(02)-000-0000</p>
-                      </div>
-                      <div>
-                        <p className="font-bold">Email</p>
-                        <p className="text-sm opacity-70">ymlight@gmail.com</p>
-                      </div>
-                      <div>
-                        <p className="font-bold">페이지 관리자</p>
-                        <p className="text-sm opacity-70">bkndev7@gmail.com</p>
-                      </div>
+                      <InfoBlock
+                        title="Address | South Korea."
+                        desc="서울특별시 도봉구 길동로 123 1층"
+                      />
+                      <InfoBlock title="FAX" desc="(02)-000-0000" />
+                      <InfoBlock title="Email" desc="ymlight@gmail.com" />
+                      <InfoBlock
+                        title="페이지 관리자"
+                        desc="bkndev7@gmail.com"
+                      />
                     </div>
-                  </div>
+                  </section>
                 </div>
               </div>
 
