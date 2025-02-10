@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useMemo } from "react";
 import contactImg from "/public/images/contact.jpg";
 import Image from "next/image";
 import FormInput from "@/components/form-input";
@@ -9,20 +9,54 @@ import { useFormState } from "react-dom";
 import { handleForm } from "./handlers/handleForm";
 import { BLUR_DATA_CONTACT } from "../../../../public/images/base64/blur_contact";
 
-type formType = {
-  username: string;
-  company: string;
-  contact: string;
-  content: string;
-};
-
-type stateProps = {
-  ok: boolean;
-  data: any;
-};
-
 const Contact = () => {
   const [state, dispatch] = useFormState(handleForm, null);
+
+  const formInputs = [
+    {
+      label: "이름",
+      name: "username",
+      type: "text",
+      placeholder: "홍길동",
+      required: true,
+      minLength: 2,
+      maxLength: 30,
+    },
+    {
+      label: "회사이름",
+      name: "company",
+      type: "text",
+      placeholder: "",
+      minLength: 1,
+      maxLength: 30,
+    },
+    {
+      label: "연락처",
+      name: "contact",
+      type: "text",
+      placeholder: "번호 또는 이메일",
+      required: true,
+    },
+    {
+      label: "연락처 재확인",
+      name: "contact_confirm",
+      type: "text",
+      placeholder: "번호 또는 이메일",
+      required: true,
+      minLength: 6,
+      maxLength: 30,
+    },
+    {
+      label: "내용",
+      name: "content",
+      type: "text",
+      placeholder: "안녕하세요",
+      required: true,
+      textarea: true,
+      minLength: 1,
+      maxLength: 1000,
+    },
+  ];
 
   return (
     <>
@@ -113,54 +147,19 @@ const Contact = () => {
                   <div className="w-full pt-5">
                     <form action={dispatch}>
                       <div className="flex flex-col gap-y-5">
-                        <FormInput
-                          label="이름"
-                          name="username"
-                          type="text"
-                          placeholder="홍길동"
-                          error={state?.fieldErrors.username}
-                          required
-                          minLength={2}
-                          maxLength={30}
-                        />
-                        <FormInput
-                          label="회사이름"
-                          name="company"
-                          type="text"
-                          placeholder=""
-                          error={state?.fieldErrors.company}
-                          minLength={1}
-                          maxLength={30}
-                        />
-                        <FormInput
-                          label="연락처"
-                          name="contact"
-                          type="text"
-                          placeholder="번호 또는 이메일"
-                          error={state?.fieldErrors.contact}
-                          required
-                        />
-                        <FormInput
-                          label="연락처 재확인"
-                          name="contact_confirm"
-                          type="text"
-                          placeholder="번호 또는 이메일"
-                          error={state?.fieldErrors.contact_confirm}
-                          required
-                          minLength={6}
-                          maxLength={30}
-                        />
-                        <FormInput
-                          label="내용"
-                          name="content"
-                          type="text"
-                          placeholder="안녕하세요"
-                          error={state?.fieldErrors.content}
-                          required
-                          textarea
-                          minLength={1}
-                          maxLength={1000}
-                        />
+                        {formInputs.map(({ label, name, ...props }) => (
+                          <FormInput
+                            key={name}
+                            label={label}
+                            name={name}
+                            error={
+                              state?.fieldErrors?.[
+                                name as keyof typeof state.fieldErrors
+                              ]
+                            }
+                            {...props}
+                          />
+                        ))}
                       </div>
 
                       <div className="pt-5">
