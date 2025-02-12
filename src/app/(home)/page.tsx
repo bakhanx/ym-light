@@ -3,12 +3,10 @@ import textFlicker from "@/styles/textFlicker.module.css";
 import db from "@/utils/db";
 import { Metadata } from "next";
 import { unstable_cache as nextCache } from "next/cache";
-import { memo, Suspense } from "react";
-import Card from "./_components/card";
-import Link from "next/link";
-import Image from "next/image";
+import { memo } from "react";
 import description from "@/../public/images/text/description.webp";
-import CardSkeleton from "./_components/card-skeleton";
+import ProductSection from "./_components/product-section";
+import { LIMIT_COUNT } from "../(content)/products/utils/constants";
 
 const PRODUCTS_LIMIT = 4;
 
@@ -22,8 +20,6 @@ const getProducts = async () => {
       select: {
         id: true,
         title: true,
-        created_at: true,
-        updated_at: true,
         photos: true,
         discount: true,
       },
@@ -96,43 +92,17 @@ export default async function Home() {
 
       <div className="mx-auto max-w-screen-xl px-2 py-5 text-white sm:px-4 sm:py-10 xl:px-0">
         <div className="flex flex-col gap-y-10 divide-y-2">
-          <div className="my-product-wrap">
-            <div className=" text-lg font-semibold sm:text-2xl">
-              새로 등록된 상품
-            </div>
-            <div className="grid grid-cols-2 gap-y-8 pt-4 min-[480px]:grid-cols-2 sm:grid-cols-2 sm:gap-y-16 md:grid-cols-4 xl:gap-16">
-              <Suspense fallback={<CardSkeleton count={PRODUCTS_LIMIT} />}>
-                {allProducts?.map((product) => (
-                  <Link key={product.id} href={`/products/${product.id}`}>
-                    <Card
-                      name={product.title}
-                      photoURL={product.photos[0]}
-                      discount={product.discount || undefined}
-                    />
-                  </Link>
-                ))}
-              </Suspense>
-            </div>
-          </div>
+          <ProductSection
+            title="새로 등록된 상품"
+            products={allProducts}
+            count={LIMIT_COUNT}
+          />
 
-          <div className="my-product-wrap">
-            <div className="pt-6 text-lg font-semibold sm:text-2xl">
-              할인 상품
-            </div>
-            <div className="grid grid-cols-2 gap-y-8 pt-4 min-[480px]:grid-cols-2 sm:grid-cols-2 sm:gap-y-16 md:grid-cols-4 xl:gap-16">
-              <Suspense fallback={<CardSkeleton count={PRODUCTS_LIMIT} />}>
-                {discountedProducts.map((product) => (
-                  <Link key={product.id} href={`/products/${product.id}`}>
-                    <Card
-                      name={product.title}
-                      photoURL={product.photos[0]}
-                      discount={product.discount || undefined}
-                    />
-                  </Link>
-                ))}
-              </Suspense>
-            </div>
-          </div>
+          <ProductSection
+            title="할인 상품"
+            products={discountedProducts}
+            count={LIMIT_COUNT}
+          />
         </div>
       </div>
     </div>
