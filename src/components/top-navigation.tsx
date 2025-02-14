@@ -9,6 +9,15 @@ import React, { useEffect, useState } from "react";
 
 const whitePaths = ["/products", "/gallery", "/manage", "/my", "/chats"];
 
+const menuItems = [
+  { label: "조명", href: "/products" },
+  { label: "갤러리", href: "/gallery" },
+  { label: "소개", href: "/about" },
+  { label: "문의", href: "/contact" },
+  { label: "주문내역", href: "/my/order" },
+  { label: "장바구니", href: "/my/cart", hasCartBadge: true },
+];
+
 const TopNavigation = ({ userId }: { userId: number | null }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const { user, setUser } = useUserStore();
@@ -19,6 +28,7 @@ const TopNavigation = ({ userId }: { userId: number | null }) => {
   const isBgWhitePaths = whitePaths.some((whitePath) =>
     pathname.startsWith(whitePath),
   );
+
   const handleLogout = async () => {
     try {
       localStorage.removeItem("user-storage");
@@ -97,34 +107,21 @@ const TopNavigation = ({ userId }: { userId: number | null }) => {
         </div>
 
         <ul className="flex w-full items-center justify-between pt-2 text-sm sm:flex sm:w-auto sm:shrink-0 sm:pt-0 md:divide-x-2 md:text-base [&>li]:flex [&>li]:h-8 [&>li]:items-center [&>li]:justify-center sm:[&>li]:border-none sm:[&>li]:px-2">
-          <li>
-            <Link href="/products">조명</Link>
-          </li>
-          <li>
-            <Link href="/gallery">갤러리</Link>
-          </li>
-          <li>
-            <Link href="/about">소개</Link>
-          </li>
-          <li>
-            <Link href="/contact">문의</Link>
-          </li>
+          {menuItems.map(({ label, href, hasCartBadge }) => (
+            <li key={href} className="relative">
+              <Link href={href}>{label}</Link>
+              {hasCartBadge && (
+                <span className="absolute -right-2 -top-2 flex min-w-[1.25rem] max-w-[3rem] items-center justify-center overflow-hidden text-ellipsis rounded-full border border-red-400 bg-red-500 px-1.5 text-xs text-white">
+                  {cartItemCount}
+                </span>
+              )}
+            </li>
+          ))}
           {userId === 1 && (
             <li>
               <Link href="/manage">관리자</Link>
             </li>
           )}
-          <li>
-            <Link href="/my/order">주문내역</Link>
-          </li>
-          <li className="relative">
-            <Link href="/my/cart">장바구니</Link>
-            {user && (
-              <span className="text-bold absolute -right-2 -top-2 flex min-w-[1.25rem] max-w-[3rem] items-center justify-center overflow-hidden text-ellipsis rounded-full border border-red-400 bg-red-500 px-1.5 text-xs text-white">
-                {cartItemCount}
-              </span>
-            )}
-          </li>
         </ul>
       </div>
     </div>
