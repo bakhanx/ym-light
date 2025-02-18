@@ -24,34 +24,18 @@ const About = () => {
           </div>
         </div>
 
-        <div className="Image-list z-20  mx-auto flex max-w-screen-xl justify-center py-10 sm:py-28">
-          <div className="flex w-full gap-x-4 px-2 sm:gap-x-20 sm:px-4 [&>div]:w-1/3">
-            <div className="relative aspect-square sm:w-[320px]">
-              <Image
-                src="/images/worker-07.jpg"
-                alt="worker07"
-                fill
-                className="object-cover"
-              />
-            </div>
-
-            <div className="relative aspect-square  sm:w-[320px]">
-              <Image
-                src="/images/tools.jpg"
-                alt="tools"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="relative aspect-square  sm:w-[320px]">
-              <Image
-                src="/images/worker-00.jpg"
-                alt="worker"
-                fill
-                sizes="1"
-                className="object-cover"
-              />
-            </div>
+        <div className="Image-list z-20 mx-auto max-w-screen-xl py-10 sm:py-28">
+          <div className="grid grid-cols-1 gap-4 px-2 sm:grid-cols-3 sm:gap-20 sm:px-4">
+            {["worker-07", "tools", "worker-00"].map((img, idx) => (
+              <div key={idx} className="relative aspect-square">
+                <Image
+                  src={`/images/${img}.jpg`}
+                  alt={img}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            ))}
           </div>
         </div>
 
