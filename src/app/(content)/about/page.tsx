@@ -1,8 +1,3 @@
-import workerImg02 from "/public/images/worker-02.jpg";
-import workerImg01 from "/public/images/worker-01.jpg";
-import Image03 from "/public/images/worker-07.jpg";
-import Image04 from "/public/images/tools.jpg";
-import Image05 from "/public/images/worker-00.jpg";
 import Image from "next/image";
 import { BLUR_DATA_WORKER_01 } from "../../../../public/images/base64/blur-worker-01";
 import { BLUR_DATA_WORKER_02 } from "../../../../public/images/base64/blur-worker-02";
@@ -14,11 +9,10 @@ const About = () => {
         <div className="Image-wrap relative h-screen w-full">
           <div className="absolute z-10 h-full w-full bg-black opacity-50" />
           <Image
-            src={workerImg02}
+            src="/images/worker-02.jpg"
             alt="worker02"
             fill
             placeholder="blur"
-            sizes="1"
             className="object-cover"
             blurDataURL={BLUR_DATA_WORKER_02}
           />
@@ -34,26 +28,24 @@ const About = () => {
           <div className="flex w-full gap-x-4 px-2 sm:gap-x-20 sm:px-4 [&>div]:w-1/3">
             <div className="relative aspect-square sm:w-[320px]">
               <Image
-                src={Image03}
+                src="/images/worker-07.jpg"
                 alt="worker07"
                 fill
-                sizes="1"
                 className="object-cover"
               />
             </div>
 
             <div className="relative aspect-square  sm:w-[320px]">
               <Image
-                src={Image04}
+                src="/images/tools.jpg"
                 alt="tools"
                 fill
-                sizes="1"
                 className="object-cover"
               />
             </div>
             <div className="relative aspect-square  sm:w-[320px]">
               <Image
-                src={Image05}
+                src="/images/worker-00.jpg"
                 alt="worker"
                 fill
                 sizes="1"
@@ -62,17 +54,17 @@ const About = () => {
             </div>
           </div>
         </div>
-      </div>
 
-      <div>
-        <Image
-          src={workerImg01}
-          alt="worker01"
-          placeholder="blur"
-          sizes="1"
-          className="object-cover"
-          blurDataURL={BLUR_DATA_WORKER_01}
-        />
+        <div className="relative h-screen w-full">
+          <Image
+            src="/images/worker-01.jpg"
+            alt="worker01"
+            placeholder="blur"
+            fill
+            className="object-cover"
+            blurDataURL={BLUR_DATA_WORKER_01}
+          />
+        </div>
       </div>
     </>
   );
