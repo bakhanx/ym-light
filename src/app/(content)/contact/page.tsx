@@ -1,13 +1,11 @@
 "use client";
 
-import React, { useMemo } from "react";
-import contactImg from "/public/images/contact.jpg";
+import React from "react";
 import Image from "next/image";
 import FormInput from "@/components/form-input";
 import FormButton from "@/components/form-button";
 import { useFormState } from "react-dom";
 import { handleForm } from "./handlers/handleForm";
-import { BLUR_DATA_CONTACT } from "../../../../public/images/base64/blur_contact";
 
 const InfoBlock = ({ title, desc }: { title: string; desc: string }) => (
   <div>
@@ -72,12 +70,11 @@ const Contact = () => {
           <div className="absolute h-full w-full">
             <div className="relative h-full w-full">
               <Image
-                src={contactImg}
+                src="/images/contact.jpg"
                 alt="contact"
                 fill
                 placeholder="blur"
-                blurDataURL={BLUR_DATA_CONTACT}
-                sizes="1"
+                blurDataURL="/images/base64/blur_contact"
                 className="object-cover"
               />
               <div className="h-full w-full bg-black opacity-80" />
