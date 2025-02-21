@@ -2,7 +2,7 @@
 
 import FormButton from "@/components/form-button";
 import FormInput from "@/components/form-input";
-import React, { useState } from "react";
+import React from "react";
 import { registerAction } from "../../../actions/register";
 import {
   PASSWORD_MIN_LENGTH,
@@ -17,7 +17,54 @@ type RegisterForm = {
   token: boolean;
   jwtToken: string;
 };
-
+const inputs = [
+  {
+    label: "아이디",
+    name: "loginId",
+    type: "text",
+    placeholder: "ymlight123",
+    maxLength: WORDS_MAX_LENGTH,
+    required: true,
+  },
+  {
+    label: "비밀번호",
+    name: "password",
+    type: "password",
+    placeholder: "****",
+    minLength: PASSWORD_MIN_LENGTH,
+    required: true,
+  },
+  {
+    label: "비밀번호 재확인",
+    name: "password_confirm",
+    type: "password",
+    placeholder: "****",
+    minLength: PASSWORD_MIN_LENGTH,
+    required: true,
+  },
+  {
+    label: "이름",
+    name: "username",
+    type: "text",
+    placeholder: "홍길동",
+    maxLength: WORDS_MAX_LENGTH,
+    required: true,
+  },
+  {
+    label: "전화번호 (선택)",
+    name: "phone",
+    type: "text",
+    placeholder: "01012345678",
+    required: false,
+  },
+  {
+    label: "이메일",
+    name: "email",
+    type: "email",
+    placeholder: "ymlight@ym.com",
+    required: true,
+  },
+];
 const Register = () => {
   const { setUser } = useUserStore();
 
@@ -37,54 +84,6 @@ const Register = () => {
       }
     },
   );
-  const inputs = [
-    {
-      label: "아이디",
-      name: "loginId",
-      type: "text",
-      placeholder: "ymlight123",
-      maxLength: WORDS_MAX_LENGTH,
-      required: true,
-    },
-    {
-      label: "비밀번호",
-      name: "password",
-      type: "password",
-      placeholder: "****",
-      minLength: PASSWORD_MIN_LENGTH,
-      required: true,
-    },
-    {
-      label: "비밀번호 재확인",
-      name: "password_confirm",
-      type: "password",
-      placeholder: "****",
-      minLength: PASSWORD_MIN_LENGTH,
-      required: true,
-    },
-    {
-      label: "이름",
-      name: "username",
-      type: "text",
-      placeholder: "홍길동",
-      maxLength: WORDS_MAX_LENGTH,
-      required: true,
-    },
-    {
-      label: "전화번호 (선택)",
-      name: "phone",
-      type: "text",
-      placeholder: "01012345678",
-      required: false,
-    },
-    {
-      label: "이메일",
-      name: "email",
-      type: "email",
-      placeholder: "ymlight@ym.com",
-      required: true,
-    },
-  ];
 
   return (
     <div className=" bg-gray-800  text-white">
@@ -154,7 +153,6 @@ const Register = () => {
 
           <div className="pt-10">
             <FormButton name="인증 요청하기" color="gray" />
-            {/* <FormButton name="회원가입 하기" color="gray" /> */}
           </div>
         </form>
       </div>
