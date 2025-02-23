@@ -3,46 +3,34 @@
 import db from "@/utils/db";
 
 const getVisitCount = async (year: number, month: number) => {
-  const startDate = new Date(year, month - 1, 1); // 선택한 년월의 첫날
-  const endDate = new Date(year, month, 0); // 선택한 년월의 마지막 날
+  const startDate = new Date(year, month - 1, 1);
+  const endDate = new Date(year, month, 0);
 
-  const logs = await db.log.findMany({
+  const logs = await db.log.groupBy({
+    by: ["created_at"],
     where: {
       created_at: {
         gte: startDate,
         lte: endDate,
       },
     },
-    select: {
-      created_at: true,
-    },
+    _count: { created_at: true },
   });
 
   const daysInMonth = endDate.getDate();
-  type VisitCountData = {
-    date: string;
-    count: number;
-  };
+  const visitCountMap = new Map<string, number>(
+    Array.from({ length: daysInMonth }, (_, i) => {
+      const date = new Date(year, month - 1, i + 1).toISOString().split("T")[0];
+      return [date, 0];
+    }),
+  );
 
-  const visitCountData: VisitCountData[] = [];
-
-  for (let day = 1; day <= daysInMonth; day++) {
-    const date = new Date(Date.UTC(year, month - 1, day))
-      .toISOString()
-      .split("T")[0];
-    visitCountData.push({ date, count: 0 });
-  }
-
-  // 로그 데이터를 해당 날짜에 반영
-  logs.forEach((log) => {
-    const date = log.created_at.toISOString().split("T")[0];
-    const index = visitCountData.findIndex((item) => item.date === date);
-    if (index !== -1) {
-      visitCountData[index].count += 1;
-    }
+  logs.forEach(({ created_at, _count }) => {
+    const date = created_at.toISOString().split("T")[0];
+    visitCountMap.set(date, _count.created_at);
   });
 
-  return visitCountData;
+  return Array.from(visitCountMap, ([date, count]) => ({ date, count }));
 };
 
 export default getVisitCount;
