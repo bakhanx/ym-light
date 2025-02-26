@@ -8,22 +8,23 @@ import Card from "../_components/card";
 
 const getChatRooms = async () => {
   const chatRooms = await db.chatRoom.findMany({
-    include: {
-      _count: true,
-      users: true,
+    select: {
+      id: true,
+      updated_at: true,
+      _count: {
+        select: { users: true, messages: true },
+      },
+      users: {
+        select: { username: true, loginId: true },
+        where: { loginId: { not: "admin" } },
+      },
       messages: {
-        select: {
-          payload: true,
-        },
+        select: { payload: true },
         take: 1,
-        orderBy: {
-          updated_at: "desc",
-        },
+        orderBy: { updated_at: "desc" },
       },
     },
-    orderBy: {
-      updated_at: "desc",
-    },
+    orderBy: { updated_at: "desc" },
   });
 
   return chatRooms;
