@@ -33,19 +33,19 @@ const ChatsList = async () => {
   const chatRooms = await getChatRooms();
   const headers = ["참여자", "채팅방 ID", "최근 메세지", "최근 업데이트", ""];
 
-  const data: RowData[][] = chatRooms.map((room) => [
-    [
-      room.users.filter((user) => user.loginId !== "admin")[0]?.username || "",
-      "text-center whitespace-nowrap",
-    ],
-    [room.id, "whitespace-nowrap"],
-    [room.messages[0]?.payload || [], ""],
-    [formatDate(room.updated_at), ""],
-    [
-      <ChatEnterButton key={room.id} roomId={room.id} />,
-      "text-center whitespace-nowrap",
-    ],
-  ]);
+  const data: RowData[][] = chatRooms.map((room) => {
+    const user = room.users.find((_user) => _user.loginId !== "admin");
+    return [
+      [user!.username, "text-center whitespace-nowrap"],
+      [room.id, "whitespace-nowrap"],
+      [room.messages[0]?.payload || "", ""],
+      [formatDate(room.updated_at), ""],
+      [
+        <ChatEnterButton key={room.id} roomId={room.id} />,
+        "text-center whitespace-nowrap",
+      ],
+    ];
+  });
 
   return (
     <div className="mx-auto min-h-screen max-w-screen-2xl px-4 pt-28  md:px-20">
