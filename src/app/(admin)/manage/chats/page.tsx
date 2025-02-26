@@ -16,7 +16,6 @@ const getChatRooms = async () => {
       },
       users: {
         select: { username: true, loginId: true },
-        where: { loginId: { not: "admin" } },
       },
       messages: {
         select: { payload: true },
@@ -36,14 +35,16 @@ const ChatsList = async () => {
 
   const data: RowData[][] = chatRooms.map((room) => [
     [
-      room.users.filter((user) => user.loginId !== "admin")[0]?.username ||
-        "",
+      room.users.filter((user) => user.loginId !== "admin")[0]?.username || "",
       "text-center whitespace-nowrap",
     ],
     [room.id, "whitespace-nowrap"],
     [room.messages[0]?.payload || [], ""],
     [formatDate(room.updated_at), ""],
-    [<ChatEnterButton key={room.id} roomId={room.id} />, "text-center whitespace-nowrap"],
+    [
+      <ChatEnterButton key={room.id} roomId={room.id} />,
+      "text-center whitespace-nowrap",
+    ],
   ]);
 
   return (
