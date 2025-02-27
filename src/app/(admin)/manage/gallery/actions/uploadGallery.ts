@@ -14,6 +14,7 @@ const formSchema = z.object({
 });
 
 export const uploadGallery = async (formData: FormData, galleryId?: number) => {
+  const datas = Object.fromEntries(formData.entries());
   const data = {
     content: formData.get("content"),
     photo: formData.get("photo"),
@@ -39,41 +40,23 @@ export const uploadGallery = async (formData: FormData, galleryId?: number) => {
         },
       });
     }
+    const galleryData = {
+      content: result.data.content,
+      tags: { connect: { name: result.data.tag } },
+      photo: result.data.photo,
+    };
 
     const gallery = galleryId
       ? await db.gallery.update({
-          where: {
-            id: Number(galleryId),
-          },
-          data: {
-            content: result.data.content,
-            tags: {
-              connect: {
-                name: result.data.tag,
-              },
-            },
-            photo: result.data.photo,
-          },
-          select: {
-            id: true,
-          },
+          where: { id: Number(galleryId) },
+          data: galleryData,
+          select: { id: true },
         })
       : await db.gallery.create({
-          data: {
-            content: result.data.content,
-            tags: {
-              connect: {
-                name: result.data.tag,
-              },
-            },
-            photo: result.data.photo,
-          },
-          select: {
-            id: true,
-          },
+          data: galleryData,
+          select: { id: true },
         });
 
-    console.log(result.data);
     revalidateTag("gallery");
     revalidatePath(`gallery/${gallery.id}`);
     redirect(`/gallery`);
