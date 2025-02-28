@@ -3,7 +3,7 @@
 import FormButton from "@/components/form-button";
 import FormInput from "@/components/form-input";
 import { BoltIcon, PhotoIcon } from "@heroicons/react/16/solid";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormState } from "react-dom";
 import { uploadGallery } from "../actions/uploadGallery";
 import getUploadUrl from "@/app/(admin)/actions/getUploadUrl";
@@ -49,6 +49,12 @@ export const Upload = ({
   const [uploadURL, setUploadURL] = useState("");
   const [photoId, setPhotoId] = useState("");
 
+  useEffect(() => {
+    return () => {
+      if (preview) URL.revokeObjectURL(preview);
+    };
+  }, [preview]);
+
   const handleChangeImage = async (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -76,11 +82,9 @@ export const Upload = ({
     if (formType === "content") {
       setFormContent(event.currentTarget.value);
     } else if (formType === "tags") {
-      const _formTags = event.currentTarget.value.split(" ");
-      let tags: tagType[] = [];
-      _formTags.map((formTag, index) => {
-        tags.push({ id: index, name: formTag });
-      });
+      const tags = event.currentTarget.value
+        .split(" ")
+        .map((tag, index) => ({ id: index, name: tag }));
       setFormTags(tags);
     }
   };
@@ -123,7 +127,7 @@ export const Upload = ({
 
   return (
     <div className="my-container">
-      <div className="pt-28 my-content m-auto min-h-full max-w-screen-xl px-2 py-5 xl:px-0">
+      <div className="my-content m-auto min-h-full max-w-screen-xl px-2 py-5 pt-28 xl:px-0">
         <form action={action}>
           <p className="pb-5 text-3xl font-bold">
             갤러리 {isEdit ? "수정하기" : "등록하기"}
