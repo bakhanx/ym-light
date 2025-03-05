@@ -4,6 +4,9 @@ import { cls } from "@/utils/cls";
 import { formatPrice } from "@/utils/formatPrice";
 import { Option } from "@prisma/client";
 import React, { useEffect, useMemo, useState } from "react";
+import OptionDropdown from "./options-dropdown";
+import TotalPriceInfo from "./options-totalPriceInfo";
+import SelectedList from "./options-selectedList";
 
 export type selectedItemType = {
   option: Option;
@@ -41,8 +44,6 @@ const Options = ({ options, price, discount, parentFunc }: OptionsType) => {
       0,
     );
   }, [selectedItemList, price]);
-
-  const handleOpenOption = () => setIsOpenOption((prev) => !prev);
 
   const handleSelectOption = (index: number) => {
     setSelectedItemList((prev) => {
@@ -100,7 +101,22 @@ const Options = ({ options, price, discount, parentFunc }: OptionsType) => {
   return (
     <div className="option pt-10">
       <label className="text-sm font-semibold sm:text-base">상품옵션</label>
-      <div
+      <OptionDropdown
+        options={options}
+        isOpen={isOpenOption}
+        onToggle={() => setIsOpenOption((prev) => !prev)}
+        onSelect={handleSelectOption}
+      />
+      <SelectedList
+        selectedItems={selectedItemList}
+        onQuantityChange={handleQuantityChange}
+        onDelete={handleDeleteOption}
+      />
+      <TotalPriceInfo
+        totalOriginalPrice={totalOriginalPrice}
+        totalItemListPrice={totalItemListPrice}
+      />
+      {/* <div
         className={cls(
           "dropbox-option mt-2 border text-xs font-semibold",
           isOpenOption ? "border-orange-300" : "border-slate-300",
@@ -129,6 +145,7 @@ const Options = ({ options, price, discount, parentFunc }: OptionsType) => {
           </ul>
         )}
       </div>
+
       <div className="pt-10">
         {selectedItemList.map((item) => (
           <div
@@ -179,7 +196,7 @@ const Options = ({ options, price, discount, parentFunc }: OptionsType) => {
             </span>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
