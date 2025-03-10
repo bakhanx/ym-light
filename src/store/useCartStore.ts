@@ -41,62 +41,56 @@ export const useCartStore = create<State & Actions>()(
       isExist: INITIAL_STATE.isExist,
 
       addToCart: (cartItem) => {
-        const cart = get().cart;
-        const indexExistedProduct = cart.findIndex(
-          (item) => item.productId === cartItem.productId,
-        );
+        set((state) => {
+          const cart = [...state.cart]; // 새로운 배열을 생성하여 상태 변경 감지
 
-        const isExist = indexExistedProduct !== -1;
-        set({ isExist });
+          const indexExistedProduct = cart.findIndex(
+            (item) => item.productId === cartItem.productId,
+          );
 
-        // 장바구니에 없으면
-        if (!isExist) {
-          cart.push({ ...cartItem, checked: true });
-        }
-        
-        // 이미 장바구니에 있으면
-        else {
-          //  no option
-          if (cartItem.quantity > 0) {
-            cart[indexExistedProduct].quantity += cartItem.quantity;
+          // 장바구니에 상품이 없으면 추가
+          if (indexExistedProduct === -1) {
+            return { cart: [...cart, { ...cartItem, checked: true }] };
           }
 
-          // Option
-          else {
-            const currentCartIndex = cart.findIndex(
-              (item) => item.productId === cartItem.productId,
-            );
-            if (currentCartIndex !== -1) {
-              cartItem.options.map((optionInfo) => {
-                const indexExistedOption = cart[
-                  currentCartIndex
-                ].options.findIndex(
-                  (_optionInfo) => _optionInfo.optionId === optionInfo.optionId,
-                );
-                if (indexExistedOption !== -1) {
-                  cart[currentCartIndex].options[indexExistedOption].quantity +=
-                    optionInfo.quantity;
-                } else {
-                  cart[currentCartIndex].options.push(optionInfo);
-                }
-              });
+          // 이미 장바구니에 있는 상품이면 수량 증가
+          const updatedCart = cart.map((item, index) => {
+            if (index !== indexExistedProduct) return item; // 해당 상품이 아니라면 그대로 유지
+
+            // 옵션이 없는 경우, 수량만 증가
+            if (cartItem.options.length === 0) {
+              return { ...item, quantity: item.quantity + cartItem.quantity };
             }
-          }
-        }
 
-        set((state) => ({ cart: state.cart }));
+            // 옵션이 있는 경우, 기존 옵션의 수량을 증가하거나 새로운 옵션 추가
+            const updatedOptions = [...item.options];
+            cartItem.options.forEach((newOption) => {
+              const optionIndex = updatedOptions.findIndex(
+                (option) => option.optionId === newOption.optionId,
+              );
+
+              if (optionIndex !== -1) {
+                updatedOptions[optionIndex].quantity += newOption.quantity;
+              } else {
+                updatedOptions.push(newOption);
+              }
+            });
+
+            return { ...item, options: updatedOptions };
+          });
+
+          return { cart: updatedCart };
+        });
       },
 
       removeFromCart: ({ productId }) => {
-        const cart = get().cart;
-
-        // 상품 제거
-        if (productId) {
-          const newCart = cart.filter(
-            (cartItem) => cartItem.productId !== productId,
-          );
-          set((state) => ({ ...state, cart: newCart }));
-        }
+        set((state) => ({
+          cart: [
+            ...state.cart.filter(
+              (cartItem) => cartItem.productId !== productId,
+            ),
+          ],
+        }));
 
         // 옵션 제거
         // if (productId) {
@@ -119,7 +113,6 @@ export const useCartStore = create<State & Actions>()(
           checked: true,
         }));
         set(() => ({ cart: updateToCheckCartItems }));
-        console.log(cartItems);
       },
     }),
     {
