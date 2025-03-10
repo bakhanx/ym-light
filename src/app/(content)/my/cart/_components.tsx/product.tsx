@@ -51,7 +51,9 @@ const Product = ({ cartItem, index }: ProductProps) => {
 
   // ============================================================
 
-  const { cart, removeFromCart } = useCartStore((state) => state);
+  const { cart, removeFromCart, removeOptionFromCart } = useCartStore(
+    (state) => state,
+  );
   const { substractToCartItemCount } = useUserStore();
   useEffect(() => {
     useCartStore.setState((state) => ({
@@ -81,6 +83,17 @@ const Product = ({ cartItem, index }: ProductProps) => {
     });
     deleteCartItems(cartItem.productId);
     substractToCartItemCount();
+  };
+
+  const handleDeleteOption = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    optionId: number,
+  ) => {
+    event.preventDefault();
+    removeOptionFromCart({
+      productId: cartItem.productId,
+      optionId,
+    });
   };
 
   return (
@@ -152,7 +165,7 @@ const Product = ({ cartItem, index }: ProductProps) => {
           {/* Option */}
           {cartItem.options.length > 0 && (
             <ul className="mt-4 flex flex-col gap-y-4 bg-gray-50  p-2 text-sm text-gray-600 sm:text-base [&>li]:border-b-[1px] [&>li]:py-2">
-              {cartItem.options.map((option, idx) => (
+              {cartItem.options.map((option) => (
                 // 옵션 인덱스 필요
                 <li key={option.option.index}>
                   <div className="flex items-start justify-between">
@@ -169,7 +182,12 @@ const Product = ({ cartItem, index }: ProductProps) => {
                         )}
                         원 )
                       </span>
-                      <button className=" text-gray-400">
+                      <button
+                        className=" text-gray-400"
+                        onClick={(event) =>
+                          handleDeleteOption(event, option.optionId)
+                        }
+                      >
                         <XMarkIcon className="h-4 w-4 stroke-2" />
                       </button>
                     </div>
