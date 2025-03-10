@@ -11,7 +11,6 @@ import Loader from "@/components/loader";
 import createDirectOrder from "../actions/createDirectOrder";
 import { useUserStore } from "@/store/useUserStore";
 
-import { getUserIdFromToken } from "@/utils/jwt";
 import getCartItems from "../../my/cart/actions/getCartItems";
 
 import ProductImages from "./product-contents-images";
@@ -19,6 +18,7 @@ import ProductDetails from "./product-contents-details";
 
 import QuantitySelector from "./product-contents-quantitySelector";
 import ProductButtons from "./product-contents-buttons";
+import { getUserIdFromTokenClient } from "@/utils/authClient";
 
 type Options = {
   options: Option[];
@@ -75,7 +75,7 @@ const ProductContents = ({ product, userId }: ProductContentsProps) => {
 
     setIsLoading(true);
     const cartItem = createCartItem();
-    const userId = getUserIdFromToken();
+    const userId = await getUserIdFromTokenClient();
 
     // 장바구니 데이터 초기화 server -> zustand
     if (userId && !isDataLoaded) {
@@ -85,7 +85,7 @@ const ProductContents = ({ product, userId }: ProductContentsProps) => {
         setInitData(cartItems);
       }
     }
-    
+
     addToCart({ ...cartItem, checked: true }); // client
 
     if (userId) {
