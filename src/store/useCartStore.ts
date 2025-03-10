@@ -24,6 +24,7 @@ type RemoveFromCart = {
 type Actions = {
   addToCart: (cartItem: CartItemDetail) => void;
   removeFromCart: ({ productId, optionId }: RemoveFromCart) => void;
+  removeOptionFromCart: ({ productId, optionId }: RemoveFromCart) => void;
   setDataLoaded: () => void;
   setInitData: ({ cartItems }: { cartItems: CartItemDetail[] }) => void;
 };
@@ -85,23 +86,29 @@ export const useCartStore = create<State & Actions>()(
 
       removeFromCart: ({ productId }) => {
         set((state) => ({
-          cart: [
-            ...state.cart.filter(
-              (cartItem) => cartItem.productId !== productId,
-            ),
-          ],
+          cart: state.cart.filter(
+            (cartItem) => cartItem.productId !== productId,
+          ),
         }));
+      },
 
-        // 옵션 제거
-        // if (productId) {
-        //   const productIndex = cart.findIndex(
-        //     (item) => item.cartItem.productId === productId,
-        //   );
-        //   const newOptionList = cart[productIndex].cartItem.productId !== productId
+      removeOptionFromCart: ({ productId, optionId }) => {
+        set((state) => ({
+          cart: state.cart
+            .map((cartItem) => {
+              if (cartItem.productId === productId) {
+                const updatedOptions = cartItem.options.filter(
+                  (option) => option.optionId !== optionId,
+                );
 
-        //   // cart[productIndex].cartItem = newOptionList;
-        // }
-        // set((state) => ({ cart: state.cart }));
+                if (updatedOptions.length === 0) return null;
+
+                return { ...cartItem, options: updatedOptions };
+              }
+              return cartItem;
+            })
+            .filter((cartItem) => cartItem !== null),
+        }));
       },
 
       setDataLoaded: () => {
