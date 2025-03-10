@@ -4,8 +4,9 @@ import { cls } from "@/utils/cls";
 import { formatPrice } from "@/utils/formatPrice";
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import deleteCartItems from "../actions/deleteCartItems";
+import deleteCartItemOption from "../actions/deleteCartItemOption";
 
 type ProductProps = {
   cartItem: CartItemDetail;
@@ -54,7 +55,7 @@ const Product = ({ cartItem, index }: ProductProps) => {
   const { cart, removeFromCart, removeOptionFromCart } = useCartStore(
     (state) => state,
   );
-  const { substractToCartItemCount } = useUserStore();
+  const { user, substractToCartItemCount } = useUserStore();
   useEffect(() => {
     useCartStore.setState((state) => ({
       cart: state.cart.map((cartItem) => ({ ...cartItem, checked: true })),
@@ -78,10 +79,14 @@ const Product = ({ cartItem, index }: ProductProps) => {
 
   const handleDeleteClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+    // client
     removeFromCart({
       productId: cartItem.productId,
     });
-    deleteCartItems(cartItem.productId);
+    //server
+    if (user) {
+      deleteCartItems(cartItem.productId);
+    }
     substractToCartItemCount();
   };
 
@@ -90,10 +95,18 @@ const Product = ({ cartItem, index }: ProductProps) => {
     optionId: number,
   ) => {
     event.preventDefault();
+    // client
     removeOptionFromCart({
       productId: cartItem.productId,
       optionId,
     });
+    // server
+    if (user) {
+      deleteCartItemOption({
+        productId: cartItem.productId,
+        optionId,
+      });
+    }
   };
 
   return (
