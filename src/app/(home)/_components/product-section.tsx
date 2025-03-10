@@ -16,7 +16,7 @@ type ProductSectionProps = {
 };
 
 const ProductSection = ({ title, products, count }: ProductSectionProps) => (
-  <div className="my-product-wrap">
+  <div className="my-product-wrap py-2">
     <div className="text-lg font-semibold sm:text-2xl">{title}</div>
     <div className="grid grid-cols-2 gap-y-8 pt-4 min-[480px]:grid-cols-2 sm:grid-cols-2 sm:gap-y-16 md:grid-cols-4 xl:gap-16">
       <Suspense fallback={<CardSkeleton count={count} />}>
