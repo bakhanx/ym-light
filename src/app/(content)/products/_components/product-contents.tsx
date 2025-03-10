@@ -75,23 +75,22 @@ const ProductContents = ({ product, userId }: ProductContentsProps) => {
 
     setIsLoading(true);
     const cartItem = createCartItem();
+    const userId = getUserIdFromToken();
 
     // 장바구니 데이터 초기화 server -> zustand
-    if (!isDataLoaded) {
-      const userId = getUserIdFromToken();
-      if (userId) {
-        setDataLoaded();
-        const cartItems = await getCartItems(userId);
-        if (cartItems) {
-          setInitData(cartItems);
-        }
+    if (userId && !isDataLoaded) {
+      setDataLoaded();
+      const cartItems = await getCartItems(userId);
+      if (cartItems) {
+        setInitData(cartItems);
       }
     }
+    
+    addToCart({ ...cartItem, checked: true }); // client
 
-    await Promise.all([
-      addToCart({ ...cartItem, checked: true }), // client
-      updateCart(cartItem), // server
-    ]);
+    if (userId) {
+      updateCart(cartItem); // server
+    }
 
     if (!useCartStore.getState().isExist) {
       addToCartItemCount();
