@@ -18,7 +18,6 @@ import ProductDetails from "./product-contents-details";
 
 import QuantitySelector from "./product-contents-quantitySelector";
 import ProductButtons from "./product-contents-buttons";
-import { getUserIdFromTokenClient } from "@/utils/authClient";
 
 type Options = {
   options: Option[];
@@ -75,7 +74,6 @@ const ProductContents = ({ product, userId }: ProductContentsProps) => {
 
     setIsLoading(true);
     const cartItem = createCartItem();
-    const userId = await getUserIdFromTokenClient();
 
     // 장바구니 데이터 초기화 server -> zustand
     if (userId && !isDataLoaded) {
