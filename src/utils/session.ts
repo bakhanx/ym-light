@@ -1,6 +1,5 @@
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
-import React from "react";
 
 type SessionType = {
   id: number;
