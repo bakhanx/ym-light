@@ -39,7 +39,7 @@ const ProductContents = ({ product, userId }: ProductContentsProps) => {
   const [mainImage, setMainImage] = useState(product.photos[0]);
   const [selectedThumbnail, setSelectedThumbnail] = useState(0);
 
-  const { addToCart, isDataLoaded, setDataLoaded, setInitData } =
+  const { cart, addToCart, isDataLoaded, setDataLoaded, setInitData } =
     useCartStore();
   const { addToCartItemCount } = useUserStore();
 
@@ -90,7 +90,9 @@ const ProductContents = ({ product, userId }: ProductContentsProps) => {
       updateCart(cartItem); // server
     }
 
-    if (!useCartStore.getState().isExist) {
+    const isProductInCart = cart.some(item => item.productId === product.id);
+
+    if (!isProductInCart) {
       addToCartItemCount();
     }
 
