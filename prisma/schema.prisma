@@ -90,7 +90,7 @@ model CartItem {
   cart      Cart?            @relation(fields: [cartId], references: [id], onDelete: Cascade)
   Order     Order?           @relation(fields: [orderId], references: [id])
   options   CartItemOption[]
-  quantity  Int              @default(1)
+  quantity  Int              @default(0)
   productId Int
   cartId    Int?
   orderId   Int?
