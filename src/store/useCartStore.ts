@@ -107,13 +107,15 @@ export const useCartStore = create<State & Actions>()(
                   (option) => option.optionId !== optionId,
                 );
 
-                if (updatedOptions.length === 0) return null; 
+                if (updatedOptions.length === 0) {
+                  return undefined;
+                }
 
                 return { ...cartItem, options: updatedOptions };
               }
               return cartItem;
             })
-            .filter((cartItem) => cartItem !== null);
+            .filter((cartItem) => cartItem !== undefined);
 
           set((state) => ({
             ...state,
