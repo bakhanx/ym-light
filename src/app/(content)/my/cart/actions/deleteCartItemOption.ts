@@ -25,7 +25,7 @@ const deleteCartItemOption = async ({ productId, optionId }: OptionProps) => {
     });
     if (!cart) return null;
 
-    const cartItem = cart.cartItems.find((item) => item.id === productId);
+    const cartItem = cart.cartItems.find((item) => item.productId === productId);
     if (!cartItem) return null;
 
     // 삭제
@@ -38,12 +38,12 @@ const deleteCartItemOption = async ({ productId, optionId }: OptionProps) => {
       },
     });
 
+    // 남은 1개 옵션 삭제 -> with 상품 삭제
     const remainingOptions = await db.cartItemOption.findMany({
       where: {
         cartItemId: cartItem.id,
       },
     });
-
     if (remainingOptions.length === 0) {
       await db.cartItem.delete({
         where: {
