@@ -84,17 +84,19 @@ const ProductContents = ({ product, userId }: ProductContentsProps) => {
       }
     }
 
-    addToCart({ ...cartItem, checked: true }); // client
-
-    if (userId) {
-      updateCart(cartItem); // server
-    }
-
+    // TopNav 수량 체크
     const isProductInCart = cart.some((item) => item.productId === product.id);
-
     if (!isProductInCart) {
       addToCartItemCount();
     }
+
+    addToCart({ ...cartItem, checked: true }); // client
+
+    if (userId) {
+      await updateCart(cartItem); // server
+    }
+
+
 
     setIsLoading(false);
     if (
