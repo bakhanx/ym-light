@@ -89,35 +89,37 @@ export const useCartStore = create<State & Actions>()(
       },
 
       removeFromCart: ({ productId }) => {
-        set((state) => ({
-          cart: state.cart.filter(
+        const cart = get().cart;
+        if (cart) {
+          const newCart = cart.filter(
             (cartItem) => cartItem.productId !== productId,
-          ),
-        }));
+          );
+          set((state) => ({ ...state, cart: newCart }));
+        }
       },
       removeOptionFromCart: ({ productId, optionId }) => {
-        set((state) => {
-          if (!state.cart) {
-            return state;
-          }
+        const cart = get().cart;
+        if (cart) {
+          const updatedCart = cart
+            .map((cartItem) => {
+              if (cartItem.productId === productId) {
+                const updatedOptions = cartItem.options.filter(
+                  (option) => option.optionId !== optionId,
+                );
 
-          return {
-            cart: state.cart
-              .map((cartItem) => {
-                if (cartItem.productId === productId) {
-                  const updatedOptions = cartItem.options.filter(
-                    (option) => option.optionId !== optionId,
-                  );
+                if (updatedOptions.length === 0) return null; 
 
-                  if (updatedOptions.length === 0) return null;
+                return { ...cartItem, options: updatedOptions };
+              }
+              return cartItem;
+            })
+            .filter((cartItem) => cartItem !== null);
 
-                  return { ...cartItem, options: updatedOptions };
-                }
-                return cartItem;
-              })
-              .filter((cartItem) => cartItem !== null)
-          };
-        });
+          set((state) => ({
+            ...state,
+            cart: updatedCart,
+          }));
+        }
       },
 
       setDataLoaded: () => {
