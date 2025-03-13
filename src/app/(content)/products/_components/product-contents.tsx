@@ -35,7 +35,7 @@ const ProductContents = ({ product, userId }: ProductContentsProps) => {
   const [selectedOptionList, setSelectedOptionList] = useState<
     selectedItemType[]
   >([]);
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(product.options.length > 0 ? 0 : 1);
   const [mainImage, setMainImage] = useState(product.photos[0]);
   const [selectedThumbnail, setSelectedThumbnail] = useState(0);
 
@@ -90,7 +90,7 @@ const ProductContents = ({ product, userId }: ProductContentsProps) => {
       updateCart(cartItem); // server
     }
 
-    const isProductInCart = cart.some(item => item.productId === product.id);
+    const isProductInCart = cart.some((item) => item.productId === product.id);
 
     if (!isProductInCart) {
       addToCartItemCount();
