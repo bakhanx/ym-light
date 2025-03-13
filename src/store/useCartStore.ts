@@ -95,24 +95,29 @@ export const useCartStore = create<State & Actions>()(
           ),
         }));
       },
-
       removeOptionFromCart: ({ productId, optionId }) => {
-        set((state) => ({
-          cart: state.cart
-            .map((cartItem) => {
-              if (cartItem.productId === productId) {
-                const updatedOptions = cartItem.options.filter(
-                  (option) => option.optionId !== optionId,
-                );
+        set((state) => {
+          if (!state.cart) {
+            return state;
+          }
 
-                if (updatedOptions.length === 0) return null;
+          return {
+            cart: state.cart
+              .map((cartItem) => {
+                if (cartItem.productId === productId) {
+                  const updatedOptions = cartItem.options.filter(
+                    (option) => option.optionId !== optionId,
+                  );
 
-                return { ...cartItem, options: updatedOptions };
-              }
-              return cartItem;
-            })
-            .filter((cartItem) => cartItem !== null),
-        }));
+                  if (updatedOptions.length === 0) return null;
+
+                  return { ...cartItem, options: updatedOptions };
+                }
+                return cartItem;
+              })
+              .filter((cartItem) => cartItem !== null)
+          };
+        });
       },
 
       setDataLoaded: () => {
